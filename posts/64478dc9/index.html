@@ -1,0 +1,946 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  
+    <title>Claude Code Skills 安装记录 | Maverick Spore</title>
+  
+
+  <!-- Google Fonts: Noto Serif SC (宋体正文) + Open Sans (西文无衬线) + Fira Code (等宽) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Noto+Serif+SC:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <!-- Obsidian 格式支持 (Callout / Wiki-link) -->
+  <!-- CDN: highlight.js CSS - 可在 _config.yml 的 cdn.vendors.highlight_css 中覆盖 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/atom-one-dark.min.css">
+  
+<link rel="stylesheet" href="/css/obsidian.css">
+
+  <meta name="description" content="通过 npx skills 安装全局 Claude Code 技能的记录，涵盖 Obsidian 笔记、前端设计等 5 个技能。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Claude Code Skills 安装记录">
+<meta property="og:url" content="https://blog.zhengxi.me/posts/64478dc9/index.html">
+<meta property="og:site_name" content="Maverick Spore">
+<meta property="og:description" content="通过 npx skills 安装全局 Claude Code 技能的记录，涵盖 Obsidian 笔记、前端设计等 5 个技能。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-28T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-28T00:00:00.000Z">
+<meta property="article:author" content="ZhengXi">
+<meta property="article:tag" content="claude-code">
+<meta property="article:tag" content="skills">
+<meta property="article:tag" content="obsidian">
+<meta property="article:tag" content="配置">
+<meta name="twitter:card" content="summary">
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Maverick Spore" type="application/atom+xml">
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" id="reading-progress"></div>
+
+  <div class="site-wrapper">
+    
+<header class="site-header">
+  
+    <h1 class="site-title">
+      <a href="/">Maverick Spore</a>
+    </h1>
+  
+  
+  
+    <p class="site-subtitle">Unconventional by nature, curious by code</p>
+  
+
+  <nav class="site-nav">
+    <a class="nav-link" href="/">Home</a>
+    <a class="nav-link" href="/archives/">Archives</a>
+    <a class="nav-link" href="/categories/">Categories</a>
+    <a class="nav-link" href="/tags/">Tags</a>
+    <button class="search-btn nav-link" id="search-btn" aria-label="Search">
+      Search
+    </button>
+  </nav>
+</header>
+
+    
+    <main class="main-content">
+      
+      <article class="post-article">
+  <header class="post-header">
+    
+      <div class="post-category">
+        <a class="category-link" href="/categories/%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE/">
+          工具配置
+        </a>
+      </div>
+    
+
+    <h1 class="post-article-title">Claude Code Skills 安装记录</h1>
+
+    <div class="post-meta">
+      <time datetime="2026-04-28">
+        2026-04-28
+      </time>
+      
+        <span class="meta-sep">·</span>
+        <span>260 words</span>
+        <span class="meta-sep">·</span>
+        <span>1 min read</span>
+      
+      <span class="meta-sep">·</span>
+      <span id="busuanzi_container_page_pv" class="post-views">
+        <span id="busuanzi_value_page_pv"></span> views
+      </span>
+    </div>
+  </header>
+
+  <div class="post-content">
+    <p>通过 <code>npx skills</code> 安装了 5 个全局技能（<code>zhengxi</code> 用户下所有项目可用）。</p>
+<h2 id="已安装技能"><a class="markdownIt-Anchor" href="#已安装技能"></a> 已安装技能</h2>
+<table>
+<thead>
+<tr>
+<th>技能</th>
+<th>来源</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>find-skills</code></td>
+<td>vercel-labs/skills</td>
+<td>搜索和发现更多社区技能</td>
+</tr>
+<tr>
+<td><code>md-to-office</code></td>
+<td>claude-office-skills/skills</td>
+<td>Markdown 转 Word/Office 文档</td>
+</tr>
+<tr>
+<td><code>obsidian-markdown</code></td>
+<td>kepano/obsidian-skills</td>
+<td>Obsidian 格式 Markdown（wikilinks、callouts、属性等）</td>
+</tr>
+<tr>
+<td><code>obsidian-bases</code></td>
+<td>kepano/obsidian-skills</td>
+<td>Obsidian Databases 操作</td>
+</tr>
+<tr>
+<td><code>obsidian-cli</code></td>
+<td>kepano/obsidian-skills</td>
+<td>Obsidian CLI 集成</td>
+</tr>
+</tbody>
+</table>
+<h2 id="常用命令"><a class="markdownIt-Anchor" href="#常用命令"></a> 常用命令</h2>
+<pre><code class="bash"># 搜索技能
+npx skills find &lt;关键词&gt;
+
+# 安装技能
+npx skills add &lt;owner/repo@skill&gt; -g -y
+
+# 列出已安装技能
+npx skills list -g
+
+# 检查更新
+npx skills check -g
+
+# 更新所有技能
+npx skills update -g
+</code></pre>
+<h2 id="安装说明"><a class="markdownIt-Anchor" href="#安装说明"></a> 安装说明</h2>
+<ul>
+<li><code>obsidian-markdown</code>、<code>obsidian-bases</code>、<code>obsidian-cli</code> 来自 <a target="_blank" rel="noopener" href="https://github.com/kepano/obsidian-skills">kepano/obsidian-skills</a>（Obsidian CEO 出品，20K+ 安装量）</li>
+<li><code>md-to-office</code> 来自 <a target="_blank" rel="noopener" href="https://github.com/claude-office-skills/skills">claude-office-skills/skills</a></li>
+<li>安装路径：<code>~/.agents/skills/</code>，通过 symlink 链接到 <code>~/.claude/skills/</code></li>
+</ul>
+<h2 id="注意"><a class="markdownIt-Anchor" href="#注意"></a> 注意</h2>
+<ul>
+<li>安装后需在 Claude Code 中执行 <code>/reload-plugins</code> 刷新技能列表</li>
+<li>如果遇到 <code>RPC failed; curl 16 Error in the HTTP2 framing layer</code> 错误，可执行以下命令后重试：</li>
+</ul>
+<pre><code class="bash">git config --global http.version HTTP/1.1
+git config --global http.postBuffer 524288000
+</code></pre>
+
+  </div>
+
+  
+    <div class="post-tags">
+      
+        <a class="post-tag" href="/tags/claude-code/">claude-code</a>
+      
+        <a class="post-tag" href="/tags/skills/">skills</a>
+      
+        <a class="post-tag" href="/tags/obsidian/">obsidian</a>
+      
+        <a class="post-tag" href="/tags/%E9%85%8D%E7%BD%AE/">配置</a>
+      
+    </div>
+  
+
+  
+  <div class="post-share">
+    <span class="share-label">分享</span>
+    <a class="share-btn share-twitter" href="javascript:void(0)" onclick="shareTo('twitter','Claude Code Skills 安装记录')" aria-label="分享到 Twitter">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a class="share-btn share-weibo" href="javascript:void(0)" onclick="shareTo('weibo','Claude Code Skills 安装记录')" aria-label="分享到微博">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.443zM8.594 11.39c-5.065.662-8.727 4.033-8.18 7.543.547 3.51 5.05 5.827 10.115 5.166 5.065-.662 8.727-4.033 8.18-7.543-.547-3.51-5.05-5.827-10.115-5.166zm5.636-1.591c-.275-.052-.462-.199-.422-.332.041-.133.287-.194.562-.143.619.117.998.452.84.776-.156.318-.685.423-1.304.308-.197-.037-.34-.161-.32-.278.021-.117.186-.182.382-.145.276.053.466.012.44-.064-.026-.076-.214-.142-.49-.195.303.12.498.278.457.411-.04.131-.284.19-.558.14-.613-.116-.991-.451-.833-.774.155-.316.679-.418 1.292-.304zM7.706 9.262c-.226-.062-.374-.212-.332-.334.043-.122.252-.172.478-.11.564.152.892.482.735.79-.155.303-.628.42-1.192.27-.569-.152-.891-.483-.734-.791.156-.309.625-.428 1.186-.278.236.064.384.214.341.335-.042.122-.25.172-.482.118zM14.912.472c-2.023-.558-4.314.126-5.963 1.664-.658.614-1.145 1.313-1.44 2.043-.307.759-.417 1.525-.363 2.216.27.208.557.389.861.543.286.144.586.262.897.353.36.107.737.18 1.112.229.054-.09.104-.184.155-.277.244-.45.582-.845 1.006-1.17.957-.735 2.145-.991 3.157-.735 1.011.257 1.646 1.01 1.78 1.992.039.281.04.566.002.846.385.032.76.098 1.113.2.38.108.736.258 1.065.443.15.084.293.177.43.277.257-.954.184-2.07-.311-3.118C21.372 2.933 18.595.735 14.912.472zm-1.374 17.918c-2.203.691-4.611-.196-5.368-1.982-.762-1.796.46-3.788 2.667-4.483 2.203-.695 4.61.197 5.368 1.983.762 1.796-.46 3.788-2.667 4.482zm1.157-2.272c.462-.815-.198-1.848-1.438-2.296-1.239-.447-2.473-.205-2.935.608-.462.813.197 1.848 1.437 2.296 1.24.449 2.473.207 2.936-.608z"/></svg>
+    </a>
+    <button class="share-btn share-copy" onclick="copyPageLink(this)" aria-label="复制链接">
+      <svg class="share-copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    </button>
+    <span class="share-copy-feedback" aria-hidden>已复制</span>
+  </div>
+  
+
+  
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+        
+          
+        
+      
+    
+      
+        
+      
+        
+          
+        
+      
+    
+    
+    <div class="related-posts">
+      <h3 class="related-title">相关文章</h3>
+      <div class="related-list">
+        
+        <a class="related-item" href="/posts/4f4d7fcc/">
+          <span class="related-item-title">notesmd-cli 安装与使用</span>
+          <time class="related-item-date">2026-04-26</time>
+        </a>
+        
+        <a class="related-item" href="/posts/e5faa21f/">
+          <span class="related-item-title">Claude 环境变量配置 ｜ 搭配 DeepSeek V4 模型</span>
+          <time class="related-item-date">2026-04-29</time>
+        </a>
+        
+      </div>
+    </div>
+    
+  
+
+  
+  <div class="post-copyright">
+    <div class="copyright-content">
+      <div class="copyright-title">Claude Code Skills 安装记录</div>
+      <div class="copyright-url" id="copyright-url">https://blog.zhengxi.me/posts/64478dc9/</div>
+      <div class="copyright-meta">
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">作者</span>
+          <span class="copyright-meta-value">ZhengXi</span>
+        </span>
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">发布时间</span>
+          <span class="copyright-meta-value">2026-04-28 00:00</span>
+        </span>
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">著作权</span>
+          <span class="copyright-meta-value">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a>
+          </span>
+        </span>
+      </div>
+    </div>
+    <button class="copyright-copy-btn" onclick="copyCopyrightInfo(this)" aria-label="复制版权信息" title="复制版权信息">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+      <span class="copyright-copy-feedback">复制</span>
+    </button>
+  </div>
+  
+
+  
+  <nav class="post-nav">
+    
+      <a class="post-nav-item post-nav-prev" href="/posts/526a2e3a/">
+        <span class="post-nav-label">PREV</span>
+        <span class="post-nav-title">MacOS 上 Conda 安装与使用指南</span>
+      </a>
+    
+    
+      <a class="post-nav-item post-nav-next" href="/posts/72c69583/">
+        <span class="post-nav-label">NEXT</span>
+        <span class="post-nav-title">真菌分子系统学与多基因系统发育树构建</span>
+      </a>
+    
+  </nav>
+  
+
+  
+  <section id="comments" class="comments-section">
+    <script src="https://giscus.app/client.js"
+      data-repo="realzhengxi/zhengxi_blog_comments"
+      data-repo-id="R_kgDOSKT6sA"
+      data-category="General"
+      data-category-id="DIC_kwDOSKT6sM4C7fUT"
+      data-mapping="title"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="zh-CN"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+    </script>
+  </section>
+  
+</article>
+
+<nav class="post-toc" id="post-toc">
+  <div class="toc-header">CONTENTS</div>
+  <div class="toc-body" id="toc-body"></div>
+</nav>
+
+    </main>
+
+    
+<footer class="site-footer">
+  <div class="footer-bottom">
+    <a class="footer-license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer" aria-label="CC BY-NC-ND 4.0 License">
+      CC&nbsp;&nbsp;BY–NC–ND&nbsp;&nbsp;4.0
+    </a>
+    <span class="footer-credit">
+      <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> &middot;
+      <a href="https://github.com/realzhengxi/hexo-theme-highlight" target="_blank" rel="noopener noreferrer">Highlight</a>
+    </span>
+    <span class="footer-links">
+      <a class="footer-link" href="https://github.com/realzhengxi" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015-2.895-.015-3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      </a>
+      <a class="footer-rss" href="/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS Feed">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="4" cy="20" r="3"/><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/></svg>
+      </a>
+    </span>
+  </div>
+</footer>
+
+  </div>
+
+  <!-- Search Modal -->
+  <div class="search-overlay" id="search-overlay"></div>
+  <div class="search-modal" id="search-modal">
+    <div class="search-modal-header">
+      <input
+        type="text"
+        id="search-input"
+        class="search-input"
+        placeholder="Search something..."
+        autocomplete="off"
+      />
+      <button class="search-close" id="search-close" aria-label="Close search">✕</button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+
+  <!-- Search Script (inline, fetches search.json at runtime) -->
+  <script>
+  (function() {
+    var overlay = document.getElementById('search-overlay');
+    var modal = document.getElementById('search-modal');
+    var input = document.getElementById('search-input');
+    var resultsContainer = document.getElementById('search-results');
+    var closeBtn = document.getElementById('search-close');
+
+    // Find the search open button(s)
+    var openBtns = document.querySelectorAll('#search-btn');
+
+    var postsData = [];
+    var dataLoaded = false;
+
+    function loadSearchData() {
+      if (dataLoaded && postsData.length > 0) return Promise.resolve(postsData);
+      return fetch(window.location.origin + '/search.json')
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          postsData = data || [];
+          dataLoaded = true;
+          return postsData;
+        })
+        .catch(function(err) {
+          console.error('Failed to load search data:', err);
+          postsData = [];
+          dataLoaded = true;
+          return [];
+        });
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(text));
+      return div.innerHTML;
+    }
+
+    function highlightMatch(text, query) {
+      if (!query) return text;
+      try {
+        var escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var regex = new RegExp('(' + escaped + ')', 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
+      } catch(e) {
+        return text;
+      }
+    }
+
+    function renderResults(items, query) {
+      if (!items || items.length === 0) {
+        resultsContainer.innerHTML = '<div class="search-empty">No results found.</div>';
+        return;
+      }
+      var html = '';
+      for (var i = 0; i < items.length; i++) {
+        var p = items[i];
+        var title = escapeHtml(p.title);
+        var excerptText = p.text || p.content || '';
+        var excerpt = '';
+        if (excerptText.length > 120) {
+          excerpt = escapeHtml(excerptText.substring(0, 140));
+        } else {
+          excerpt = escapeHtml(excerptText);
+        }
+        html += '<a href="' + p.url + '" class="search-result-item">';
+        html += '  <span class="result-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>';
+        html += '  <div class="result-body">';
+        html += '    <h3 class="result-title">' + highlightMatch(title, query) + '</h3>';
+        html += '    <p class="result-excerpt">' + highlightMatch(excerpt, query) + '</p>';
+        html += '  </div>';
+        html += '</a>';
+      }
+      resultsContainer.innerHTML = html;
+    }
+
+    function performSearch(query) {
+      var q = query.trim().toLowerCase();
+      if (!q) {
+        renderResults(postsData, '');
+        return;
+      }
+      var filtered = postsData.filter(function(post) {
+        var searchText = post.text || post.content || '';
+        return post.title.toLowerCase().indexOf(q) !== -1 ||
+               searchText.toLowerCase().indexOf(q) !== -1;
+      });
+      renderResults(filtered, q);
+    }
+
+    function openSearch() {
+      overlay.classList.add('active');
+      modal.classList.add('active');
+      setTimeout(function() { input.focus(); }, 150);
+
+      // Load data and show all posts on open
+      loadSearchData().then(function() {
+        resultsContainer.innerHTML = '<div class="search-placeholder">Posts</div>';
+        renderResults(postsData, input.value);
+      });
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('active');
+      modal.classList.remove('active');
+      input.value = '';
+      resultsContainer.innerHTML = '';
+    }
+
+    for (var i = 0; i < openBtns.length; i++) {
+      openBtns[i].addEventListener('click', openSearch);
+    }
+    closeBtn.addEventListener('click', closeSearch);
+    overlay.addEventListener('click', closeSearch);
+
+    document.addEventListener('keydown', function(e) {
+      // Cmd/Ctrl + K
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        if (modal.classList.contains('active')) {
+          closeSearch();
+        } else {
+          openSearch();
+        }
+      }
+      // Escape to close
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeSearch();
+      }
+    });
+
+    // Search as you type
+    var searchTimer = null;
+    input.addEventListener('input', function() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(function() {
+        performSearch(input.value);
+      }, 150);
+    });
+
+    // Pre-load search data in background after page loads
+    setTimeout(loadSearchData, 2000);
+  })();
+  </script>
+
+  <!-- Code Highlight (highlight.js) - CDN -->
+  <!-- CDN URL 可在 _config.yml → cdn.vendors.highlight_js 覆盖 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  <script>
+  (function() {
+    // Add language label and copy button to each pre block (skip mermaid)
+    document.querySelectorAll('pre').forEach(function(pre) {
+      var code = pre.querySelector('code');
+      if (!code) return;
+      if (code.className.indexOf('mermaid') !== -1) return;
+
+      // Wrap code content in a scrollable container
+      // so the copy button stays fixed when content scrolls
+      var wrapper = document.createElement('div');
+      wrapper.className = 'code-scroll-wrapper';
+      while (pre.firstChild) {
+        wrapper.appendChild(pre.firstChild);
+      }
+      pre.appendChild(wrapper);
+      // code is now inside wrapper
+
+      var langClass = '';
+      for (var i = 0; i < code.classList.length; i++) {
+        var cls = code.classList[i];
+        if (cls.startsWith('language-') || cls.startsWith('lang-')) {
+          langClass = cls.replace('language-', '').replace('lang-', '');
+          break;
+        }
+      }
+      if (langClass) {
+        pre.setAttribute('data-lang', langClass);
+      }
+
+      // Add copy button only if not already present
+      if (pre.dataset.copyBtn) return;
+      pre.dataset.copyBtn = 'true';
+      var btn = document.createElement('button');
+      btn.className = 'code-copy-btn';
+      btn.setAttribute('type', 'button');
+      btn.setAttribute('aria-label', '复制代码');
+      btn.title = '复制';
+      btn.textContent = '复制';
+
+      function doCopy(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          return navigator.clipboard.writeText(text);
+        }
+        return new Promise(function(resolve, reject) {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            document.execCommand('copy');
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
+          document.body.removeChild(ta);
+        });
+      }
+
+      btn.addEventListener('click', function() {
+        var text = code.innerText || code.textContent || '';
+        doCopy(text).then(function() {
+          btn.textContent = '已复制';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.textContent = '复制';
+            btn.classList.remove('copied');
+          }, 1800);
+        }).catch(function() {
+          btn.textContent = '复制失败';
+          setTimeout(function() {
+            btn.textContent = '复制';
+          }, 1800);
+        });
+      });
+      pre.appendChild(btn);
+
+      // Ensure code content is visible (fix dark theme issue)
+      if (getComputedStyle(pre).color === 'rgb(0, 0, 0)' || getComputedStyle(code).color === 'rgb(0, 0, 0)') {
+        code.style.color = '#1a1a1a';
+      }
+    });
+
+    // Ensure inline code visibility
+    document.querySelectorAll(':not(pre) > code').forEach(function(inline) {
+      if (inline.parentElement && inline.parentElement.tagName !== 'PRE') {
+        inline.style.color = '#404040';
+        inline.style.fontWeight = '500';
+      }
+    });
+
+    // Initialize highlight.js on all code blocks EXCEPT mermaid
+    // MUST run AFTER wrapping code in scroll containers
+    if (typeof hljs !== 'undefined') {
+      document.querySelectorAll('pre code').forEach(function(block) {
+        if (block.className.indexOf('mermaid') !== -1) return;
+        try {
+          hljs.highlightElement(block);
+        } catch (e) {
+          console.warn('Highlight.js error:', e);
+        }
+      });
+    }
+  })();
+  </script>
+
+  <!-- Mermaid Diagrams (CDN) - 纯前端渲染，必须在 highlight.js 之后 -->
+  <!-- CDN URL 可在 _config.yml → cdn.vendors.mermaid 覆盖 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>
+  (function() {
+    if (!window.mermaid) {
+      console.error('Mermaid library not loaded');
+      return;
+    }
+
+    // 匹配所有 mermaid 代码块
+    var blocks = document.querySelectorAll('code.language-mermaid, code.lang-mermaid, code.mermaid');
+
+    if (blocks.length > 0) {
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'default',
+        themeVariables: {
+          primaryColor: '#e3f2fd',
+          primaryBorderColor: '#2563eb',
+          lineColor: '#737373',
+          secondaryColor: '#fff8e1',
+          tertiaryColor: '#f5f5f5',
+          fontFamily: '"Open Sans", "PingFang SC", "Noto Serif SC", sans-serif',
+          fontSize: '14px',
+          nodeTextColor: '#404040'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true },
+        securityLevel: 'loose'
+      });
+
+      for (var i = 0; i < blocks.length; i++) {
+        (function(block, idx) {
+          var pre = block.parentElement;
+          var codeText = block.textContent || block.innerText;
+
+          // 转换 Markdown 内联格式为 HTML 标签（mermaid htmlLabels 需用 HTML）
+          codeText = codeText
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+          var container = document.createElement('div');
+          container.className = 'mermaid-container';
+          var id = 'mermaid-' + Date.now() + '-' + idx;
+
+          pre.replaceWith(container);
+
+          mermaid.render(id, codeText.trim()).then(function(result) {
+            container.innerHTML = result.svg;
+          }).catch(function(err) {
+            console.error('Mermaid error:', err);
+            container.innerHTML = '<pre class="mermaid-error" style="color:#c62828;padding:16px;background:#ffebee;border-radius:8px;font-size:13px;line-height:1.6;"><strong>Mermaid 渲染失败</strong>\n' + err.message + '\n\n源码：\n' + codeText + '</pre>';
+          });
+        })(blocks[i], i);
+      }
+    }
+  })();
+  </script>
+
+  <!-- Lightbox Overlay -->
+  <div class="lightbox-overlay" id="lightbox-overlay">
+    <img src="" alt="" id="lightbox-image" />
+  </div>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top" title="Back to top">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"/>
+    </svg>
+  </button>
+
+  <!-- Lightbox interaction -->
+  <script>
+  (function() {
+    var overlay = document.getElementById('lightbox-overlay');
+    var lightboxImg = document.getElementById('lightbox-image');
+    if (overlay && lightboxImg) {
+      var postContent = document.querySelector('.post-content');
+      if (postContent) {
+        postContent.addEventListener('click', function(e) {
+          var target = e.target;
+          if (target.tagName === 'IMG' && target.closest('.post-content')) {
+            lightboxImg.src = target.src;
+            lightboxImg.alt = target.alt || '';
+            overlay.classList.add('active');
+          }
+        });
+      }
+      overlay.addEventListener('click', function() {
+        overlay.classList.remove('active');
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) {
+          overlay.classList.remove('active');
+        }
+      });
+    }
+  })();
+  </script>
+
+  <!-- Share copy function -->
+  <script>
+  function shareTo(platform, title) {
+    var url = window.location.href;
+    var shareUrl;
+    switch (platform) {
+      case 'twitter':
+        shareUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);
+        break;
+      case 'weibo':
+        shareUrl = 'https://service.weibo.com/share/share.php?title=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);
+        break;
+    }
+    if (shareUrl) window.open(shareUrl, '_blank', 'width=600,height=500');
+  }
+  function copyPageLink(btn) {
+    var url = window.location.href;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = url;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+    btn.classList.add('copied');
+    setTimeout(function() { btn.classList.remove('copied'); }, 1800);
+  }
+
+  function copyCopyrightInfo(btn) {
+    var title = document.querySelector('.copyright-title');
+    var url = document.querySelector('.copyright-url');
+    var author = document.querySelector('.copyright-meta-value');
+    if (!title || !url) return;
+    var text = '作者：' + (author ? author.textContent.trim() : '') + '\n'
+             + '标题：' + title.textContent.trim() + '\n'
+             + '链接：' + url.textContent.trim() + '\n'
+             + '来源：' + window.location.host + '\n'
+             + '著作权：CC BY-NC-ND 4.0';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+    btn.classList.add('copied');
+    btn.querySelector('.copyright-copy-feedback').textContent = '已复制';
+    setTimeout(function() {
+      btn.classList.remove('copied');
+      btn.querySelector('.copyright-copy-feedback').textContent = '复制';
+    }, 1800);
+  }
+  </script>
+
+  <!-- Reading Progress & Back to Top -->
+  <script>
+  (function() {
+    var progressBar = document.getElementById('reading-progress');
+    var backBtn = document.getElementById('back-to-top');
+    var hero = document.getElementById('hero');
+    var heroBg = hero ? hero.querySelector('.hero-bg img') : null;
+    var siteHeader = document.querySelector('.site-header');
+
+    function updateProgress() {
+      var winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (height > 0) {
+        progressBar.style.width = (winScroll / height) * 100 + '%';
+      }
+    }
+
+    function toggleBackToTop() {
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop > 400) {
+        backBtn.classList.add('visible');
+      } else {
+        backBtn.classList.remove('visible');
+      }
+    }
+
+    // Hero parallax & nav scroll effect
+    function updateHero() {
+      if (!hero) return;
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      var heroHeight = hero.offsetHeight;
+
+      // Parallax: background moves slower than scroll
+      if (heroBg) {
+        var offset = scrollTop * 0.35;
+        heroBg.style.transform = 'scale(1.05) translateY(' + offset + 'px)';
+      }
+
+      // Fade out hero content as user scrolls
+      var heroContent = hero.querySelector('.hero-content');
+      var scrollHint = hero.querySelector('.hero-scroll-hint');
+      var fadeRatio = Math.max(0, 1 - scrollTop / (heroHeight * 0.6));
+      if (heroContent) {
+        heroContent.style.opacity = fadeRatio;
+        heroContent.style.transform = 'translateY(' + (scrollTop * 0.15) + 'px)';
+      }
+      if (scrollHint) {
+        scrollHint.style.opacity = fadeRatio;
+      }
+
+      // Sticky nav: add background after scrolling past hero
+      if (siteHeader) {
+        if (scrollTop > heroHeight * 0.85) {
+          siteHeader.classList.add('scrolled');
+        } else {
+          siteHeader.classList.remove('scrolled');
+        }
+      }
+    }
+
+    function onScroll() {
+      updateProgress();
+      toggleBackToTop();
+      updateHero();
+    }
+
+    backBtn.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+  </script>
+
+  <!-- busuanzi (不蒜子) - 页面阅读量统计 -->
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  <!-- Table of Contents -->
+  <script>
+  (function() {
+    var toc = document.getElementById('post-toc');
+    var tocBody = document.getElementById('toc-body');
+    if (!toc || !tocBody) return;
+
+    function escapeHtml(str) {
+      var d = document.createElement('div');
+      d.appendChild(document.createTextNode(str));
+      return d.innerHTML;
+    }
+
+    var content = document.querySelector('.post-content');
+    if (!content) { toc.style.display = 'none'; return; }
+
+    var headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    if (headings.length < 2) { toc.style.display = 'none'; return; }
+
+    var idCounts = {};
+    function getId(h) {
+      if (h.id) return h.id;
+      var base = (h.textContent || '').toLowerCase()
+        .replace(/[^\w一-鿿]+/g, '-').replace(/^-+|-+$/g, '') || 'heading';
+      idCounts[base] = (idCounts[base] || 0) + 1;
+      return idCounts[base] > 1 ? base + '-' + idCounts[base] : base;
+    }
+
+    var items = [];
+    headings.forEach(function(h) {
+      var id = getId(h);
+      if (!h.id) h.id = id;
+      items.push({
+        el: h,
+        level: parseInt(h.tagName.charAt(1)),
+        id: id,
+        text: h.textContent.trim()
+      });
+    });
+
+    var minLevel = Math.min.apply(null, items.map(function(i) { return i.level; }));
+    var html = '<ul class="toc-list">';
+    items.forEach(function(item) {
+      var indent = item.level - minLevel;
+      html += '<li class="toc-item" style="--level: ' + indent + '">'
+           + '<a class="toc-link" href="#' + item.id + '">'
+           + escapeHtml(item.text) + '</a></li>';
+    });
+    html += '</ul>';
+    tocBody.innerHTML = html;
+
+    var links = tocBody.querySelectorAll('.toc-link');
+    var els = items.map(function(i) { return i.el; });
+
+    function updateActive() {
+      var activeIndex = -1;
+      for (var i = els.length - 1; i >= 0; i--) {
+        if (els[i].getBoundingClientRect().top <= 100) { activeIndex = i; break; }
+      }
+      links.forEach(function(link, i) {
+        link.classList.toggle('active', i === activeIndex);
+      });
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+
+    links.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          var top = target.getBoundingClientRect().top + window.scrollY - 60;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        }
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1130 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  
+    <title>MacOS 上 Conda 安装与使用指南 | Maverick Spore</title>
+  
+
+  <!-- Google Fonts: Noto Serif SC (宋体正文) + Open Sans (西文无衬线) + Fira Code (等宽) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Noto+Serif+SC:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <!-- Obsidian 格式支持 (Callout / Wiki-link) -->
+  <!-- CDN: highlight.js CSS - 可在 _config.yml 的 cdn.vendors.highlight_css 中覆盖 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/atom-one-dark.min.css">
+  
+<link rel="stylesheet" href="/css/obsidian.css">
+
+  <meta name="description" content="macOS 上 Conda 的安装、环境隔离与包管理实用指南，涵盖 Python&#x2F;R 多语言环境配置。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MacOS 上 Conda 安装与使用指南">
+<meta property="og:url" content="https://blog.zhengxi.me/posts/526a2e3a/index.html">
+<meta property="og:site_name" content="Maverick Spore">
+<meta property="og:description" content="macOS 上 Conda 的安装、环境隔离与包管理实用指南，涵盖 Python&#x2F;R 多语言环境配置。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-29T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-29T10:00:00.000Z">
+<meta property="article:author" content="ZhengXi">
+<meta property="article:tag" content="conda">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="macos">
+<meta property="article:tag" content="环境管理">
+<meta property="article:tag" content="包管理">
+<meta name="twitter:card" content="summary">
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Maverick Spore" type="application/atom+xml">
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" id="reading-progress"></div>
+
+  <div class="site-wrapper">
+    
+<header class="site-header">
+  
+    <h1 class="site-title">
+      <a href="/">Maverick Spore</a>
+    </h1>
+  
+  
+  
+    <p class="site-subtitle">Unconventional by nature, curious by code</p>
+  
+
+  <nav class="site-nav">
+    <a class="nav-link" href="/">Home</a>
+    <a class="nav-link" href="/archives/">Archives</a>
+    <a class="nav-link" href="/categories/">Categories</a>
+    <a class="nav-link" href="/tags/">Tags</a>
+    <button class="search-btn nav-link" id="search-btn" aria-label="Search">
+      Search
+    </button>
+  </nav>
+</header>
+
+    
+    <main class="main-content">
+      
+      <article class="post-article">
+  <header class="post-header">
+    
+      <div class="post-category">
+        <a class="category-link" href="/categories/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
+          环境配置
+        </a>
+      </div>
+    
+
+    <h1 class="post-article-title">MacOS 上 Conda 安装与使用指南</h1>
+
+    <div class="post-meta">
+      <time datetime="2026-04-29">
+        2026-04-29
+      </time>
+      
+        <span class="meta-sep">·</span>
+        <span>1.4k words</span>
+        <span class="meta-sep">·</span>
+        <span>6 min read</span>
+      
+      <span class="meta-sep">·</span>
+      <span id="busuanzi_container_page_pv" class="post-views">
+        <span id="busuanzi_value_page_pv"></span> views
+      </span>
+    </div>
+  </header>
+
+  <div class="post-content">
+    <p>Conda 是一个开源的包管理系统和环境管理系统，支持 Python、R 等多种语言。相比 pip + venv，Conda 的优势在于：</p>
+<ul>
+<li><strong>跨语言</strong>：不仅管 Python 包，还能管 C 库、R 包等</li>
+<li><strong>二进制分发</strong>：预编译好的包，无需本地编译工具链</li>
+<li><strong>环境隔离</strong>：每个环境有独立的 Python 解释器和包集合</li>
+</ul>
+<h2 id="1-安装-conda"><a class="markdownIt-Anchor" href="#1-安装-conda"></a> 1. 安装 Conda</h2>
+<h3 id="选择版本"><a class="markdownIt-Anchor" href="#选择版本"></a> 选择版本</h3>
+<p>推荐安装 <strong>Miniconda</strong>（精简版）而非 Anaconda（完整版 3GB+），只装最核心的 conda + Python，需要什么包再自己装。</p>
+<h3 id="安装步骤"><a class="markdownIt-Anchor" href="#安装步骤"></a> 安装步骤</h3>
+<pre><code class="bash"># 下载 Miniconda (Apple Silicon / Intel 根据你的机器选)
+# Apple Silicon (M1/M2/M3/M4):
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-arm64.sh
+
+# Intel Mac:
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh
+
+# 运行安装脚本
+bash Miniconda3-latest-MacOSX-*.sh
+
+# 按照提示：
+#   1. 按 Enter 浏览协议，输入 yes 接受
+#   2. 确认安装路径（默认 ~/miniconda3）
+#   3. 是否初始化 conda（建议 yes，会自动修改 ~/.zshrc）
+</code></pre>
+<p>安装完成后<strong>重新打开终端</strong>，如果命令行前面出现 <code>(base)</code> 即表示成功。</p>
+<pre><code class="bash">conda --version
+</code></pre>
+<h3 id="验证安装"><a class="markdownIt-Anchor" href="#验证安装"></a> 验证安装</h3>
+<pre><code class="bash">conda info
+</code></pre>
+<h3 id="如果不想默认激活-base-环境"><a class="markdownIt-Anchor" href="#如果不想默认激活-base-环境"></a> 如果不想默认激活 base 环境</h3>
+<pre><code class="bash">conda config --set auto_activate_base false
+</code></pre>
+<h2 id="2-conda-常用命令速查"><a class="markdownIt-Anchor" href="#2-conda-常用命令速查"></a> 2. Conda 常用命令速查</h2>
+<h3 id="查看帮助"><a class="markdownIt-Anchor" href="#查看帮助"></a> 查看帮助</h3>
+<pre><code class="bash">conda --help
+conda &lt;子命令&gt; --help    # 例如 conda install --help
+</code></pre>
+<h3 id="更新-conda-自身"><a class="markdownIt-Anchor" href="#更新-conda-自身"></a> 更新 Conda 自身</h3>
+<pre><code class="bash">conda update conda
+conda update --all       # 更新当前环境所有包
+</code></pre>
+<h2 id="3-环境管理核心功能"><a class="markdownIt-Anchor" href="#3-环境管理核心功能"></a> 3. 环境管理（核心功能）</h2>
+<h3 id="创建新环境"><a class="markdownIt-Anchor" href="#创建新环境"></a> 创建新环境</h3>
+<pre><code class="bash"># 创建名为 myenv 的环境，指定 Python 版本
+conda create -n myenv python=3.11
+
+# 创建环境时同时安装多个包
+conda create -n myenv python=3.11 numpy pandas matplotlib
+
+# 指定环境路径（不放在默认 envs 目录）
+conda create -p /path/to/env python=3.11
+</code></pre>
+<p>参数说明：</p>
+<ul>
+<li><code>-n</code> 或 <code>--name</code>：环境名称</li>
+<li><code>-p</code> 或 <code>--prefix</code>：环境路径</li>
+<li><code>-c</code>：指定频道，如 <code>-c conda-forge</code></li>
+</ul>
+<h3 id="激活与退出环境"><a class="markdownIt-Anchor" href="#激活与退出环境"></a> 激活与退出环境</h3>
+<pre><code class="bash"># 激活环境
+conda activate myenv
+
+# 退出当前环境，回到 base
+conda deactivate
+</code></pre>
+<p>激活后终端提示符变为 <code>(myenv) $</code>，之后的 Python 和包操作都在该环境内。</p>
+<h3 id="查看环境列表"><a class="markdownIt-Anchor" href="#查看环境列表"></a> 查看环境列表</h3>
+<pre><code class="bash">conda env list
+# 或
+conda info --envs
+</code></pre>
+<p>当前环境前会有 <code>*</code> 标记。</p>
+<h3 id="复制环境"><a class="markdownIt-Anchor" href="#复制环境"></a> 复制环境</h3>
+<pre><code class="bash">conda create -n newenv --clone oldenv
+</code></pre>
+<h3 id="删除环境"><a class="markdownIt-Anchor" href="#删除环境"></a> 删除环境</h3>
+<pre><code class="bash">conda remove -n myenv --all
+conda env remove -n myenv   # 同上
+</code></pre>
+<h2 id="4-在环境中安装-python"><a class="markdownIt-Anchor" href="#4-在环境中安装-python"></a> 4. 在环境中安装 Python</h2>
+<p>Conda 环境可以不指定 Python 版本创建，但这会使用 base 环境的 Python：</p>
+<pre><code class="bash"># 创建环境时指定 Python（推荐）
+conda create -n py311 python=3.11
+
+# 创建后再安装 Python
+conda activate myenv
+conda install python=3.11
+</code></pre>
+<blockquote>
+<p><strong>为什么需要指定？</strong> 不同项目对 Python 版本要求不同，Conda 可以在不同环境中维护不同 Python 版本。</p>
+</blockquote>
+<h2 id="5-包管理"><a class="markdownIt-Anchor" href="#5-包管理"></a> 5. 包管理</h2>
+<h3 id="安装包"><a class="markdownIt-Anchor" href="#安装包"></a> 安装包</h3>
+<pre><code class="bash"># 安装单个包
+conda install numpy
+
+# 安装多个包
+conda install numpy pandas matplotlib
+
+# 指定版本
+conda install numpy=1.24
+
+# 从 conda-forge 频道安装
+conda install -c conda-forge opencv
+
+# 安装到指定环境（不激活也能装）
+conda install -n myenv numpy
+</code></pre>
+<h3 id="conda-forge-频道"><a class="markdownIt-Anchor" href="#conda-forge-频道"></a> conda-forge 频道</h3>
+<p>conda-forge 是社区维护的频道，包比默认频道更全、更新更快。建议添加为默认频道：</p>
+<pre><code class="bash">conda config --add channels conda-forge
+conda config --set channel_priority strict
+</code></pre>
+<h3 id="查看已安装的包"><a class="markdownIt-Anchor" href="#查看已安装的包"></a> 查看已安装的包</h3>
+<pre><code class="bash">conda list
+conda list -n myenv          # 查看指定环境
+</code></pre>
+<h3 id="更新包"><a class="markdownIt-Anchor" href="#更新包"></a> 更新包</h3>
+<pre><code class="bash">conda update numpy
+conda update --all            # 更新当前环境所有包
+</code></pre>
+<h3 id="删除包"><a class="markdownIt-Anchor" href="#删除包"></a> 删除包</h3>
+<pre><code class="bash">conda remove numpy
+conda remove -n myenv numpy   # 删除指定环境的包
+</code></pre>
+<h3 id="搜索包"><a class="markdownIt-Anchor" href="#搜索包"></a> 搜索包</h3>
+<pre><code class="bash">conda search numpy
+conda search numpy=1.24        # 搜索特定版本
+</code></pre>
+<h3 id="当-conda-没有这个包时"><a class="markdownIt-Anchor" href="#当-conda-没有这个包时"></a> 当 conda 没有这个包时</h3>
+<p>有些 PyPI-only 的包用 pip 安装：</p>
+<pre><code class="bash"># 先激活环境
+conda activate myenv
+
+# 用 pip 安装
+pip install some-package
+</code></pre>
+<blockquote>
+<p><strong>建议</strong>：先用 <code>conda install</code>，找不到再用 <code>pip install</code>。混用时尽量先装完所有 conda 包再装 pip 包，避免依赖冲突。</p>
+</blockquote>
+<h2 id="6-导出与重建环境"><a class="markdownIt-Anchor" href="#6-导出与重建环境"></a> 6. 导出与重建环境</h2>
+<h3 id="导出环境配置"><a class="markdownIt-Anchor" href="#导出环境配置"></a> 导出环境配置</h3>
+<pre><code class="bash"># 导出当前环境的包列表
+conda env export &gt; environment.yml
+
+# 只导出显式安装的包（不含依赖）
+conda env export --from-history &gt; environment.yml
+</code></pre>
+<h3 id="从配置重建环境"><a class="markdownIt-Anchor" href="#从配置重建环境"></a> 从配置重建环境</h3>
+<pre><code class="bash">conda env create -f environment.yml
+</code></pre>
+<blockquote>
+<p><code>environment.yml</code> 是 Conda 项目最常见的分发方式，放到 Git 仓库中就可以让别人一键重建环境。</p>
+</blockquote>
+<h2 id="7-macos-注意事项"><a class="markdownIt-Anchor" href="#7-macos-注意事项"></a> 7. MacOS 注意事项</h2>
+<h3 id="apple-silicon-m1m2m3m4"><a class="markdownIt-Anchor" href="#apple-silicon-m1m2m3m4"></a> Apple Silicon (M1/M2/M3/M4)</h3>
+<p>Miniconda 安装时会自动选择 <code>arm64</code> 架构，Python 包也默认是 arm64 版本。如果需要运行 x86_64 的包，可以创建 x86 环境：</p>
+<pre><code class="bash">CONDA_SUBDIR=osx-64 conda create -n py311-x86 python=3.11
+conda activate py311-x86
+conda config --env --set subdir osx-64
+</code></pre>
+<h3 id="rosetta-2"><a class="markdownIt-Anchor" href="#rosetta-2"></a> Rosetta 2</h3>
+<p>如果你需要运行一些尚未适配 ARM 的旧软件，确保已安装 Rosetta 2：</p>
+<pre><code class="bash">softwareupdate --install-rosetta
+</code></pre>
+<h3 id="shell-配置"><a class="markdownIt-Anchor" href="#shell-配置"></a> Shell 配置</h3>
+<p>Conda 初始化会在 <code>~/.zshrc</code> 中添加一段代码。如果终端不显示 <code>(base)</code>，确认 <code>.zshrc</code> 已加载：</p>
+<pre><code class="bash"># 手动初始化（如果安装时选了 no）
+conda init zsh
+# 重新加载配置
+source ~/.zshrc
+</code></pre>
+<h3 id="加速下载国内用户"><a class="markdownIt-Anchor" href="#加速下载国内用户"></a> 加速下载（国内用户）</h3>
+<pre><code class="bash"># 添加国内镜像（以清华 tuna 为例）
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/free/
+conda config --add channels https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/conda-forge/
+conda config --set show_channel_urls yes
+</code></pre>
+<h2 id="8-日常工作流示例"><a class="markdownIt-Anchor" href="#8-日常工作流示例"></a> 8. 日常工作流示例</h2>
+<pre><code class="bash"># 1. 创建新项目环境
+conda create -n myproject python=3.11
+
+# 2. 激活
+conda activate myproject
+
+# 3. 安装常用包
+conda install numpy pandas matplotlib jupyter
+conda install -c conda-forge scikit-learn
+
+# 4. 确认安装成功
+python -c &quot;import numpy; print(numpy.__version__)&quot;
+python --version
+
+# 5. 开始编码...
+
+# 6. 完成后退出环境
+conda deactivate
+</code></pre>
+<h2 id="9-卸载-conda"><a class="markdownIt-Anchor" href="#9-卸载-conda"></a> 9. 卸载 Conda</h2>
+<pre><code class="bash"># 删除整个 miniconda3 目录
+rm -rf ~/miniconda3
+
+# 清理 ~/.zshrc 中的 conda 初始化代码
+# 编辑 ~/.zshrc，删除 conda 相关的几行
+
+# 删除 conda 配置文件
+rm -rf ~/.condarc ~/.conda
+</code></pre>
+<h2 id="10-速查表"><a class="markdownIt-Anchor" href="#10-速查表"></a> 10. 速查表</h2>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>创建环境</td>
+<td><code>conda create -n env python=3.11</code></td>
+</tr>
+<tr>
+<td>激活环境</td>
+<td><code>conda activate env</code></td>
+</tr>
+<tr>
+<td>退出环境</td>
+<td><code>conda deactivate</code></td>
+</tr>
+<tr>
+<td>列出环境</td>
+<td><code>conda env list</code></td>
+</tr>
+<tr>
+<td>删除环境</td>
+<td><code>conda env remove -n env</code></td>
+</tr>
+<tr>
+<td>安装包</td>
+<td><code>conda install numpy</code></td>
+</tr>
+<tr>
+<td>查看包</td>
+<td><code>conda list</code></td>
+</tr>
+<tr>
+<td>更新包</td>
+<td><code>conda update numpy</code></td>
+</tr>
+<tr>
+<td>删除包</td>
+<td><code>conda remove numpy</code></td>
+</tr>
+<tr>
+<td>导出环境</td>
+<td><code>conda env export &gt; environment.yml</code></td>
+</tr>
+<tr>
+<td>重建环境</td>
+<td><code>conda env create -f environment.yml</code></td>
+</tr>
+<tr>
+<td>搜索包</td>
+<td><code>conda search numpy</code></td>
+</tr>
+</tbody>
+</table>
+
+  </div>
+
+  
+    <div class="post-tags">
+      
+        <a class="post-tag" href="/tags/conda/">conda</a>
+      
+        <a class="post-tag" href="/tags/python/">python</a>
+      
+        <a class="post-tag" href="/tags/macos/">macos</a>
+      
+        <a class="post-tag" href="/tags/%E7%8E%AF%E5%A2%83%E7%AE%A1%E7%90%86/">环境管理</a>
+      
+        <a class="post-tag" href="/tags/%E5%8C%85%E7%AE%A1%E7%90%86/">包管理</a>
+      
+    </div>
+  
+
+  
+  <div class="post-share">
+    <span class="share-label">分享</span>
+    <a class="share-btn share-twitter" href="javascript:void(0)" onclick="shareTo('twitter','MacOS 上 Conda 安装与使用指南')" aria-label="分享到 Twitter">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a class="share-btn share-weibo" href="javascript:void(0)" onclick="shareTo('weibo','MacOS 上 Conda 安装与使用指南')" aria-label="分享到微博">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.443zM8.594 11.39c-5.065.662-8.727 4.033-8.18 7.543.547 3.51 5.05 5.827 10.115 5.166 5.065-.662 8.727-4.033 8.18-7.543-.547-3.51-5.05-5.827-10.115-5.166zm5.636-1.591c-.275-.052-.462-.199-.422-.332.041-.133.287-.194.562-.143.619.117.998.452.84.776-.156.318-.685.423-1.304.308-.197-.037-.34-.161-.32-.278.021-.117.186-.182.382-.145.276.053.466.012.44-.064-.026-.076-.214-.142-.49-.195.303.12.498.278.457.411-.04.131-.284.19-.558.14-.613-.116-.991-.451-.833-.774.155-.316.679-.418 1.292-.304zM7.706 9.262c-.226-.062-.374-.212-.332-.334.043-.122.252-.172.478-.11.564.152.892.482.735.79-.155.303-.628.42-1.192.27-.569-.152-.891-.483-.734-.791.156-.309.625-.428 1.186-.278.236.064.384.214.341.335-.042.122-.25.172-.482.118zM14.912.472c-2.023-.558-4.314.126-5.963 1.664-.658.614-1.145 1.313-1.44 2.043-.307.759-.417 1.525-.363 2.216.27.208.557.389.861.543.286.144.586.262.897.353.36.107.737.18 1.112.229.054-.09.104-.184.155-.277.244-.45.582-.845 1.006-1.17.957-.735 2.145-.991 3.157-.735 1.011.257 1.646 1.01 1.78 1.992.039.281.04.566.002.846.385.032.76.098 1.113.2.38.108.736.258 1.065.443.15.084.293.177.43.277.257-.954.184-2.07-.311-3.118C21.372 2.933 18.595.735 14.912.472zm-1.374 17.918c-2.203.691-4.611-.196-5.368-1.982-.762-1.796.46-3.788 2.667-4.483 2.203-.695 4.61.197 5.368 1.983.762 1.796-.46 3.788-2.667 4.482zm1.157-2.272c.462-.815-.198-1.848-1.438-2.296-1.239-.447-2.473-.205-2.935.608-.462.813.197 1.848 1.437 2.296 1.24.449 2.473.207 2.936-.608z"/></svg>
+    </a>
+    <button class="share-btn share-copy" onclick="copyPageLink(this)" aria-label="复制链接">
+      <svg class="share-copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    </button>
+    <span class="share-copy-feedback" aria-hidden>已复制</span>
+  </div>
+  
+
+  
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+    
+  
+
+  
+  <div class="post-copyright">
+    <div class="copyright-content">
+      <div class="copyright-title">MacOS 上 Conda 安装与使用指南</div>
+      <div class="copyright-url" id="copyright-url">https://blog.zhengxi.me/posts/526a2e3a/</div>
+      <div class="copyright-meta">
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">作者</span>
+          <span class="copyright-meta-value">ZhengXi</span>
+        </span>
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">发布时间</span>
+          <span class="copyright-meta-value">2026-04-29 00:00</span>
+        </span>
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">著作权</span>
+          <span class="copyright-meta-value">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a>
+          </span>
+        </span>
+      </div>
+    </div>
+    <button class="copyright-copy-btn" onclick="copyCopyrightInfo(this)" aria-label="复制版权信息" title="复制版权信息">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+      <span class="copyright-copy-feedback">复制</span>
+    </button>
+  </div>
+  
+
+  
+  <nav class="post-nav">
+    
+      <a class="post-nav-item post-nav-prev" href="/posts/e5faa21f/">
+        <span class="post-nav-label">PREV</span>
+        <span class="post-nav-title">Claude 环境变量配置 ｜ 搭配 DeepSeek V4 模型</span>
+      </a>
+    
+    
+      <a class="post-nav-item post-nav-next" href="/posts/64478dc9/">
+        <span class="post-nav-label">NEXT</span>
+        <span class="post-nav-title">Claude Code Skills 安装记录</span>
+      </a>
+    
+  </nav>
+  
+
+  
+  <section id="comments" class="comments-section">
+    <script src="https://giscus.app/client.js"
+      data-repo="realzhengxi/zhengxi_blog_comments"
+      data-repo-id="R_kgDOSKT6sA"
+      data-category="General"
+      data-category-id="DIC_kwDOSKT6sM4C7fUT"
+      data-mapping="title"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="zh-CN"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+    </script>
+  </section>
+  
+</article>
+
+<nav class="post-toc" id="post-toc">
+  <div class="toc-header">CONTENTS</div>
+  <div class="toc-body" id="toc-body"></div>
+</nav>
+
+    </main>
+
+    
+<footer class="site-footer">
+  <div class="footer-bottom">
+    <a class="footer-license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer" aria-label="CC BY-NC-ND 4.0 License">
+      CC&nbsp;&nbsp;BY–NC–ND&nbsp;&nbsp;4.0
+    </a>
+    <span class="footer-credit">
+      <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> &middot;
+      <a href="https://github.com/realzhengxi/hexo-theme-highlight" target="_blank" rel="noopener noreferrer">Highlight</a>
+    </span>
+    <span class="footer-links">
+      <a class="footer-link" href="https://github.com/realzhengxi" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015-2.895-.015-3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      </a>
+      <a class="footer-rss" href="/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS Feed">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="4" cy="20" r="3"/><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/></svg>
+      </a>
+    </span>
+  </div>
+</footer>
+
+  </div>
+
+  <!-- Search Modal -->
+  <div class="search-overlay" id="search-overlay"></div>
+  <div class="search-modal" id="search-modal">
+    <div class="search-modal-header">
+      <input
+        type="text"
+        id="search-input"
+        class="search-input"
+        placeholder="Search something..."
+        autocomplete="off"
+      />
+      <button class="search-close" id="search-close" aria-label="Close search">✕</button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+
+  <!-- Search Script (inline, fetches search.json at runtime) -->
+  <script>
+  (function() {
+    var overlay = document.getElementById('search-overlay');
+    var modal = document.getElementById('search-modal');
+    var input = document.getElementById('search-input');
+    var resultsContainer = document.getElementById('search-results');
+    var closeBtn = document.getElementById('search-close');
+
+    // Find the search open button(s)
+    var openBtns = document.querySelectorAll('#search-btn');
+
+    var postsData = [];
+    var dataLoaded = false;
+
+    function loadSearchData() {
+      if (dataLoaded && postsData.length > 0) return Promise.resolve(postsData);
+      return fetch(window.location.origin + '/search.json')
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          postsData = data || [];
+          dataLoaded = true;
+          return postsData;
+        })
+        .catch(function(err) {
+          console.error('Failed to load search data:', err);
+          postsData = [];
+          dataLoaded = true;
+          return [];
+        });
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(text));
+      return div.innerHTML;
+    }
+
+    function highlightMatch(text, query) {
+      if (!query) return text;
+      try {
+        var escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var regex = new RegExp('(' + escaped + ')', 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
+      } catch(e) {
+        return text;
+      }
+    }
+
+    function renderResults(items, query) {
+      if (!items || items.length === 0) {
+        resultsContainer.innerHTML = '<div class="search-empty">No results found.</div>';
+        return;
+      }
+      var html = '';
+      for (var i = 0; i < items.length; i++) {
+        var p = items[i];
+        var title = escapeHtml(p.title);
+        var excerptText = p.text || p.content || '';
+        var excerpt = '';
+        if (excerptText.length > 120) {
+          excerpt = escapeHtml(excerptText.substring(0, 140));
+        } else {
+          excerpt = escapeHtml(excerptText);
+        }
+        html += '<a href="' + p.url + '" class="search-result-item">';
+        html += '  <span class="result-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>';
+        html += '  <div class="result-body">';
+        html += '    <h3 class="result-title">' + highlightMatch(title, query) + '</h3>';
+        html += '    <p class="result-excerpt">' + highlightMatch(excerpt, query) + '</p>';
+        html += '  </div>';
+        html += '</a>';
+      }
+      resultsContainer.innerHTML = html;
+    }
+
+    function performSearch(query) {
+      var q = query.trim().toLowerCase();
+      if (!q) {
+        renderResults(postsData, '');
+        return;
+      }
+      var filtered = postsData.filter(function(post) {
+        var searchText = post.text || post.content || '';
+        return post.title.toLowerCase().indexOf(q) !== -1 ||
+               searchText.toLowerCase().indexOf(q) !== -1;
+      });
+      renderResults(filtered, q);
+    }
+
+    function openSearch() {
+      overlay.classList.add('active');
+      modal.classList.add('active');
+      setTimeout(function() { input.focus(); }, 150);
+
+      // Load data and show all posts on open
+      loadSearchData().then(function() {
+        resultsContainer.innerHTML = '<div class="search-placeholder">Posts</div>';
+        renderResults(postsData, input.value);
+      });
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('active');
+      modal.classList.remove('active');
+      input.value = '';
+      resultsContainer.innerHTML = '';
+    }
+
+    for (var i = 0; i < openBtns.length; i++) {
+      openBtns[i].addEventListener('click', openSearch);
+    }
+    closeBtn.addEventListener('click', closeSearch);
+    overlay.addEventListener('click', closeSearch);
+
+    document.addEventListener('keydown', function(e) {
+      // Cmd/Ctrl + K
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        if (modal.classList.contains('active')) {
+          closeSearch();
+        } else {
+          openSearch();
+        }
+      }
+      // Escape to close
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeSearch();
+      }
+    });
+
+    // Search as you type
+    var searchTimer = null;
+    input.addEventListener('input', function() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(function() {
+        performSearch(input.value);
+      }, 150);
+    });
+
+    // Pre-load search data in background after page loads
+    setTimeout(loadSearchData, 2000);
+  })();
+  </script>
+
+  <!-- Code Highlight (highlight.js) - CDN -->
+  <!-- CDN URL 可在 _config.yml → cdn.vendors.highlight_js 覆盖 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  <script>
+  (function() {
+    // Add language label and copy button to each pre block (skip mermaid)
+    document.querySelectorAll('pre').forEach(function(pre) {
+      var code = pre.querySelector('code');
+      if (!code) return;
+      if (code.className.indexOf('mermaid') !== -1) return;
+
+      // Wrap code content in a scrollable container
+      // so the copy button stays fixed when content scrolls
+      var wrapper = document.createElement('div');
+      wrapper.className = 'code-scroll-wrapper';
+      while (pre.firstChild) {
+        wrapper.appendChild(pre.firstChild);
+      }
+      pre.appendChild(wrapper);
+      // code is now inside wrapper
+
+      var langClass = '';
+      for (var i = 0; i < code.classList.length; i++) {
+        var cls = code.classList[i];
+        if (cls.startsWith('language-') || cls.startsWith('lang-')) {
+          langClass = cls.replace('language-', '').replace('lang-', '');
+          break;
+        }
+      }
+      if (langClass) {
+        pre.setAttribute('data-lang', langClass);
+      }
+
+      // Add copy button only if not already present
+      if (pre.dataset.copyBtn) return;
+      pre.dataset.copyBtn = 'true';
+      var btn = document.createElement('button');
+      btn.className = 'code-copy-btn';
+      btn.setAttribute('type', 'button');
+      btn.setAttribute('aria-label', '复制代码');
+      btn.title = '复制';
+      btn.textContent = '复制';
+
+      function doCopy(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          return navigator.clipboard.writeText(text);
+        }
+        return new Promise(function(resolve, reject) {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            document.execCommand('copy');
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
+          document.body.removeChild(ta);
+        });
+      }
+
+      btn.addEventListener('click', function() {
+        var text = code.innerText || code.textContent || '';
+        doCopy(text).then(function() {
+          btn.textContent = '已复制';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.textContent = '复制';
+            btn.classList.remove('copied');
+          }, 1800);
+        }).catch(function() {
+          btn.textContent = '复制失败';
+          setTimeout(function() {
+            btn.textContent = '复制';
+          }, 1800);
+        });
+      });
+      pre.appendChild(btn);
+
+      // Ensure code content is visible (fix dark theme issue)
+      if (getComputedStyle(pre).color === 'rgb(0, 0, 0)' || getComputedStyle(code).color === 'rgb(0, 0, 0)') {
+        code.style.color = '#1a1a1a';
+      }
+    });
+
+    // Ensure inline code visibility
+    document.querySelectorAll(':not(pre) > code').forEach(function(inline) {
+      if (inline.parentElement && inline.parentElement.tagName !== 'PRE') {
+        inline.style.color = '#404040';
+        inline.style.fontWeight = '500';
+      }
+    });
+
+    // Initialize highlight.js on all code blocks EXCEPT mermaid
+    // MUST run AFTER wrapping code in scroll containers
+    if (typeof hljs !== 'undefined') {
+      document.querySelectorAll('pre code').forEach(function(block) {
+        if (block.className.indexOf('mermaid') !== -1) return;
+        try {
+          hljs.highlightElement(block);
+        } catch (e) {
+          console.warn('Highlight.js error:', e);
+        }
+      });
+    }
+  })();
+  </script>
+
+  <!-- Mermaid Diagrams (CDN) - 纯前端渲染，必须在 highlight.js 之后 -->
+  <!-- CDN URL 可在 _config.yml → cdn.vendors.mermaid 覆盖 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>
+  (function() {
+    if (!window.mermaid) {
+      console.error('Mermaid library not loaded');
+      return;
+    }
+
+    // 匹配所有 mermaid 代码块
+    var blocks = document.querySelectorAll('code.language-mermaid, code.lang-mermaid, code.mermaid');
+
+    if (blocks.length > 0) {
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'default',
+        themeVariables: {
+          primaryColor: '#e3f2fd',
+          primaryBorderColor: '#2563eb',
+          lineColor: '#737373',
+          secondaryColor: '#fff8e1',
+          tertiaryColor: '#f5f5f5',
+          fontFamily: '"Open Sans", "PingFang SC", "Noto Serif SC", sans-serif',
+          fontSize: '14px',
+          nodeTextColor: '#404040'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true },
+        securityLevel: 'loose'
+      });
+
+      for (var i = 0; i < blocks.length; i++) {
+        (function(block, idx) {
+          var pre = block.parentElement;
+          var codeText = block.textContent || block.innerText;
+
+          // 转换 Markdown 内联格式为 HTML 标签（mermaid htmlLabels 需用 HTML）
+          codeText = codeText
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+          var container = document.createElement('div');
+          container.className = 'mermaid-container';
+          var id = 'mermaid-' + Date.now() + '-' + idx;
+
+          pre.replaceWith(container);
+
+          mermaid.render(id, codeText.trim()).then(function(result) {
+            container.innerHTML = result.svg;
+          }).catch(function(err) {
+            console.error('Mermaid error:', err);
+            container.innerHTML = '<pre class="mermaid-error" style="color:#c62828;padding:16px;background:#ffebee;border-radius:8px;font-size:13px;line-height:1.6;"><strong>Mermaid 渲染失败</strong>\n' + err.message + '\n\n源码：\n' + codeText + '</pre>';
+          });
+        })(blocks[i], i);
+      }
+    }
+  })();
+  </script>
+
+  <!-- Lightbox Overlay -->
+  <div class="lightbox-overlay" id="lightbox-overlay">
+    <img src="" alt="" id="lightbox-image" />
+  </div>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top" title="Back to top">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"/>
+    </svg>
+  </button>
+
+  <!-- Lightbox interaction -->
+  <script>
+  (function() {
+    var overlay = document.getElementById('lightbox-overlay');
+    var lightboxImg = document.getElementById('lightbox-image');
+    if (overlay && lightboxImg) {
+      var postContent = document.querySelector('.post-content');
+      if (postContent) {
+        postContent.addEventListener('click', function(e) {
+          var target = e.target;
+          if (target.tagName === 'IMG' && target.closest('.post-content')) {
+            lightboxImg.src = target.src;
+            lightboxImg.alt = target.alt || '';
+            overlay.classList.add('active');
+          }
+        });
+      }
+      overlay.addEventListener('click', function() {
+        overlay.classList.remove('active');
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) {
+          overlay.classList.remove('active');
+        }
+      });
+    }
+  })();
+  </script>
+
+  <!-- Share copy function -->
+  <script>
+  function shareTo(platform, title) {
+    var url = window.location.href;
+    var shareUrl;
+    switch (platform) {
+      case 'twitter':
+        shareUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);
+        break;
+      case 'weibo':
+        shareUrl = 'https://service.weibo.com/share/share.php?title=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);
+        break;
+    }
+    if (shareUrl) window.open(shareUrl, '_blank', 'width=600,height=500');
+  }
+  function copyPageLink(btn) {
+    var url = window.location.href;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = url;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+    btn.classList.add('copied');
+    setTimeout(function() { btn.classList.remove('copied'); }, 1800);
+  }
+
+  function copyCopyrightInfo(btn) {
+    var title = document.querySelector('.copyright-title');
+    var url = document.querySelector('.copyright-url');
+    var author = document.querySelector('.copyright-meta-value');
+    if (!title || !url) return;
+    var text = '作者：' + (author ? author.textContent.trim() : '') + '\n'
+             + '标题：' + title.textContent.trim() + '\n'
+             + '链接：' + url.textContent.trim() + '\n'
+             + '来源：' + window.location.host + '\n'
+             + '著作权：CC BY-NC-ND 4.0';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+    btn.classList.add('copied');
+    btn.querySelector('.copyright-copy-feedback').textContent = '已复制';
+    setTimeout(function() {
+      btn.classList.remove('copied');
+      btn.querySelector('.copyright-copy-feedback').textContent = '复制';
+    }, 1800);
+  }
+  </script>
+
+  <!-- Reading Progress & Back to Top -->
+  <script>
+  (function() {
+    var progressBar = document.getElementById('reading-progress');
+    var backBtn = document.getElementById('back-to-top');
+    var hero = document.getElementById('hero');
+    var heroBg = hero ? hero.querySelector('.hero-bg img') : null;
+    var siteHeader = document.querySelector('.site-header');
+
+    function updateProgress() {
+      var winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (height > 0) {
+        progressBar.style.width = (winScroll / height) * 100 + '%';
+      }
+    }
+
+    function toggleBackToTop() {
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop > 400) {
+        backBtn.classList.add('visible');
+      } else {
+        backBtn.classList.remove('visible');
+      }
+    }
+
+    // Hero parallax & nav scroll effect
+    function updateHero() {
+      if (!hero) return;
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      var heroHeight = hero.offsetHeight;
+
+      // Parallax: background moves slower than scroll
+      if (heroBg) {
+        var offset = scrollTop * 0.35;
+        heroBg.style.transform = 'scale(1.05) translateY(' + offset + 'px)';
+      }
+
+      // Fade out hero content as user scrolls
+      var heroContent = hero.querySelector('.hero-content');
+      var scrollHint = hero.querySelector('.hero-scroll-hint');
+      var fadeRatio = Math.max(0, 1 - scrollTop / (heroHeight * 0.6));
+      if (heroContent) {
+        heroContent.style.opacity = fadeRatio;
+        heroContent.style.transform = 'translateY(' + (scrollTop * 0.15) + 'px)';
+      }
+      if (scrollHint) {
+        scrollHint.style.opacity = fadeRatio;
+      }
+
+      // Sticky nav: add background after scrolling past hero
+      if (siteHeader) {
+        if (scrollTop > heroHeight * 0.85) {
+          siteHeader.classList.add('scrolled');
+        } else {
+          siteHeader.classList.remove('scrolled');
+        }
+      }
+    }
+
+    function onScroll() {
+      updateProgress();
+      toggleBackToTop();
+      updateHero();
+    }
+
+    backBtn.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+  </script>
+
+  <!-- busuanzi (不蒜子) - 页面阅读量统计 -->
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  <!-- Table of Contents -->
+  <script>
+  (function() {
+    var toc = document.getElementById('post-toc');
+    var tocBody = document.getElementById('toc-body');
+    if (!toc || !tocBody) return;
+
+    function escapeHtml(str) {
+      var d = document.createElement('div');
+      d.appendChild(document.createTextNode(str));
+      return d.innerHTML;
+    }
+
+    var content = document.querySelector('.post-content');
+    if (!content) { toc.style.display = 'none'; return; }
+
+    var headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    if (headings.length < 2) { toc.style.display = 'none'; return; }
+
+    var idCounts = {};
+    function getId(h) {
+      if (h.id) return h.id;
+      var base = (h.textContent || '').toLowerCase()
+        .replace(/[^\w一-鿿]+/g, '-').replace(/^-+|-+$/g, '') || 'heading';
+      idCounts[base] = (idCounts[base] || 0) + 1;
+      return idCounts[base] > 1 ? base + '-' + idCounts[base] : base;
+    }
+
+    var items = [];
+    headings.forEach(function(h) {
+      var id = getId(h);
+      if (!h.id) h.id = id;
+      items.push({
+        el: h,
+        level: parseInt(h.tagName.charAt(1)),
+        id: id,
+        text: h.textContent.trim()
+      });
+    });
+
+    var minLevel = Math.min.apply(null, items.map(function(i) { return i.level; }));
+    var html = '<ul class="toc-list">';
+    items.forEach(function(item) {
+      var indent = item.level - minLevel;
+      html += '<li class="toc-item" style="--level: ' + indent + '">'
+           + '<a class="toc-link" href="#' + item.id + '">'
+           + escapeHtml(item.text) + '</a></li>';
+    });
+    html += '</ul>';
+    tocBody.innerHTML = html;
+
+    var links = tocBody.querySelectorAll('.toc-link');
+    var els = items.map(function(i) { return i.el; });
+
+    function updateActive() {
+      var activeIndex = -1;
+      for (var i = els.length - 1; i >= 0; i--) {
+        if (els[i].getBoundingClientRect().top <= 100) { activeIndex = i; break; }
+      }
+      links.forEach(function(link, i) {
+        link.classList.toggle('active', i === activeIndex);
+      });
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+
+    links.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          var top = target.getBoundingClientRect().top + window.scrollY - 60;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        }
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

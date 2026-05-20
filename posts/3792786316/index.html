@@ -1,0 +1,1157 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  
+    <title>微信小程序Git远程仓库设置（GitHub） | Maverick Spore</title>
+  
+
+  <!-- Google Fonts: Noto Serif SC (宋体正文) + Open Sans (西文无衬线) + Fira Code (等宽) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Noto+Serif+SC:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <!-- Obsidian 格式支持 (Callout / Wiki-link) -->
+  <!-- CDN: highlight.js CSS - 可在 _config.yml 的 cdn.vendors.highlight_css 中覆盖 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/atom-one-dark.min.css">
+  
+<link rel="stylesheet" href="/css/obsidian.css">
+
+  <meta name="description" content="通过 Git 版本管理将小程序项目推送到 GitHub 远程仓库。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微信小程序Git远程仓库设置（GitHub）">
+<meta property="og:url" content="https://blog.zhengxi.me/posts/3792786316/index.html">
+<meta property="og:site_name" content="Maverick Spore">
+<meta property="og:description" content="通过 Git 版本管理将小程序项目推送到 GitHub 远程仓库。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.see.you/2026/04/22/8ejZ/_20260422190301_401_34.png">
+<meta property="article:published_time" content="2026-04-20T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-23T09:16:02.000Z">
+<meta property="article:author" content="ZhengXi">
+<meta property="article:tag" content="微信小程序">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="GitHub">
+<meta property="article:tag" content="SSH">
+<meta property="article:tag" content="微信开发者工具">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.see.you/2026/04/22/8ejZ/_20260422190301_401_34.png">
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Maverick Spore" type="application/atom+xml">
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" id="reading-progress"></div>
+
+  <div class="site-wrapper">
+    
+<header class="site-header">
+  
+    <h1 class="site-title">
+      <a href="/">Maverick Spore</a>
+    </h1>
+  
+  
+  
+    <p class="site-subtitle">Unconventional by nature, curious by code</p>
+  
+
+  <nav class="site-nav">
+    <a class="nav-link" href="/">Home</a>
+    <a class="nav-link" href="/archives/">Archives</a>
+    <a class="nav-link" href="/categories/">Categories</a>
+    <a class="nav-link" href="/tags/">Tags</a>
+    <button class="search-btn nav-link" id="search-btn" aria-label="Search">
+      Search
+    </button>
+  </nav>
+</header>
+
+    
+    <main class="main-content">
+      
+      <article class="post-article">
+  <header class="post-header">
+    
+      <div class="post-category">
+        <a class="category-link" href="/categories/%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/">
+          开发笔记
+        </a>
+      </div>
+    
+
+    <h1 class="post-article-title">微信小程序Git远程仓库设置（GitHub）</h1>
+
+    <div class="post-meta">
+      <time datetime="2026-04-20">
+        2026-04-20
+      </time>
+      
+        <span class="meta-sep">·</span>
+        <span>1.2k words</span>
+        <span class="meta-sep">·</span>
+        <span>5 min read</span>
+      
+      <span class="meta-sep">·</span>
+      <span id="busuanzi_container_page_pv" class="post-views">
+        <span id="busuanzi_value_page_pv"></span> views
+      </span>
+    </div>
+  </header>
+
+  <div class="post-content">
+    <h2 id="概述"><a class="markdownIt-Anchor" href="#概述"></a> 概述</h2>
+<p>在微信开发者工具中，通过 Git 版本管理将小程序项目推送到 GitHub 远程仓库，需要完成 <strong>SSH 密钥配置</strong> 和 <strong>远程仓库设置</strong> 两个核心步骤。</p>
+<blockquote>
+<p><strong>推荐认证方式</strong>：使用 <strong>SSH Key（指定密钥）</strong> 方式认证，比 SSH Agent 更可靠，不依赖系统 ssh-agent 进程。</p>
+</blockquote>
+<hr />
+<h2 id="一-生成-ssh-密钥对"><a class="markdownIt-Anchor" href="#一-生成-ssh-密钥对"></a> 一、生成 SSH 密钥对</h2>
+<p>打开终端（Terminal），执行以下命令：</p>
+<pre><code class="bash">ssh-keygen -t ed25519 -C &quot;你的GitHub邮箱@example.com&quot;
+</code></pre>
+<p>按提示操作：</p>
+<ul>
+<li><strong>文件保存路径</strong>：直接回车，使用默认路径 <code>~/.ssh/id_ed25519</code></li>
+<li><strong>密码短语 (passphrase)</strong>：可设置也可留空</li>
+</ul>
+<blockquote>
+<p><strong>为什么用 ed25519？</strong> <code>ed25519</code> 是 GitHub 推荐的最新算法，比传统的 <code>rsa</code> 更安全、更快。如果系统不支持，可改用 <code>ssh-keygen -t rsa -b 4096</code>。</p>
+</blockquote>
+<p>生成后会在 <code>~/.ssh/</code> 目录下产生两个文件：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id_ed25519</code></td>
+<td>私钥（<mark>绝对不能泄露</mark>）</td>
+</tr>
+<tr>
+<td><code>id_ed25519.pub</code></td>
+<td>公钥（添加到 GitHub 使用）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="二-将公钥添加到-github"><a class="markdownIt-Anchor" href="#二-将公钥添加到-github"></a> 二、将公钥添加到 GitHub</h2>
+<h3 id="21-查看并复制公钥"><a class="markdownIt-Anchor" href="#21-查看并复制公钥"></a> 2.1 查看并复制公钥</h3>
+<pre><code class="bash">cat ~/.ssh/id_ed25519.pub
+</code></pre>
+<p>复制输出的全部内容。</p>
+<h3 id="22-在-github-上添加"><a class="markdownIt-Anchor" href="#22-在-github-上添加"></a> 2.2 在 GitHub 上添加</h3>
+<ol>
+<li>打开 GitHub → <strong>Settings</strong> → <strong>SSH and GPG keys</strong> → <strong>New SSH key</strong></li>
+<li><strong>Title</strong>：随意填写（如 <code>WeChat DevTools</code>）</li>
+<li><strong>Key type</strong>：选择 <code>Authentication Key</code></li>
+<li><strong>Key</strong>：粘贴刚才复制的公钥内容</li>
+<li>点击 <strong>Add SSH key</strong></li>
+</ol>
+<hr />
+<h2 id="三-配置-~sshconfig推荐"><a class="markdownIt-Anchor" href="#三-配置-~sshconfig推荐"></a> 三、配置 ~/.ssh/config（推荐）</h2>
+<h3 id="31-创建或编辑-config-文件"><a class="markdownIt-Anchor" href="#31-创建或编辑-config-文件"></a> 3.1 创建或编辑 config 文件</h3>
+<pre><code class="bash">nano ~/.ssh/config
+</code></pre>
+<h3 id="32-写入以下内容"><a class="markdownIt-Anchor" href="#32-写入以下内容"></a> 3.2 写入以下内容</h3>
+<pre><code># ===== GitHub 配置 =====
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519
+  UseKeychain yes    # 仅 macOS 需要，Windows/Linux 删掉这行
+</code></pre>
+<h3 id="33-设置文件权限"><a class="markdownIt-Anchor" href="#33-设置文件权限"></a> 3.3 设置文件权限</h3>
+<pre><code class="bash">chmod 600 ~/.ssh/config
+</code></pre>
+<blockquote>
+<p><strong>权限必须为 600</strong>：SSH 要求 config 文件权限必须是 <code>600</code>（仅所有者可读写），否则会报错 <code>Bad owner or permissions</code>。</p>
+</blockquote>
+<h3 id="34-逐行解释"><a class="markdownIt-Anchor" href="#34-逐行解释"></a> 3.4 逐行解释</h3>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Host github.com</code></td>
+<td>匹配规则：当连接 <code>github.com</code> 时触发以下配置</td>
+</tr>
+<tr>
+<td><code>HostName github.com</code></td>
+<td>实际连接的主机地址</td>
+</tr>
+<tr>
+<td><code>User git</code></td>
+<td>使用 <code>git</code> 用户身份连接（GitHub 固定为 git）</td>
+</tr>
+<tr>
+<td><code>IdentityFile ~/.ssh/id_ed25519</code></td>
+<td>指定使用的私钥文件路径</td>
+</tr>
+<tr>
+<td><code>UseKeychain yes</code></td>
+<td>macOS 专用：将密钥存入系统钥匙串，重启后自动加载</td>
+</tr>
+</tbody>
+</table>
+<h3 id="35-多平台多账号配置进阶"><a class="markdownIt-Anchor" href="#35-多平台多账号配置进阶"></a> 3.5 多平台/多账号配置（进阶）</h3>
+<pre><code># ===== GitHub 主账号 =====
+Host github.com
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519_github
+  UseKeychain yes
+
+# ===== Gitee =====
+Host gitee.com
+  HostName gitee.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519_gitee
+  UseKeychain yes
+
+# ===== GitHub 副账号（通过别名区分）=====
+Host github-work
+  HostName github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519_work
+  UseKeychain yes
+</code></pre>
+<p>使用副账号时，克隆地址中的 <code>github.com</code> 替换为别名：</p>
+<pre><code class="bash">git clone git@github-work:workuser/repo.git
+</code></pre>
+<hr />
+<h2 id="四-测试-ssh-连接"><a class="markdownIt-Anchor" href="#四-测试-ssh-连接"></a> 四、测试 SSH 连接</h2>
+<pre><code class="bash">ssh -T git@github.com
+</code></pre>
+<p>首次连接会提示确认 GitHub 指纹，输入 <code>yes</code>。</p>
+<ul>
+<li>成功输出：<code>Hi 你的用户名! You've successfully authenticated, but GitHub does not provide shell access.</code></li>
+<li>失败输出：<code>Permission denied (publickey)</code> → 检查公钥是否正确添加到 GitHub</li>
+</ul>
+<hr />
+<h2 id="五-微信开发者工具配置"><a class="markdownIt-Anchor" href="#五-微信开发者工具配置"></a> 五、微信开发者工具配置</h2>
+<h3 id="51-配置认证方式"><a class="markdownIt-Anchor" href="#51-配置认证方式"></a> 5.1 配置认证方式</h3>
+<p>进入 <strong>版本管理</strong> → <strong>设置</strong>（齿轮图标）→ <strong>网络和认证</strong> → <strong>认证方式</strong>：</p>
+<p>选择 <strong>使用 SSH Key（指定密钥）</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>应填写的路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>公钥文件</strong></td>
+<td><code>/Users/你的用户名/.ssh/id_ed25519.pub</code></td>
+</tr>
+<tr>
+<td><strong>私钥文件</strong></td>
+<td><code>/Users/你的用户名/.ssh/id_ed25519</code></td>
+</tr>
+<tr>
+<td><strong>密码短语</strong></td>
+<td>生成密钥时设置的密码，没设置就留空</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>公钥 vs 私钥路径</strong></p>
+<ul>
+<li>公钥文件路径末尾必须有 <strong><code>.pub</code></strong></li>
+<li>私钥文件路径<strong>没有</strong> <code>.pub</code></li>
+<li>混淆两者会导致 <code>SSH Public key file not found</code> 错误</li>
+</ul>
+</blockquote>
+<h3 id="52-配置远程仓库"><a class="markdownIt-Anchor" href="#52-配置远程仓库"></a> 5.2 配置远程仓库</h3>
+<p>进入 <strong>版本管理</strong> → <strong>远程</strong> 标签 → <strong>添加远程仓库</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>名称</strong></td>
+<td><code>origin</code></td>
+</tr>
+<tr>
+<td><strong>URL</strong></td>
+<td><code>git@github.com:你的用户名/仓库名.git</code></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>SSH URL 格式</strong>：GitHub SSH 地址格式为 <code>git@github.com:用户名/仓库名.git</code>，不要使用 HTTPS 格式（<code>https://github.com/...</code>）。</p>
+</blockquote>
+<h3 id="53-推送"><a class="markdownIt-Anchor" href="#53-推送"></a> 5.3 推送</h3>
+<p>点击 <strong>推送</strong>，选择本地分支和远程分支，确认即可。</p>
+<hr />
+<h2 id="六-常见问题排查"><a class="markdownIt-Anchor" href="#六-常见问题排查"></a> 六、常见问题排查</h2>
+<h3 id="61-错误速查表"><a class="markdownIt-Anchor" href="#61-错误速查表"></a> 6.1 错误速查表</h3>
+<table>
+<thead>
+<tr>
+<th>错误信息</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Permission denied (publickey)</code></td>
+<td>公钥未添加到 GitHub 或密钥不匹配</td>
+<td>重新检查 <a href="#%E4%BA%8C%E5%B0%86%E5%85%AC%E9%92%A5%E6%B7%BB%E5%8A%A0%E5%88%B0-github">第二步</a></td>
+</tr>
+<tr>
+<td><code>SSH Public key file not found</code></td>
+<td>微信工具中公钥路径填错</td>
+<td>确保公钥路径以 <code>.pub</code> 结尾</td>
+</tr>
+<tr>
+<td><code>credentials callback max loop reached</code></td>
+<td>认证方式配置不当</td>
+<td>改用「指定密钥」而非「SSH Agent」</td>
+</tr>
+<tr>
+<td><code>Bad owner or permissions</code></td>
+<td>config 文件权限过宽</td>
+<td>执行 <code>chmod 600 ~/.ssh/config</code></td>
+</tr>
+<tr>
+<td><code>Could not open a connection to your authentication agent</code></td>
+<td>ssh-agent 未启动</td>
+<td>执行 <code>eval &quot;$(ssh-agent -s)&quot;</code></td>
+</tr>
+<tr>
+<td>macOS 重启后需重新 ssh-add</td>
+<td>未配置 UseKeychain</td>
+<td>确保 config 中有 <code>UseKeychain yes</code>，然后执行 <code>ssh-add --apple-use-keychain ~/.ssh/id_ed25519</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="62-新建空仓库能否推送"><a class="markdownIt-Anchor" href="#62-新建空仓库能否推送"></a> 6.2 新建空仓库能否推送？</h3>
+<blockquote>
+<p><strong>Q：远程仓库是新建的空仓库，能推送吗？</strong></p>
+<p><strong>A：完全可以。</strong> 新建的空仓库没有任何提交记录，直接推送本地分支即可。GitHub 会在首次推送时自动创建对应的远程分支。</p>
+</blockquote>
+<h3 id="63-nano-编辑器快捷键"><a class="markdownIt-Anchor" href="#63-nano-编辑器快捷键"></a> 6.3 nano 编辑器快捷键</h3>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Ctrl+O</code></td>
+<td>保存文件（WriteOut）</td>
+</tr>
+<tr>
+<td><code>Enter</code></td>
+<td>确认文件名</td>
+</tr>
+<tr>
+<td><code>Ctrl+X</code></td>
+<td>退出 nano</td>
+</tr>
+<tr>
+<td><code>Ctrl+C</code></td>
+<td>取消当前操作</td>
+</tr>
+<tr>
+<td><code>Ctrl+G</code></td>
+<td>查看帮助</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="七-完整操作流程图"><a class="markdownIt-Anchor" href="#七-完整操作流程图"></a> 七、完整操作流程图</h2>
+<p><img src="https://i.see.you/2026/04/22/8ejZ/_20260422190301_401_34.png" alt="微信图片_20260422190301_401_34.png" /></p>
+<hr />
+<h2 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.github.com/zh/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent">GitHub 官方 SSH 密钥生成文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.github.com/zh/authentication/connecting-to-github-with-ssh/testing-your-ssh-connection">GitHub 官方 SSH 配置文档</a></li>
+</ul>
+
+  </div>
+
+  
+    <div class="post-tags">
+      
+        <a class="post-tag" href="/tags/%E5%BE%AE%E4%BF%A1%E5%B0%8F%E7%A8%8B%E5%BA%8F/">微信小程序</a>
+      
+        <a class="post-tag" href="/tags/Git/">Git</a>
+      
+        <a class="post-tag" href="/tags/GitHub/">GitHub</a>
+      
+        <a class="post-tag" href="/tags/SSH/">SSH</a>
+      
+        <a class="post-tag" href="/tags/%E5%BE%AE%E4%BF%A1%E5%BC%80%E5%8F%91%E8%80%85%E5%B7%A5%E5%85%B7/">微信开发者工具</a>
+      
+    </div>
+  
+
+  
+  <div class="post-share">
+    <span class="share-label">分享</span>
+    <a class="share-btn share-twitter" href="javascript:void(0)" onclick="shareTo('twitter','微信小程序Git远程仓库设置（GitHub）')" aria-label="分享到 Twitter">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a class="share-btn share-weibo" href="javascript:void(0)" onclick="shareTo('weibo','微信小程序Git远程仓库设置（GitHub）')" aria-label="分享到微博">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.443zM8.594 11.39c-5.065.662-8.727 4.033-8.18 7.543.547 3.51 5.05 5.827 10.115 5.166 5.065-.662 8.727-4.033 8.18-7.543-.547-3.51-5.05-5.827-10.115-5.166zm5.636-1.591c-.275-.052-.462-.199-.422-.332.041-.133.287-.194.562-.143.619.117.998.452.84.776-.156.318-.685.423-1.304.308-.197-.037-.34-.161-.32-.278.021-.117.186-.182.382-.145.276.053.466.012.44-.064-.026-.076-.214-.142-.49-.195.303.12.498.278.457.411-.04.131-.284.19-.558.14-.613-.116-.991-.451-.833-.774.155-.316.679-.418 1.292-.304zM7.706 9.262c-.226-.062-.374-.212-.332-.334.043-.122.252-.172.478-.11.564.152.892.482.735.79-.155.303-.628.42-1.192.27-.569-.152-.891-.483-.734-.791.156-.309.625-.428 1.186-.278.236.064.384.214.341.335-.042.122-.25.172-.482.118zM14.912.472c-2.023-.558-4.314.126-5.963 1.664-.658.614-1.145 1.313-1.44 2.043-.307.759-.417 1.525-.363 2.216.27.208.557.389.861.543.286.144.586.262.897.353.36.107.737.18 1.112.229.054-.09.104-.184.155-.277.244-.45.582-.845 1.006-1.17.957-.735 2.145-.991 3.157-.735 1.011.257 1.646 1.01 1.78 1.992.039.281.04.566.002.846.385.032.76.098 1.113.2.38.108.736.258 1.065.443.15.084.293.177.43.277.257-.954.184-2.07-.311-3.118C21.372 2.933 18.595.735 14.912.472zm-1.374 17.918c-2.203.691-4.611-.196-5.368-1.982-.762-1.796.46-3.788 2.667-4.483 2.203-.695 4.61.197 5.368 1.983.762 1.796-.46 3.788-2.667 4.482zm1.157-2.272c.462-.815-.198-1.848-1.438-2.296-1.239-.447-2.473-.205-2.935.608-.462.813.197 1.848 1.437 2.296 1.24.449 2.473.207 2.936-.608z"/></svg>
+    </a>
+    <button class="share-btn share-copy" onclick="copyPageLink(this)" aria-label="复制链接">
+      <svg class="share-copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    </button>
+    <span class="share-copy-feedback" aria-hidden>已复制</span>
+  </div>
+  
+
+  
+    
+    
+      
+        
+      
+        
+          
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+    
+    <div class="related-posts">
+      <h3 class="related-title">相关文章</h3>
+      <div class="related-list">
+        
+        <a class="related-item" href="/posts/3215020490/">
+          <span class="related-item-title">微信小程序：生科小算Pro</span>
+          <time class="related-item-date">2026-04-21</time>
+        </a>
+        
+      </div>
+    </div>
+    
+  
+
+  
+  <div class="post-copyright">
+    <div class="copyright-content">
+      <div class="copyright-title">微信小程序Git远程仓库设置（GitHub）</div>
+      <div class="copyright-url" id="copyright-url">https://blog.zhengxi.me/posts/3792786316/</div>
+      <div class="copyright-meta">
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">作者</span>
+          <span class="copyright-meta-value">ZhengXi</span>
+        </span>
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">发布时间</span>
+          <span class="copyright-meta-value">2026-04-20 00:00</span>
+        </span>
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">著作权</span>
+          <span class="copyright-meta-value">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a>
+          </span>
+        </span>
+      </div>
+    </div>
+    <button class="copyright-copy-btn" onclick="copyCopyrightInfo(this)" aria-label="复制版权信息" title="复制版权信息">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+      <span class="copyright-copy-feedback">复制</span>
+    </button>
+  </div>
+  
+
+  
+  <nav class="post-nav">
+    
+      <a class="post-nav-item post-nav-prev" href="/posts/3215020490/">
+        <span class="post-nav-label">PREV</span>
+        <span class="post-nav-title">微信小程序：生科小算Pro</span>
+      </a>
+    
+    
+  </nav>
+  
+
+  
+  <section id="comments" class="comments-section">
+    <script src="https://giscus.app/client.js"
+      data-repo="realzhengxi/zhengxi_blog_comments"
+      data-repo-id="R_kgDOSKT6sA"
+      data-category="General"
+      data-category-id="DIC_kwDOSKT6sM4C7fUT"
+      data-mapping="title"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="zh-CN"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+    </script>
+  </section>
+  
+</article>
+
+<nav class="post-toc" id="post-toc">
+  <div class="toc-header">CONTENTS</div>
+  <div class="toc-body" id="toc-body"></div>
+</nav>
+
+    </main>
+
+    
+<footer class="site-footer">
+  <div class="footer-bottom">
+    <a class="footer-license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer" aria-label="CC BY-NC-ND 4.0 License">
+      CC&nbsp;&nbsp;BY–NC–ND&nbsp;&nbsp;4.0
+    </a>
+    <span class="footer-credit">
+      <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> &middot;
+      <a href="https://github.com/realzhengxi/hexo-theme-highlight" target="_blank" rel="noopener noreferrer">Highlight</a>
+    </span>
+    <span class="footer-links">
+      <a class="footer-link" href="https://github.com/realzhengxi" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015-2.895-.015-3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      </a>
+      <a class="footer-rss" href="/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS Feed">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="4" cy="20" r="3"/><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/></svg>
+      </a>
+    </span>
+  </div>
+</footer>
+
+  </div>
+
+  <!-- Search Modal -->
+  <div class="search-overlay" id="search-overlay"></div>
+  <div class="search-modal" id="search-modal">
+    <div class="search-modal-header">
+      <input
+        type="text"
+        id="search-input"
+        class="search-input"
+        placeholder="Search something..."
+        autocomplete="off"
+      />
+      <button class="search-close" id="search-close" aria-label="Close search">✕</button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+
+  <!-- Search Script (inline, fetches search.json at runtime) -->
+  <script>
+  (function() {
+    var overlay = document.getElementById('search-overlay');
+    var modal = document.getElementById('search-modal');
+    var input = document.getElementById('search-input');
+    var resultsContainer = document.getElementById('search-results');
+    var closeBtn = document.getElementById('search-close');
+
+    // Find the search open button(s)
+    var openBtns = document.querySelectorAll('#search-btn');
+
+    var postsData = [];
+    var dataLoaded = false;
+
+    function loadSearchData() {
+      if (dataLoaded && postsData.length > 0) return Promise.resolve(postsData);
+      return fetch(window.location.origin + '/search.json')
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          postsData = data || [];
+          dataLoaded = true;
+          return postsData;
+        })
+        .catch(function(err) {
+          console.error('Failed to load search data:', err);
+          postsData = [];
+          dataLoaded = true;
+          return [];
+        });
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(text));
+      return div.innerHTML;
+    }
+
+    function highlightMatch(text, query) {
+      if (!query) return text;
+      try {
+        var escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var regex = new RegExp('(' + escaped + ')', 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
+      } catch(e) {
+        return text;
+      }
+    }
+
+    function renderResults(items, query) {
+      if (!items || items.length === 0) {
+        resultsContainer.innerHTML = '<div class="search-empty">No results found.</div>';
+        return;
+      }
+      var html = '';
+      for (var i = 0; i < items.length; i++) {
+        var p = items[i];
+        var title = escapeHtml(p.title);
+        var excerptText = p.text || p.content || '';
+        var excerpt = '';
+        if (excerptText.length > 120) {
+          excerpt = escapeHtml(excerptText.substring(0, 140));
+        } else {
+          excerpt = escapeHtml(excerptText);
+        }
+        html += '<a href="' + p.url + '" class="search-result-item">';
+        html += '  <span class="result-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>';
+        html += '  <div class="result-body">';
+        html += '    <h3 class="result-title">' + highlightMatch(title, query) + '</h3>';
+        html += '    <p class="result-excerpt">' + highlightMatch(excerpt, query) + '</p>';
+        html += '  </div>';
+        html += '</a>';
+      }
+      resultsContainer.innerHTML = html;
+    }
+
+    function performSearch(query) {
+      var q = query.trim().toLowerCase();
+      if (!q) {
+        renderResults(postsData, '');
+        return;
+      }
+      var filtered = postsData.filter(function(post) {
+        var searchText = post.text || post.content || '';
+        return post.title.toLowerCase().indexOf(q) !== -1 ||
+               searchText.toLowerCase().indexOf(q) !== -1;
+      });
+      renderResults(filtered, q);
+    }
+
+    function openSearch() {
+      overlay.classList.add('active');
+      modal.classList.add('active');
+      setTimeout(function() { input.focus(); }, 150);
+
+      // Load data and show all posts on open
+      loadSearchData().then(function() {
+        resultsContainer.innerHTML = '<div class="search-placeholder">Posts</div>';
+        renderResults(postsData, input.value);
+      });
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('active');
+      modal.classList.remove('active');
+      input.value = '';
+      resultsContainer.innerHTML = '';
+    }
+
+    for (var i = 0; i < openBtns.length; i++) {
+      openBtns[i].addEventListener('click', openSearch);
+    }
+    closeBtn.addEventListener('click', closeSearch);
+    overlay.addEventListener('click', closeSearch);
+
+    document.addEventListener('keydown', function(e) {
+      // Cmd/Ctrl + K
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        if (modal.classList.contains('active')) {
+          closeSearch();
+        } else {
+          openSearch();
+        }
+      }
+      // Escape to close
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeSearch();
+      }
+    });
+
+    // Search as you type
+    var searchTimer = null;
+    input.addEventListener('input', function() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(function() {
+        performSearch(input.value);
+      }, 150);
+    });
+
+    // Pre-load search data in background after page loads
+    setTimeout(loadSearchData, 2000);
+  })();
+  </script>
+
+  <!-- Code Highlight (highlight.js) - CDN -->
+  <!-- CDN URL 可在 _config.yml → cdn.vendors.highlight_js 覆盖 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  <script>
+  (function() {
+    // Add language label and copy button to each pre block (skip mermaid)
+    document.querySelectorAll('pre').forEach(function(pre) {
+      var code = pre.querySelector('code');
+      if (!code) return;
+      if (code.className.indexOf('mermaid') !== -1) return;
+
+      // Wrap code content in a scrollable container
+      // so the copy button stays fixed when content scrolls
+      var wrapper = document.createElement('div');
+      wrapper.className = 'code-scroll-wrapper';
+      while (pre.firstChild) {
+        wrapper.appendChild(pre.firstChild);
+      }
+      pre.appendChild(wrapper);
+      // code is now inside wrapper
+
+      var langClass = '';
+      for (var i = 0; i < code.classList.length; i++) {
+        var cls = code.classList[i];
+        if (cls.startsWith('language-') || cls.startsWith('lang-')) {
+          langClass = cls.replace('language-', '').replace('lang-', '');
+          break;
+        }
+      }
+      if (langClass) {
+        pre.setAttribute('data-lang', langClass);
+      }
+
+      // Add copy button only if not already present
+      if (pre.dataset.copyBtn) return;
+      pre.dataset.copyBtn = 'true';
+      var btn = document.createElement('button');
+      btn.className = 'code-copy-btn';
+      btn.setAttribute('type', 'button');
+      btn.setAttribute('aria-label', '复制代码');
+      btn.title = '复制';
+      btn.textContent = '复制';
+
+      function doCopy(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          return navigator.clipboard.writeText(text);
+        }
+        return new Promise(function(resolve, reject) {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            document.execCommand('copy');
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
+          document.body.removeChild(ta);
+        });
+      }
+
+      btn.addEventListener('click', function() {
+        var text = code.innerText || code.textContent || '';
+        doCopy(text).then(function() {
+          btn.textContent = '已复制';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.textContent = '复制';
+            btn.classList.remove('copied');
+          }, 1800);
+        }).catch(function() {
+          btn.textContent = '复制失败';
+          setTimeout(function() {
+            btn.textContent = '复制';
+          }, 1800);
+        });
+      });
+      pre.appendChild(btn);
+
+      // Ensure code content is visible (fix dark theme issue)
+      if (getComputedStyle(pre).color === 'rgb(0, 0, 0)' || getComputedStyle(code).color === 'rgb(0, 0, 0)') {
+        code.style.color = '#1a1a1a';
+      }
+    });
+
+    // Ensure inline code visibility
+    document.querySelectorAll(':not(pre) > code').forEach(function(inline) {
+      if (inline.parentElement && inline.parentElement.tagName !== 'PRE') {
+        inline.style.color = '#404040';
+        inline.style.fontWeight = '500';
+      }
+    });
+
+    // Initialize highlight.js on all code blocks EXCEPT mermaid
+    // MUST run AFTER wrapping code in scroll containers
+    if (typeof hljs !== 'undefined') {
+      document.querySelectorAll('pre code').forEach(function(block) {
+        if (block.className.indexOf('mermaid') !== -1) return;
+        try {
+          hljs.highlightElement(block);
+        } catch (e) {
+          console.warn('Highlight.js error:', e);
+        }
+      });
+    }
+  })();
+  </script>
+
+  <!-- Mermaid Diagrams (CDN) - 纯前端渲染，必须在 highlight.js 之后 -->
+  <!-- CDN URL 可在 _config.yml → cdn.vendors.mermaid 覆盖 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>
+  (function() {
+    if (!window.mermaid) {
+      console.error('Mermaid library not loaded');
+      return;
+    }
+
+    // 匹配所有 mermaid 代码块
+    var blocks = document.querySelectorAll('code.language-mermaid, code.lang-mermaid, code.mermaid');
+
+    if (blocks.length > 0) {
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'default',
+        themeVariables: {
+          primaryColor: '#e3f2fd',
+          primaryBorderColor: '#2563eb',
+          lineColor: '#737373',
+          secondaryColor: '#fff8e1',
+          tertiaryColor: '#f5f5f5',
+          fontFamily: '"Open Sans", "PingFang SC", "Noto Serif SC", sans-serif',
+          fontSize: '14px',
+          nodeTextColor: '#404040'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true },
+        securityLevel: 'loose'
+      });
+
+      for (var i = 0; i < blocks.length; i++) {
+        (function(block, idx) {
+          var pre = block.parentElement;
+          var codeText = block.textContent || block.innerText;
+
+          // 转换 Markdown 内联格式为 HTML 标签（mermaid htmlLabels 需用 HTML）
+          codeText = codeText
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+          var container = document.createElement('div');
+          container.className = 'mermaid-container';
+          var id = 'mermaid-' + Date.now() + '-' + idx;
+
+          pre.replaceWith(container);
+
+          mermaid.render(id, codeText.trim()).then(function(result) {
+            container.innerHTML = result.svg;
+          }).catch(function(err) {
+            console.error('Mermaid error:', err);
+            container.innerHTML = '<pre class="mermaid-error" style="color:#c62828;padding:16px;background:#ffebee;border-radius:8px;font-size:13px;line-height:1.6;"><strong>Mermaid 渲染失败</strong>\n' + err.message + '\n\n源码：\n' + codeText + '</pre>';
+          });
+        })(blocks[i], i);
+      }
+    }
+  })();
+  </script>
+
+  <!-- Lightbox Overlay -->
+  <div class="lightbox-overlay" id="lightbox-overlay">
+    <img src="" alt="" id="lightbox-image" />
+  </div>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top" title="Back to top">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"/>
+    </svg>
+  </button>
+
+  <!-- Lightbox interaction -->
+  <script>
+  (function() {
+    var overlay = document.getElementById('lightbox-overlay');
+    var lightboxImg = document.getElementById('lightbox-image');
+    if (overlay && lightboxImg) {
+      var postContent = document.querySelector('.post-content');
+      if (postContent) {
+        postContent.addEventListener('click', function(e) {
+          var target = e.target;
+          if (target.tagName === 'IMG' && target.closest('.post-content')) {
+            lightboxImg.src = target.src;
+            lightboxImg.alt = target.alt || '';
+            overlay.classList.add('active');
+          }
+        });
+      }
+      overlay.addEventListener('click', function() {
+        overlay.classList.remove('active');
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) {
+          overlay.classList.remove('active');
+        }
+      });
+    }
+  })();
+  </script>
+
+  <!-- Share copy function -->
+  <script>
+  function shareTo(platform, title) {
+    var url = window.location.href;
+    var shareUrl;
+    switch (platform) {
+      case 'twitter':
+        shareUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);
+        break;
+      case 'weibo':
+        shareUrl = 'https://service.weibo.com/share/share.php?title=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);
+        break;
+    }
+    if (shareUrl) window.open(shareUrl, '_blank', 'width=600,height=500');
+  }
+  function copyPageLink(btn) {
+    var url = window.location.href;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = url;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+    btn.classList.add('copied');
+    setTimeout(function() { btn.classList.remove('copied'); }, 1800);
+  }
+
+  function copyCopyrightInfo(btn) {
+    var title = document.querySelector('.copyright-title');
+    var url = document.querySelector('.copyright-url');
+    var author = document.querySelector('.copyright-meta-value');
+    if (!title || !url) return;
+    var text = '作者：' + (author ? author.textContent.trim() : '') + '\n'
+             + '标题：' + title.textContent.trim() + '\n'
+             + '链接：' + url.textContent.trim() + '\n'
+             + '来源：' + window.location.host + '\n'
+             + '著作权：CC BY-NC-ND 4.0';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+    btn.classList.add('copied');
+    btn.querySelector('.copyright-copy-feedback').textContent = '已复制';
+    setTimeout(function() {
+      btn.classList.remove('copied');
+      btn.querySelector('.copyright-copy-feedback').textContent = '复制';
+    }, 1800);
+  }
+  </script>
+
+  <!-- Reading Progress & Back to Top -->
+  <script>
+  (function() {
+    var progressBar = document.getElementById('reading-progress');
+    var backBtn = document.getElementById('back-to-top');
+    var hero = document.getElementById('hero');
+    var heroBg = hero ? hero.querySelector('.hero-bg img') : null;
+    var siteHeader = document.querySelector('.site-header');
+
+    function updateProgress() {
+      var winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (height > 0) {
+        progressBar.style.width = (winScroll / height) * 100 + '%';
+      }
+    }
+
+    function toggleBackToTop() {
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop > 400) {
+        backBtn.classList.add('visible');
+      } else {
+        backBtn.classList.remove('visible');
+      }
+    }
+
+    // Hero parallax & nav scroll effect
+    function updateHero() {
+      if (!hero) return;
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      var heroHeight = hero.offsetHeight;
+
+      // Parallax: background moves slower than scroll
+      if (heroBg) {
+        var offset = scrollTop * 0.35;
+        heroBg.style.transform = 'scale(1.05) translateY(' + offset + 'px)';
+      }
+
+      // Fade out hero content as user scrolls
+      var heroContent = hero.querySelector('.hero-content');
+      var scrollHint = hero.querySelector('.hero-scroll-hint');
+      var fadeRatio = Math.max(0, 1 - scrollTop / (heroHeight * 0.6));
+      if (heroContent) {
+        heroContent.style.opacity = fadeRatio;
+        heroContent.style.transform = 'translateY(' + (scrollTop * 0.15) + 'px)';
+      }
+      if (scrollHint) {
+        scrollHint.style.opacity = fadeRatio;
+      }
+
+      // Sticky nav: add background after scrolling past hero
+      if (siteHeader) {
+        if (scrollTop > heroHeight * 0.85) {
+          siteHeader.classList.add('scrolled');
+        } else {
+          siteHeader.classList.remove('scrolled');
+        }
+      }
+    }
+
+    function onScroll() {
+      updateProgress();
+      toggleBackToTop();
+      updateHero();
+    }
+
+    backBtn.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+  </script>
+
+  <!-- busuanzi (不蒜子) - 页面阅读量统计 -->
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  <!-- Table of Contents -->
+  <script>
+  (function() {
+    var toc = document.getElementById('post-toc');
+    var tocBody = document.getElementById('toc-body');
+    if (!toc || !tocBody) return;
+
+    function escapeHtml(str) {
+      var d = document.createElement('div');
+      d.appendChild(document.createTextNode(str));
+      return d.innerHTML;
+    }
+
+    var content = document.querySelector('.post-content');
+    if (!content) { toc.style.display = 'none'; return; }
+
+    var headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    if (headings.length < 2) { toc.style.display = 'none'; return; }
+
+    var idCounts = {};
+    function getId(h) {
+      if (h.id) return h.id;
+      var base = (h.textContent || '').toLowerCase()
+        .replace(/[^\w一-鿿]+/g, '-').replace(/^-+|-+$/g, '') || 'heading';
+      idCounts[base] = (idCounts[base] || 0) + 1;
+      return idCounts[base] > 1 ? base + '-' + idCounts[base] : base;
+    }
+
+    var items = [];
+    headings.forEach(function(h) {
+      var id = getId(h);
+      if (!h.id) h.id = id;
+      items.push({
+        el: h,
+        level: parseInt(h.tagName.charAt(1)),
+        id: id,
+        text: h.textContent.trim()
+      });
+    });
+
+    var minLevel = Math.min.apply(null, items.map(function(i) { return i.level; }));
+    var html = '<ul class="toc-list">';
+    items.forEach(function(item) {
+      var indent = item.level - minLevel;
+      html += '<li class="toc-item" style="--level: ' + indent + '">'
+           + '<a class="toc-link" href="#' + item.id + '">'
+           + escapeHtml(item.text) + '</a></li>';
+    });
+    html += '</ul>';
+    tocBody.innerHTML = html;
+
+    var links = tocBody.querySelectorAll('.toc-link');
+    var els = items.map(function(i) { return i.el; });
+
+    function updateActive() {
+      var activeIndex = -1;
+      for (var i = els.length - 1; i >= 0; i--) {
+        if (els[i].getBoundingClientRect().top <= 100) { activeIndex = i; break; }
+      }
+      links.forEach(function(link, i) {
+        link.classList.toggle('active', i === activeIndex);
+      });
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+
+    links.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          var top = target.getBoundingClientRect().top + window.scrollY - 60;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        }
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

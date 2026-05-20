@@ -1,0 +1,202 @@
+/* ========================================
+   Obsidian Callouts / Admonitions
+   适配 highlight 主题配色
+   ======================================== */
+
+/* ========================================
+   Mermaid 流程图 / 图表
+   ======================================== */
+
+.mermaid-container {
+  margin: 1.8rem auto;
+  padding: 0.5rem;
+  max-width: 100%;
+  text-align: center;
+}
+
+.mermaid-container svg {
+  max-width: 100%;
+  height: auto !important;
+  font-family: "Open Sans", "PingFang SC", "Noto Serif SC", sans-serif !important;
+}
+
+/* 深色主题下 mermaid 文字可读性 */
+.mermaid-container .nodeLabel,
+.mermaid-container .edgeLabel,
+.mermaid-container .label {
+  color: var(--text-title) !important;
+  font-size: 0.88rem !important;
+}
+
+.mermaid-container .edgePath path {
+  stroke: #666 !important;
+}
+
+.mermaid-container .node rect,
+.mermaid-container .node circle,
+.mermaid-container .node polygon {
+  stroke: #555 !important;
+  filter: none !important;
+}
+
+/* 响应式：小屏幕缩放 */
+@media (max-width: 600px) {
+  .mermaid-container {
+    transform: scale(0.85);
+    transform-origin: center top;
+  }
+}
+
+.callout {
+  --callout-color: var(--accent, #ff5268);
+  
+  margin: 1.5rem 0;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  border-left: 4px solid var(--callout-color);
+  background: var(--bg-card, rgba(255, 255, 255, 0.03));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.callout-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sans-font, "Open Sans", "PingFang SC", sans-serif);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-title, #cececf);
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.01em;
+}
+
+.callout-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.callout-content {
+  font-size: 0.92rem;
+  color: var(--text-secondary, #aaa);
+  line-height: 1.7;
+}
+
+.callout-content > p:first-child {
+  margin-top: 0;
+}
+.callout-content > p:last-child {
+  margin-bottom: 0;
+}
+
+/* ---- Callout 类型色彩 ---- */
+/* note / abstract - 蓝色 */
+.callout[data-callout="note"],
+.callout[data-callout="abstract"] {
+  --callout-color: #5b8fd9;
+}
+
+/* info / todo - 青色 */
+.callout[data-callout="info"],
+.callout[data-callout="todo"] {
+  --callout-color: #3ba3c9;
+}
+
+/* tip / hint / success - 绿色 */
+.callout[data-callout="tip"],
+.callout[data-callout="hint"],
+.callout[data-callout="success"] {
+  --callout-color: #50a85a;
+}
+
+/* question / help / faq - 紫色 */
+.callout[data-callout="question"],
+.callout[data-callout="help"],
+.callout[data-callout="faq"] {
+  --callout-color: #9b72cf;
+}
+
+/* warning / caution / important - 橙色 */
+.callout[data-callout="warning"],
+.callout[data-callout="caution"],
+.callout[data-callout="important"] {
+  --callout-color: #d4982a;
+}
+
+/* failure / fail / danger / error / bug - 红色 */
+.callout[data-callout="failure"],
+.callout[data-callout="fail"],
+.callout[data-callout="danger"],
+.callout[data-callout="error"],
+.callout[data-callout="bug"] {
+  --callout-color: #d94f4f;
+}
+
+/* example - 粉色 */
+.callout[data-callout="example"] {
+  --callout-color: #c77da8;
+}
+
+/* quote / cite - 灰色 */
+.callout[data-callout="quote"],
+.callout[data-callout="cite"] {
+  --callout-color: #888;
+}
+
+/* ========================================
+   Wiki-link 双向链接样式
+   [[link]] 或 [[link|alias]]
+   ======================================== */
+
+.wiki-link,
+a[data-wiki] {
+  color: var(--accent, #ff5268) !important;
+  text-decoration: none !important;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+
+.wiki-link:hover,
+a[data-wiki]:hover {
+  border-bottom-color: currentColor;
+}
+
+/* 未找到的链接（虚线） */
+.wiki-link.is-broken,
+a[data-wiki].is-broken {
+  opacity: 0.55;
+  border-bottom: 1px dashed currentColor;
+}
+
+/* ========================================
+   Obsidian 图片尺寸语法
+   ![name|widthxheight](path)
+   ======================================== */
+
+.obsidian-img-size img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ========================================
+   响应式适配
+   ======================================== */
+
+@media (max-width: 600px) {
+  .callout {
+    padding: 0.65rem 0.85rem;
+    margin: 1.2rem 0;
+    border-radius: 6px;
+  }
+  
+  .callout-title {
+    font-size: 0.88rem;
+  }
+  
+  .callout-content {
+    font-size: 0.87rem;
+  }
+}

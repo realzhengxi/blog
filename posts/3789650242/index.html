@@ -1,0 +1,1415 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  
+    <title>Hexo 静态博客方案 ｜ GitHub Actions 自动化部署 | Maverick Spore</title>
+  
+
+  <!-- Google Fonts: Noto Serif SC (宋体正文) + Open Sans (西文无衬线) + Fira Code (等宽) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Noto+Serif+SC:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <!-- Obsidian 格式支持 (Callout / Wiki-link) -->
+  <!-- CDN: highlight.js CSS - 可在 _config.yml 的 cdn.vendors.highlight_css 中覆盖 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/atom-one-dark.min.css">
+  
+<link rel="stylesheet" href="/css/obsidian.css">
+
+  <meta name="description" content="从零搭建 Hexo 博客，通过 GitHub Actions 实现推送即部署。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo 静态博客方案 ｜ GitHub Actions 自动化部署">
+<meta property="og:url" content="https://blog.zhengxi.me/posts/3789650242/index.html">
+<meta property="og:site_name" content="Maverick Spore">
+<meta property="og:description" content="从零搭建 Hexo 博客，通过 GitHub Actions 实现推送即部署。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-26T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-08T11:34:26.000Z">
+<meta property="article:author" content="ZhengXi">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="GitHub Pages">
+<meta property="article:tag" content="GitHub Actions">
+<meta property="article:tag" content="静态博客">
+<meta property="article:tag" content="CI&#x2F;CD">
+<meta property="article:tag" content="Node.js">
+<meta name="twitter:card" content="summary">
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Maverick Spore" type="application/atom+xml">
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" id="reading-progress"></div>
+
+  <div class="site-wrapper">
+    
+<header class="site-header">
+  
+    <h1 class="site-title">
+      <a href="/">Maverick Spore</a>
+    </h1>
+  
+  
+  
+    <p class="site-subtitle">Unconventional by nature, curious by code</p>
+  
+
+  <nav class="site-nav">
+    <a class="nav-link" href="/">Home</a>
+    <a class="nav-link" href="/archives/">Archives</a>
+    <a class="nav-link" href="/categories/">Categories</a>
+    <a class="nav-link" href="/tags/">Tags</a>
+    <button class="search-btn nav-link" id="search-btn" aria-label="Search">
+      Search
+    </button>
+  </nav>
+</header>
+
+    
+    <main class="main-content">
+      
+      <article class="post-article">
+  <header class="post-header">
+    
+      <div class="post-category">
+        <a class="category-link" href="/categories/%E5%BC%80%E5%8F%91%E7%AC%94%E8%AE%B0/">
+          开发笔记
+        </a>
+      </div>
+    
+
+    <h1 class="post-article-title">Hexo 静态博客方案 ｜ GitHub Actions 自动化部署</h1>
+
+    <div class="post-meta">
+      <time datetime="2026-04-26">
+        2026-04-26
+      </time>
+      
+        <span class="meta-sep">·</span>
+        <span>3.3k words</span>
+        <span class="meta-sep">·</span>
+        <span>13 min read</span>
+      
+      <span class="meta-sep">·</span>
+      <span id="busuanzi_container_page_pv" class="post-views">
+        <span id="busuanzi_value_page_pv"></span> views
+      </span>
+    </div>
+  </header>
+
+  <div class="post-content">
+    <blockquote>
+<p><strong>适用环境</strong>：macOS / Windows / Linux + Node.js 16.0+ + Git<br />
+<strong>目标</strong>：在 GitHub Pages 上搭建 Hexo 静态博客，实现「写文章 → 推送源码 → 自动构建并部署」的全自动化工作流</p>
+</blockquote>
+<hr />
+<h2 id="概述"><a class="markdownIt-Anchor" href="#概述"></a> 概述</h2>
+<p>静态博客方案结合了 Markdown 的写作体验和 GitHub Pages 的免费托管能力，是个人技术博客和知识库的首选方案之一。Hexo 作为最流行的静态博客框架，生态成熟、主题丰富、部署方式灵活，社区中积累了大量开箱即用的主题和插件。</p>
+<p>本文以一个真实的生产环境博客（<a target="_blank" rel="noopener" href="https://blog.realzhengxi.com">伞间岁月</a>）为案例，详细讲解：</p>
+<ul>
+<li>Hexo 项目的初始化和核心配置</li>
+<li>主题选择与定制要点</li>
+<li>GitHub Actions 自动化部署流水线的完整搭建</li>
+<li>自定义域名与 CDN 加速</li>
+<li>日常写作工作流和问题排查</li>
+</ul>
+<hr />
+<h2 id="一-整体架构"><a class="markdownIt-Anchor" href="#一-整体架构"></a> 一、整体架构</h2>
+<p>静态博客方案的核心思想是 <strong>源码与静态文件分离</strong>：源码仓库存放 Hexo 源文件（Markdown 文章、主题、配置），GitHub Pages 仓库只存放构建后的 HTML/CSS/JS。两者通过 GitHub Actions 自动同步。</p>
+<pre><code>                    Hexo 源码仓库
+            github.com/你的用户名/blog-source
+
+  _posts/        themes/        _config.yml     .github/
+  文章.md        主题文件         package         workflows/
+                                .json           deploy.yml
+                      │ git push (main 分支)
+                      ▼
+
+                    GitHub Actions
+
+  1. actions/checkout@v3 → 拉取源码
+  2. 安装 Node.js + npm ci
+  3. hexo generate → 构建静态文件
+  4. 推送 public/ 到 Pages 仓库的 gh-pages 分支
+
+                      │ 自动部署
+                      ▼
+
+                   GitHub Pages 仓库
+        github.com/你的用户名/你的用户名.github.io
+
+  gh-pages 分支：index.html, archives/, posts/, ...
+
+                      │ GitHub Pages 服务
+                      ▼
+                    https://你的域名/
+</code></pre>
+<p>这种架构的优势：</p>
+<ul>
+<li><strong>职责清晰</strong>：源文件和构建产物互不干扰</li>
+<li><strong>安全可控</strong>：源码仓库可设为 Private，Pages 仓库保持 Public</li>
+<li><strong>零成本运维</strong>：GitHub Pages + Actions 的免费额度对个人博客绰绰有余</li>
+<li><strong>全自动化</strong>：一次配置，永久生效，只管写作和推送</li>
+</ul>
+<hr />
+<h2 id="二-前置准备"><a class="markdownIt-Anchor" href="#二-前置准备"></a> 二、前置准备</h2>
+<h3 id="21-安装-nodejs"><a class="markdownIt-Anchor" href="#21-安装-nodejs"></a> 2.1 安装 Node.js</h3>
+<p>Hexo 基于 Node.js，首先确保系统已安装 Node.js 16.0+：</p>
+<pre><code class="bash"># macOS
+brew install node
+
+# Windows（推荐使用 nvm-windows 或直接下载安装包）
+# https://nodejs.org/
+
+# Linux
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# 验证版本
+node -v
+npm -v
+</code></pre>
+<h3 id="22-安装-git-并配置-ssh"><a class="markdownIt-Anchor" href="#22-安装-git-并配置-ssh"></a> 2.2 安装 Git 并配置 SSH</h3>
+<pre><code class="bash"># macOS
+brew install git
+
+# Windows: https://git-scm.com/download/win
+# Linux: sudo apt-get install git
+
+# 配置全局身份信息
+git config --global user.name &quot;你的 GitHub 用户名&quot;
+git config --global user.email &quot;你的邮箱@example.com&quot;
+
+# 生成 SSH 密钥对
+ssh-keygen -t ed25519 -C &quot;你的邮箱@example.com&quot;
+
+# 查看并复制公钥
+cat ~/.ssh/id_ed25519.pub
+</code></pre>
+<p>将输出的公钥添加到 GitHub → <strong>Settings</strong> → <strong>SSH and GPG keys</strong> → <strong>New SSH key</strong>。</p>
+<blockquote>
+<p>SSH 的详细配置（包括多账号、权限问题排查）可参考同系列的 <a target="_blank" rel="noopener" href="https://blog.realzhengxi.com/posts/3792786316/">《微信小程序 Git 远程仓库设置》</a>。</p>
+</blockquote>
+<h3 id="23-创建两个-github-仓库"><a class="markdownIt-Anchor" href="#23-创建两个-github-仓库"></a> 2.3 创建两个 GitHub 仓库</h3>
+<p>需要准备两个仓库：</p>
+<table>
+<thead>
+<tr>
+<th>仓库</th>
+<th>作用</th>
+<th>建议可见性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>blog-source</code></td>
+<td>存放 Hexo 源码（包括文章、主题、配置）</td>
+<td>Private（可选）</td>
+</tr>
+<tr>
+<td><code>你的用户名.github.io</code> 或 <code>blog</code></td>
+<td>存放构建后的静态文件</td>
+<td>Public（必须）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>命名说明</strong>：如果你的站点是用户级 Pages（<code>https://你的用户名.github.io</code>），Pages 仓库必须命名为 <code>你的用户名.github.io</code>。如果是项目级 Pages（<code>https://你的用户名.github.io/仓库名/</code>），仓库名可以任意。</p>
+</blockquote>
+<hr />
+<h2 id="三-初始化-hexo-项目"><a class="markdownIt-Anchor" href="#三-初始化-hexo-项目"></a> 三、初始化 Hexo 项目</h2>
+<h3 id="31-安装-hexo-cli"><a class="markdownIt-Anchor" href="#31-安装-hexo-cli"></a> 3.1 安装 Hexo CLI</h3>
+<pre><code class="bash">npm install -g hexo-cli
+</code></pre>
+<h3 id="32-创建项目"><a class="markdownIt-Anchor" href="#32-创建项目"></a> 3.2 创建项目</h3>
+<pre><code class="bash"># 在目标目录创建 Hexo 项目
+hexo init blog-source
+cd blog-source
+
+# 安装项目依赖
+npm install
+</code></pre>
+<p><code>hexo init</code> 生成的目录结构：</p>
+<pre><code>blog-source/
+├── _config.yml        # 站点配置文件——最重要的配置文件
+├── package.json       # Node.js 依赖声明
+├── node_modules/      # 依赖包（不提交到 Git）
+├── scaffolds/         # 文章模板（可自定义）
+├── source/            # 源文件目录
+│   ├── _posts/        # 博客文章（Markdown 文件）
+│   └── CNAME          # 自定义域名文件（可选）
+├── themes/            # 主题目录
+└── public/            # 构建输出（自动生成，不提交）
+</code></pre>
+<h3 id="33-安装常用插件"><a class="markdownIt-Anchor" href="#33-安装常用插件"></a> 3.3 安装常用插件</h3>
+<pre><code class="bash">npm install hexo-abbrlink hexo-generator-feed --save
+</code></pre>
+<p>各插件作用：</p>
+<table>
+<thead>
+<tr>
+<th>插件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hexo-abbrlink</code></td>
+<td>为每篇文章生成唯一数字短链接（如 <code>/posts/3789650242/</code>），避免中文标题 URL 编码问题</td>
+</tr>
+<tr>
+<td><code>hexo-generator-feed</code></td>
+<td>生成 RSS/Atom 订阅源，方便读者订阅更新</td>
+</tr>
+<tr>
+<td><code>hexo-deployer-git</code></td>
+<td>本地 <code>hexo deploy</code> 命令的支持（可选，使用 GitHub Actions 时可省略）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="四-站点配置"><a class="markdownIt-Anchor" href="#四-站点配置"></a> 四、站点配置</h2>
+<h3 id="41-编辑-_configyml"><a class="markdownIt-Anchor" href="#41-编辑-_configyml"></a> 4.1 编辑 _config.yml</h3>
+<p>项目根目录的 <code>_config.yml</code> 是 Hexo 的核心配置文件。以下是关键配置项：</p>
+<pre><code class="yaml"># ===== 站点信息 =====
+title: 我的博客
+subtitle: '副标题'
+description: '博客描述，用于 SEO'
+author: 你的名字
+language: zh-CN
+timezone: ''
+
+# ===== URL 配置 =====
+url: https://你的域名.com                         # 博客最终访问地址
+permalink: posts/:abbrlink/                       # 使用 abbrlink 短链接
+permalink_defaults:
+pretty_urls:
+  trailing_index: false                           # 去除 index.html
+
+# ===== 目录配置 =====
+source_dir: source
+public_dir: public
+tag_dir: tags
+archive_dir: archives
+category_dir: categories
+
+# ===== 写作配置 =====
+syntax_highlighter: false       # 关闭内置高亮（交给主题处理）
+highlight:
+  enable: false
+prismjs:
+  enable: false
+
+# ===== 首页分页 =====
+index_generator:
+  per_page: 10
+  order_by: -date
+
+# ===== 文章短链接（hexo-abbrlink）=====
+abbrlink:
+  alg: crc32                    # 算法：crc16（更短）或 crc32（更唯一）
+  reps: true                    # 使用数字 + 字母混合
+
+# ===== RSS Feed =====
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+  order_by: -date
+</code></pre>
+<h3 id="42-初始化-git-并推送到远程"><a class="markdownIt-Anchor" href="#42-初始化-git-并推送到远程"></a> 4.2 初始化 Git 并推送到远程</h3>
+<pre><code class="bash">git init
+git add .
+git commit -m &quot;feat: init hexo blog&quot;
+
+git remote add origin git@github.com:你的用户名/blog-source.git
+git branch -M main
+git push -u origin main
+</code></pre>
+<hr />
+<h2 id="五-主题配置"><a class="markdownIt-Anchor" href="#五-主题配置"></a> 五、主题配置</h2>
+<h3 id="51-选择主题"><a class="markdownIt-Anchor" href="#51-选择主题"></a> 5.1 选择主题</h3>
+<p>Hexo 拥有丰富的主题生态，可通过 <a target="_blank" rel="noopener" href="https://hexo.io/themes/">Hexo Themes 官方列表</a> 浏览。以下是社区中活跃度较高的主题：</p>
+<table>
+<thead>
+<tr>
+<th>主题</th>
+<th>GitHub Stars</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Butterfly</strong></td>
+<td>7k+</td>
+<td>功能全面，文档完善，支持卡片布局和图片画廊</td>
+</tr>
+<tr>
+<td><strong>Keep</strong></td>
+<td>1k+</td>
+<td>简洁现代，性能优化好，支持 PJAX 无刷新跳转</td>
+</tr>
+<tr>
+<td><strong>NexT</strong></td>
+<td>10k+</td>
+<td>经典主题，生态丰富，插件体系完善</td>
+</tr>
+<tr>
+<td><strong>Fluid</strong></td>
+<td>2k+</td>
+<td>Material Design 风格，适配移动端优秀</td>
+</tr>
+</tbody>
+</table>
+<h3 id="52-安装主题"><a class="markdownIt-Anchor" href="#52-安装主题"></a> 5.2 安装主题</h3>
+<p>以 Keep 主题为例：</p>
+<pre><code class="bash">git clone https://github.com/theme-keep/hexo-theme-keep.git themes/keep
+</code></pre>
+<p>在 <code>_config.yml</code> 中启用：</p>
+<pre><code class="yaml">theme: keep
+</code></pre>
+<h3 id="53-主题配置方式重要"><a class="markdownIt-Anchor" href="#53-主题配置方式重要"></a> 5.3 主题配置方式（重要）</h3>
+<p>每个主题都有自己的配置项，有两种配置方式：</p>
+<p><strong>方式一（推荐）</strong>：在项目根目录创建 <code>_config.&#123;主题名&#125;.yml</code>，Hexo 会自动合并此文件的内容到主题默认配置之上。这样做的好处是避免直接修改 <code>themes/</code> 目录下的文件，方便以后升级主题。</p>
+<pre><code class="yaml"># _config.keep.yml
+menu:
+  首页: /
+  归档: /archives/
+  分类: /categories/
+  标签: /tags/
+
+favicon: /images/favicon.png
+avatar: /images/avatar.jpg
+
+social:
+  GitHub: https://github.com/你的用户名
+</code></pre>
+<p><strong>方式二</strong>：直接编辑 <code>themes/keep/_config.yml</code>（不推荐，升级主题时会覆盖）。</p>
+<blockquote>
+<p><strong>主题渲染器依赖</strong>：部分主题需要额外的渲染器。Keep 主题需要 <code>hexo-renderer-ejs</code> 和 <code>hexo-renderer-stylus</code>，Butterfly 需要 <code>hexo-renderer-pug</code>。安装主题时请阅读其文档确认。</p>
+</blockquote>
+<hr />
+<h2 id="六-github-actions-自动化部署"><a class="markdownIt-Anchor" href="#六-github-actions-自动化部署"></a> 六、GitHub Actions 自动化部署</h2>
+<p>这是本方案的核心环节。配置完成后，你只需要 <code>git push</code> 源码，博客便会自动构建并部署。</p>
+<h3 id="61-部署流程概览"><a class="markdownIt-Anchor" href="#61-部署流程概览"></a> 6.1 部署流程概览</h3>
+<pre><code class="bash">你写文章 → git push → GitHub Actions 触发 →
+  → Checkout 源码 → 安装依赖 → hexo generate →
+  → 推送 public/ 到 Pages 仓库 → GitHub Pages 生效
+</code></pre>
+<h3 id="62-创建-github-personal-access-token"><a class="markdownIt-Anchor" href="#62-创建-github-personal-access-token"></a> 6.2 创建 GitHub Personal Access Token</h3>
+<p>GitHub Actions 需要权限将构建产物推送到 Pages 仓库：</p>
+<ol>
+<li>打开 GitHub → 右上角头像 → <strong>Settings</strong> → <strong>Developer settings</strong> → <strong>Personal access tokens</strong> → <strong>Tokens (classic)</strong></li>
+<li>点击 <strong>Generate new token (classic)</strong></li>
+<li><strong>Note</strong>：填写 <code>HEXO_DEPLOY</code>（方便识别）</li>
+<li><strong>Expiration</strong>：选择 <code>No expiration</code>（永不过期），或选择 90 天并在过期前刷新</li>
+<li><strong>Scopes</strong>：勾选 <code>repo</code>（Full control of private repositories）——这包含了将文件推送到仓库所需的所有权限</li>
+<li>点击底部的 <strong>Generate token</strong></li>
+<li><strong>立即复制并保存生成的 Token</strong>（关闭页面后将无法再次查看）</li>
+</ol>
+<h3 id="63-将-token-添加到源码仓库-secrets"><a class="markdownIt-Anchor" href="#63-将-token-添加到源码仓库-secrets"></a> 6.3 将 Token 添加到源码仓库 Secrets</h3>
+<ol>
+<li>打开你的<strong>源码仓库</strong> → <strong>Settings</strong> → <strong>Secrets and variables</strong> → <strong>Actions</strong></li>
+<li>点击 <strong>New repository secret</strong></li>
+<li><strong>Name</strong>：<code>HEXO_DEPLOY</code>（必须与 workflow 文件中引用的名称一致）</li>
+<li><strong>Secret</strong>：粘贴上一步保存的 Token</li>
+<li>点击 <strong>Add secret</strong></li>
+</ol>
+<h3 id="64-创建-workflow-文件"><a class="markdownIt-Anchor" href="#64-创建-workflow-文件"></a> 6.4 创建 Workflow 文件</h3>
+<p>在项目根目录创建 <code>.github/workflows/hexo-deploy.yml</code>：</p>
+<pre><code class="yaml">name: deploying Hexo project to GitHub pages
+on:
+  push:
+    branches:
+      - main  # 当 main 分支有推送时触发
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Build and Deploy
+        uses: theme-keep/hexo-deploy-github-pages-action@master
+        env:
+          PERSONAL_TOKEN: $&#123;&#123; secrets.HEXO_DEPLOY &#125;&#125;
+          PUBLISH_REPOSITORY: 你的用户名/你的Pages仓库名
+          BRANCH: gh-pages
+          PUBLISH_DIR: ./public
+</code></pre>
+<p><strong>关键配置项说明</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>PERSONAL_TOKEN</code></td>
+<td>GitHub Token（通过 Secrets 引用）</td>
+<td><code>$&#123;&#123; secrets.HEXO_DEPLOY &#125;&#125;</code></td>
+</tr>
+<tr>
+<td><code>PUBLISH_REPOSITORY</code></td>
+<td>Pages 仓库位置</td>
+<td><code>realzhengxi/zhengxi_blog</code></td>
+</tr>
+<tr>
+<td><code>BRANCH</code></td>
+<td>部署分支，固定为 <code>gh-pages</code></td>
+<td><code>gh-pages</code></td>
+</tr>
+<tr>
+<td><code>PUBLISH_DIR</code></td>
+<td>Hexo 构建产物目录</td>
+<td><code>./public</code></td>
+</tr>
+</tbody>
+</table>
+<p>这个 Action 会自动完成以下步骤：</p>
+<ol>
+<li>拉取源码仓库的最新代码</li>
+<li>安装 Node.js（内置使用 Node 18）</li>
+<li>执行 <code>npm ci</code> 安装依赖（比 <code>npm install</code> 更快，且保证依赖版本锁定）</li>
+<li>执行 <code>npx hexo generate</code> 构建静态文件</li>
+<li>将 <code>public/</code> 目录下的所有文件推送到 Pages 仓库的 <code>gh-pages</code> 分支</li>
+<li><code>gh-pages</code> 分支的历史会被覆盖（保持只存最新版本）</li>
+</ol>
+<h3 id="65-提交并推送"><a class="markdownIt-Anchor" href="#65-提交并推送"></a> 6.5 提交并推送</h3>
+<pre><code class="bash">git add .github/
+git commit -m &quot;ci: add GitHub Actions deploy workflow&quot;
+git push origin main
+</code></pre>
+<p>推送后，打开源码仓库的 <strong>Actions</strong> 标签页，可以看到工作流正在执行。等待黄色的运行中图标变为绿色勾号，说明部署成功。</p>
+<hr />
+<h2 id="七-配置-github-pages"><a class="markdownIt-Anchor" href="#七-配置-github-pages"></a> 七、配置 GitHub Pages</h2>
+<h3 id="71-启用-pages-服务"><a class="markdownIt-Anchor" href="#71-启用-pages-服务"></a> 7.1 启用 Pages 服务</h3>
+<ol>
+<li>打开 Pages 仓库 → <strong>Settings</strong> → <strong>Pages</strong></li>
+<li><strong>Source</strong> 选择 <strong>Deploy from a branch</strong></li>
+<li><strong>Branch</strong> 选择 <code>gh-pages</code>，目录选 <code>/ (root)</code></li>
+<li>点击 <strong>Save</strong></li>
+</ol>
+<p>配置完成后，博客即可通过 <code>https://你的用户名.github.io/你的Pages仓库名/</code> 访问。</p>
+<h3 id="72-配置自定义域名"><a class="markdownIt-Anchor" href="#72-配置自定义域名"></a> 7.2 配置自定义域名</h3>
+<p>绑定自己的域名可以让博客更专业。以下以 <code>blog.example.com</code> 为例：</p>
+<p><strong>第一步</strong>：在域名 DNS 管理后台添加解析记录</p>
+<table>
+<thead>
+<tr>
+<th>记录类型</th>
+<th>主机记录</th>
+<th>记录值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CNAME</td>
+<td><code>blog</code></td>
+<td><code>你的用户名.github.io</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>第二步</strong>：在 Pages 仓库设置域名</p>
+<p>在 Pages 仓库的 <strong>Settings</strong> → <strong>Pages</strong> → <strong>Custom domain</strong> 中输入 <code>blog.example.com</code>，点击 <strong>Save</strong>。GitHub 会自动签发 SSL/TLS 证书。</p>
+<p><strong>第三步</strong>：在源码仓库添加 CNAME 文件</p>
+<p>在 <code>source/</code> 目录下创建 <code>CNAME</code> 文件（无扩展名），内容为你的域名：</p>
+<pre><code>blog.example.com
+</code></pre>
+<blockquote>
+<p><strong>为什么 CNAME 文件要放在 <code>source/</code> 目录？</strong> 因为 <code>hexo generate</code> 时，<code>source/</code> 下的所有文件（不含 <code>_posts/</code> 中的文章）会原样复制到 <code>public/</code>，确保每次构建后 CNAME 文件都在部署目录中。</p>
+</blockquote>
+<hr />
+<h2 id="八-日常写作工作流"><a class="markdownIt-Anchor" href="#八-日常写作工作流"></a> 八、日常写作工作流</h2>
+<p>所有配置完成后，日常使用就变得非常简单：</p>
+<pre><code class="bash"># 1. 创建新文章
+hexo new post &quot;新文章标题&quot;
+
+# 2. 用任何编辑器编辑 Markdown 文件
+#    文件位置：source/_posts/新文章标题.md
+code source/_posts/新文章标题.md
+
+# 3. 本地预览（可选，但推荐）
+hexo clean &amp;&amp; hexo generate &amp;&amp; hexo server
+# 浏览器访问 http://localhost:4000
+
+# 4. 提交并推送
+git add source/_posts/
+git commit -m &quot;post: add 新文章标题&quot;
+git push
+</code></pre>
+<p>推送后等待 1-2 分钟，GitHub Actions 构建部署完成，博客即自动更新。</p>
+<hr />
+<h2 id="九-最佳实践与注意事项"><a class="markdownIt-Anchor" href="#九-最佳实践与注意事项"></a> 九、最佳实践与注意事项</h2>
+<h3 id="91-gitignore-配置"><a class="markdownIt-Anchor" href="#91-gitignore-配置"></a> 9.1 .gitignore 配置</h3>
+<pre><code>node_modules/
+public/
+.deploy_git/
+db.json
+*.log
+.DS_Store
+</code></pre>
+<p>确保 <code>node_modules/</code> 和 <code>public/</code> 不提交到 Git 仓库。</p>
+<h3 id="92-借助-cdn-加速静态资源"><a class="markdownIt-Anchor" href="#92-借助-cdn-加速静态资源"></a> 9.2 借助 CDN 加速静态资源</h3>
+<p>国内访问 GitHub Pages 速度较慢，可以使用 jsDelivr CDN 对主题的静态资源进行加速。</p>
+<p>以本博客的配置为例，在 <code>_config.yml</code> 中添加 CDN 配置：</p>
+<pre><code class="yaml">cdn:
+  enable: true
+  url: 'https://cdn.jsdelivr.net/gh/你的用户名/你的源码仓库@main/source'
+  vendors:
+    highlight_js: 'https://cdn.jsdelivr.net/npm/highlight.js@11.10.0'
+    highlight_css: 'https://cdn.jsdelivr.net/npm/highlight.js@11.10.0/styles/atom-one-dark.min.css'
+</code></pre>
+<p>jsDelivr 的 GitHub 加速格式：<code>https://cdn.jsdelivr.net/gh/&#123;用户名&#125;/&#123;仓库&#125;@&#123;分支&#125;/&#123;文件路径&#125;</code>，完全免费，无需注册。</p>
+<h3 id="93-为文章添加封面图"><a class="markdownIt-Anchor" href="#93-为文章添加封面图"></a> 9.3 为文章添加封面图</h3>
+<p>在文章 YAML 头部添加 <code>cover</code> 字段可以设置封面图，在首页和文章列表中以卡片形式展示。推荐使用图床存储图片，避免图片文件占用源码仓库空间。</p>
+<pre><code class="yaml">---
+title: 文章标题
+cover: https://图床域名/path/to/cover.jpg
+---
+</code></pre>
+<h3 id="94-插件推荐"><a class="markdownIt-Anchor" href="#94-插件推荐"></a> 9.4 插件推荐</h3>
+<table>
+<thead>
+<tr>
+<th>插件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hexo-abbrlink</code></td>
+<td>生成短链接，避免中文 URL</td>
+</tr>
+<tr>
+<td><code>hexo-generator-feed</code></td>
+<td>RSS 订阅</td>
+</tr>
+<tr>
+<td><code>hexo-generator-searchdb</code></td>
+<td>本地搜索索引</td>
+</tr>
+<tr>
+<td><code>hexo-wordcount</code></td>
+<td>文章字数统计</td>
+</tr>
+<tr>
+<td><code>hexo-filter-titlebased-link</code></td>
+<td>Obsidian 风格的 <code>[[双链]]</code> 支持</td>
+</tr>
+</tbody>
+</table>
+<h3 id="95-常见问题排查"><a class="markdownIt-Anchor" href="#95-常见问题排查"></a> 9.5 常见问题排查</h3>
+<p><strong>Q1：GitHub Actions 构建失败</strong></p>
+<pre><code class="bash"># 查看 Actions 日志中的具体错误
+</code></pre>
+<p>常见原因：</p>
+<ul>
+<li><code>HEXO_DEPLOY</code> Secret 未配置或 Token 已过期 → 检查 Secrets 设置</li>
+<li><code>PUBLISH_REPOSITORY</code> 格式错误 → 必须为 <code>用户名/仓库名</code></li>
+<li>Token 缺少 <code>repo</code> 权限 → 重新生成 Token 时确认勾选 <code>repo</code></li>
+</ul>
+<p><strong>Q2：博客更新但页面未变化</strong></p>
+<ol>
+<li>GitHub Pages 部署通常有 1-2 分钟延迟</li>
+<li>尝试强制刷新浏览器（<code>Cmd+Shift+R</code> / <code>Ctrl+F5</code>）</li>
+<li>确认 GitHub Actions 工作流运行成功（绿色勾号）</li>
+</ol>
+<p><strong>Q3：自定义域名 SSL 证书未生效</strong></p>
+<ul>
+<li>GitHub Pages 的 SSL 证书通过 Let’s Encrypt 自动签发，首次配置可能需要等待 5-15 分钟</li>
+<li>确认 DNS 的 CNAME 记录已正确指向 <code>你的用户名.github.io</code></li>
+<li>可以在 Pages 设置页面取消绑定再重新绑定，触发证书重新签发</li>
+</ul>
+<p><strong>Q4：图片加载失败</strong></p>
+<ul>
+<li>确认图片 URL 可公开访问</li>
+<li>使用图床（如 <a target="_blank" rel="noopener" href="http://SM.MS">SM.MS</a>、Cloudflare R2、阿里云 OSS）存储图片</li>
+<li>或使用 jsDelivr 加速 GitHub 仓库中的图片：<code>https://cdn.jsdelivr.net/gh/用户名/仓库@分支/图片路径</code></li>
+</ul>
+<hr />
+<h2 id="参考资料"><a class="markdownIt-Anchor" href="#参考资料"></a> 参考资料</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://hexo.io/docs/">Hexo 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.github.com/en/pages">GitHub Pages 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.github.com/en/actions">GitHub Actions 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/marketplace/actions/hexo-deploy-github-pages-action">hexo-deploy-github-pages-action</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/rozbo/hexo-abbrlink">hexo-abbrlink 插件</a></li>
+<li><a target="_blank" rel="noopener" href="https://keep-doc.xaox.cc/">Keep 主题文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://butterfly.js.org/">Butterfly 主题文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jsdelivr.com/">jsDelivr CDN 文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/realzhengxi/zhengxi_blog_source/blob/main/.github/workflows/hexo-deploy.yml">本博客 GitHub Actions 工作流源码</a></li>
+</ul>
+
+  </div>
+
+  
+    <div class="post-tags">
+      
+        <a class="post-tag" href="/tags/Hexo/">Hexo</a>
+      
+        <a class="post-tag" href="/tags/GitHub-Pages/">GitHub Pages</a>
+      
+        <a class="post-tag" href="/tags/GitHub-Actions/">GitHub Actions</a>
+      
+        <a class="post-tag" href="/tags/%E9%9D%99%E6%80%81%E5%8D%9A%E5%AE%A2/">静态博客</a>
+      
+        <a class="post-tag" href="/tags/CI-CD/">CI/CD</a>
+      
+        <a class="post-tag" href="/tags/Node-js/">Node.js</a>
+      
+    </div>
+  
+
+  
+  <div class="post-share">
+    <span class="share-label">分享</span>
+    <a class="share-btn share-twitter" href="javascript:void(0)" onclick="shareTo('twitter','Hexo 静态博客方案 ｜ GitHub Actions 自动化部署')" aria-label="分享到 Twitter">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a class="share-btn share-weibo" href="javascript:void(0)" onclick="shareTo('weibo','Hexo 静态博客方案 ｜ GitHub Actions 自动化部署')" aria-label="分享到微博">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.443zM8.594 11.39c-5.065.662-8.727 4.033-8.18 7.543.547 3.51 5.05 5.827 10.115 5.166 5.065-.662 8.727-4.033 8.18-7.543-.547-3.51-5.05-5.827-10.115-5.166zm5.636-1.591c-.275-.052-.462-.199-.422-.332.041-.133.287-.194.562-.143.619.117.998.452.84.776-.156.318-.685.423-1.304.308-.197-.037-.34-.161-.32-.278.021-.117.186-.182.382-.145.276.053.466.012.44-.064-.026-.076-.214-.142-.49-.195.303.12.498.278.457.411-.04.131-.284.19-.558.14-.613-.116-.991-.451-.833-.774.155-.316.679-.418 1.292-.304zM7.706 9.262c-.226-.062-.374-.212-.332-.334.043-.122.252-.172.478-.11.564.152.892.482.735.79-.155.303-.628.42-1.192.27-.569-.152-.891-.483-.734-.791.156-.309.625-.428 1.186-.278.236.064.384.214.341.335-.042.122-.25.172-.482.118zM14.912.472c-2.023-.558-4.314.126-5.963 1.664-.658.614-1.145 1.313-1.44 2.043-.307.759-.417 1.525-.363 2.216.27.208.557.389.861.543.286.144.586.262.897.353.36.107.737.18 1.112.229.054-.09.104-.184.155-.277.244-.45.582-.845 1.006-1.17.957-.735 2.145-.991 3.157-.735 1.011.257 1.646 1.01 1.78 1.992.039.281.04.566.002.846.385.032.76.098 1.113.2.38.108.736.258 1.065.443.15.084.293.177.43.277.257-.954.184-2.07-.311-3.118C21.372 2.933 18.595.735 14.912.472zm-1.374 17.918c-2.203.691-4.611-.196-5.368-1.982-.762-1.796.46-3.788 2.667-4.483 2.203-.695 4.61.197 5.368 1.983.762 1.796-.46 3.788-2.667 4.482zm1.157-2.272c.462-.815-.198-1.848-1.438-2.296-1.239-.447-2.473-.205-2.935.608-.462.813.197 1.848 1.437 2.296 1.24.449 2.473.207 2.936-.608z"/></svg>
+    </a>
+    <button class="share-btn share-copy" onclick="copyPageLink(this)" aria-label="复制链接">
+      <svg class="share-copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    </button>
+    <span class="share-copy-feedback" aria-hidden>已复制</span>
+  </div>
+  
+
+  
+    
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+      
+        
+      
+    
+    
+  
+
+  
+  <div class="post-copyright">
+    <div class="copyright-content">
+      <div class="copyright-title">Hexo 静态博客方案 ｜ GitHub Actions 自动化部署</div>
+      <div class="copyright-url" id="copyright-url">https://blog.zhengxi.me/posts/3789650242/</div>
+      <div class="copyright-meta">
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">作者</span>
+          <span class="copyright-meta-value">ZhengXi</span>
+        </span>
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">发布时间</span>
+          <span class="copyright-meta-value">2026-04-26 00:00</span>
+        </span>
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">著作权</span>
+          <span class="copyright-meta-value">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a>
+          </span>
+        </span>
+      </div>
+    </div>
+    <button class="copyright-copy-btn" onclick="copyCopyrightInfo(this)" aria-label="复制版权信息" title="复制版权信息">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+      <span class="copyright-copy-feedback">复制</span>
+    </button>
+  </div>
+  
+
+  
+  <nav class="post-nav">
+    
+      <a class="post-nav-item post-nav-prev" href="/posts/d3363a64/">
+        <span class="post-nav-label">PREV</span>
+        <span class="post-nav-title">羊肚菌（Morchella）分类学与系统发育</span>
+      </a>
+    
+    
+      <a class="post-nav-item post-nav-next" href="/posts/4f4d7fcc/">
+        <span class="post-nav-label">NEXT</span>
+        <span class="post-nav-title">notesmd-cli 安装与使用</span>
+      </a>
+    
+  </nav>
+  
+
+  
+  <section id="comments" class="comments-section">
+    <script src="https://giscus.app/client.js"
+      data-repo="realzhengxi/zhengxi_blog_comments"
+      data-repo-id="R_kgDOSKT6sA"
+      data-category="General"
+      data-category-id="DIC_kwDOSKT6sM4C7fUT"
+      data-mapping="title"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="zh-CN"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+    </script>
+  </section>
+  
+</article>
+
+<nav class="post-toc" id="post-toc">
+  <div class="toc-header">CONTENTS</div>
+  <div class="toc-body" id="toc-body"></div>
+</nav>
+
+    </main>
+
+    
+<footer class="site-footer">
+  <div class="footer-bottom">
+    <a class="footer-license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer" aria-label="CC BY-NC-ND 4.0 License">
+      CC&nbsp;&nbsp;BY–NC–ND&nbsp;&nbsp;4.0
+    </a>
+    <span class="footer-credit">
+      <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> &middot;
+      <a href="https://github.com/realzhengxi/hexo-theme-highlight" target="_blank" rel="noopener noreferrer">Highlight</a>
+    </span>
+    <span class="footer-links">
+      <a class="footer-link" href="https://github.com/realzhengxi" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015-2.895-.015-3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      </a>
+      <a class="footer-rss" href="/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS Feed">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="4" cy="20" r="3"/><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/></svg>
+      </a>
+    </span>
+  </div>
+</footer>
+
+  </div>
+
+  <!-- Search Modal -->
+  <div class="search-overlay" id="search-overlay"></div>
+  <div class="search-modal" id="search-modal">
+    <div class="search-modal-header">
+      <input
+        type="text"
+        id="search-input"
+        class="search-input"
+        placeholder="Search something..."
+        autocomplete="off"
+      />
+      <button class="search-close" id="search-close" aria-label="Close search">✕</button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+
+  <!-- Search Script (inline, fetches search.json at runtime) -->
+  <script>
+  (function() {
+    var overlay = document.getElementById('search-overlay');
+    var modal = document.getElementById('search-modal');
+    var input = document.getElementById('search-input');
+    var resultsContainer = document.getElementById('search-results');
+    var closeBtn = document.getElementById('search-close');
+
+    // Find the search open button(s)
+    var openBtns = document.querySelectorAll('#search-btn');
+
+    var postsData = [];
+    var dataLoaded = false;
+
+    function loadSearchData() {
+      if (dataLoaded && postsData.length > 0) return Promise.resolve(postsData);
+      return fetch(window.location.origin + '/search.json')
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          postsData = data || [];
+          dataLoaded = true;
+          return postsData;
+        })
+        .catch(function(err) {
+          console.error('Failed to load search data:', err);
+          postsData = [];
+          dataLoaded = true;
+          return [];
+        });
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(text));
+      return div.innerHTML;
+    }
+
+    function highlightMatch(text, query) {
+      if (!query) return text;
+      try {
+        var escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var regex = new RegExp('(' + escaped + ')', 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
+      } catch(e) {
+        return text;
+      }
+    }
+
+    function renderResults(items, query) {
+      if (!items || items.length === 0) {
+        resultsContainer.innerHTML = '<div class="search-empty">No results found.</div>';
+        return;
+      }
+      var html = '';
+      for (var i = 0; i < items.length; i++) {
+        var p = items[i];
+        var title = escapeHtml(p.title);
+        var excerptText = p.text || p.content || '';
+        var excerpt = '';
+        if (excerptText.length > 120) {
+          excerpt = escapeHtml(excerptText.substring(0, 140));
+        } else {
+          excerpt = escapeHtml(excerptText);
+        }
+        html += '<a href="' + p.url + '" class="search-result-item">';
+        html += '  <span class="result-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>';
+        html += '  <div class="result-body">';
+        html += '    <h3 class="result-title">' + highlightMatch(title, query) + '</h3>';
+        html += '    <p class="result-excerpt">' + highlightMatch(excerpt, query) + '</p>';
+        html += '  </div>';
+        html += '</a>';
+      }
+      resultsContainer.innerHTML = html;
+    }
+
+    function performSearch(query) {
+      var q = query.trim().toLowerCase();
+      if (!q) {
+        renderResults(postsData, '');
+        return;
+      }
+      var filtered = postsData.filter(function(post) {
+        var searchText = post.text || post.content || '';
+        return post.title.toLowerCase().indexOf(q) !== -1 ||
+               searchText.toLowerCase().indexOf(q) !== -1;
+      });
+      renderResults(filtered, q);
+    }
+
+    function openSearch() {
+      overlay.classList.add('active');
+      modal.classList.add('active');
+      setTimeout(function() { input.focus(); }, 150);
+
+      // Load data and show all posts on open
+      loadSearchData().then(function() {
+        resultsContainer.innerHTML = '<div class="search-placeholder">Posts</div>';
+        renderResults(postsData, input.value);
+      });
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('active');
+      modal.classList.remove('active');
+      input.value = '';
+      resultsContainer.innerHTML = '';
+    }
+
+    for (var i = 0; i < openBtns.length; i++) {
+      openBtns[i].addEventListener('click', openSearch);
+    }
+    closeBtn.addEventListener('click', closeSearch);
+    overlay.addEventListener('click', closeSearch);
+
+    document.addEventListener('keydown', function(e) {
+      // Cmd/Ctrl + K
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        if (modal.classList.contains('active')) {
+          closeSearch();
+        } else {
+          openSearch();
+        }
+      }
+      // Escape to close
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeSearch();
+      }
+    });
+
+    // Search as you type
+    var searchTimer = null;
+    input.addEventListener('input', function() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(function() {
+        performSearch(input.value);
+      }, 150);
+    });
+
+    // Pre-load search data in background after page loads
+    setTimeout(loadSearchData, 2000);
+  })();
+  </script>
+
+  <!-- Code Highlight (highlight.js) - CDN -->
+  <!-- CDN URL 可在 _config.yml → cdn.vendors.highlight_js 覆盖 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  <script>
+  (function() {
+    // Add language label and copy button to each pre block (skip mermaid)
+    document.querySelectorAll('pre').forEach(function(pre) {
+      var code = pre.querySelector('code');
+      if (!code) return;
+      if (code.className.indexOf('mermaid') !== -1) return;
+
+      // Wrap code content in a scrollable container
+      // so the copy button stays fixed when content scrolls
+      var wrapper = document.createElement('div');
+      wrapper.className = 'code-scroll-wrapper';
+      while (pre.firstChild) {
+        wrapper.appendChild(pre.firstChild);
+      }
+      pre.appendChild(wrapper);
+      // code is now inside wrapper
+
+      var langClass = '';
+      for (var i = 0; i < code.classList.length; i++) {
+        var cls = code.classList[i];
+        if (cls.startsWith('language-') || cls.startsWith('lang-')) {
+          langClass = cls.replace('language-', '').replace('lang-', '');
+          break;
+        }
+      }
+      if (langClass) {
+        pre.setAttribute('data-lang', langClass);
+      }
+
+      // Add copy button only if not already present
+      if (pre.dataset.copyBtn) return;
+      pre.dataset.copyBtn = 'true';
+      var btn = document.createElement('button');
+      btn.className = 'code-copy-btn';
+      btn.setAttribute('type', 'button');
+      btn.setAttribute('aria-label', '复制代码');
+      btn.title = '复制';
+      btn.textContent = '复制';
+
+      function doCopy(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          return navigator.clipboard.writeText(text);
+        }
+        return new Promise(function(resolve, reject) {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            document.execCommand('copy');
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
+          document.body.removeChild(ta);
+        });
+      }
+
+      btn.addEventListener('click', function() {
+        var text = code.innerText || code.textContent || '';
+        doCopy(text).then(function() {
+          btn.textContent = '已复制';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.textContent = '复制';
+            btn.classList.remove('copied');
+          }, 1800);
+        }).catch(function() {
+          btn.textContent = '复制失败';
+          setTimeout(function() {
+            btn.textContent = '复制';
+          }, 1800);
+        });
+      });
+      pre.appendChild(btn);
+
+      // Ensure code content is visible (fix dark theme issue)
+      if (getComputedStyle(pre).color === 'rgb(0, 0, 0)' || getComputedStyle(code).color === 'rgb(0, 0, 0)') {
+        code.style.color = '#1a1a1a';
+      }
+    });
+
+    // Ensure inline code visibility
+    document.querySelectorAll(':not(pre) > code').forEach(function(inline) {
+      if (inline.parentElement && inline.parentElement.tagName !== 'PRE') {
+        inline.style.color = '#404040';
+        inline.style.fontWeight = '500';
+      }
+    });
+
+    // Initialize highlight.js on all code blocks EXCEPT mermaid
+    // MUST run AFTER wrapping code in scroll containers
+    if (typeof hljs !== 'undefined') {
+      document.querySelectorAll('pre code').forEach(function(block) {
+        if (block.className.indexOf('mermaid') !== -1) return;
+        try {
+          hljs.highlightElement(block);
+        } catch (e) {
+          console.warn('Highlight.js error:', e);
+        }
+      });
+    }
+  })();
+  </script>
+
+  <!-- Mermaid Diagrams (CDN) - 纯前端渲染，必须在 highlight.js 之后 -->
+  <!-- CDN URL 可在 _config.yml → cdn.vendors.mermaid 覆盖 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>
+  (function() {
+    if (!window.mermaid) {
+      console.error('Mermaid library not loaded');
+      return;
+    }
+
+    // 匹配所有 mermaid 代码块
+    var blocks = document.querySelectorAll('code.language-mermaid, code.lang-mermaid, code.mermaid');
+
+    if (blocks.length > 0) {
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'default',
+        themeVariables: {
+          primaryColor: '#e3f2fd',
+          primaryBorderColor: '#2563eb',
+          lineColor: '#737373',
+          secondaryColor: '#fff8e1',
+          tertiaryColor: '#f5f5f5',
+          fontFamily: '"Open Sans", "PingFang SC", "Noto Serif SC", sans-serif',
+          fontSize: '14px',
+          nodeTextColor: '#404040'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true },
+        securityLevel: 'loose'
+      });
+
+      for (var i = 0; i < blocks.length; i++) {
+        (function(block, idx) {
+          var pre = block.parentElement;
+          var codeText = block.textContent || block.innerText;
+
+          // 转换 Markdown 内联格式为 HTML 标签（mermaid htmlLabels 需用 HTML）
+          codeText = codeText
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+          var container = document.createElement('div');
+          container.className = 'mermaid-container';
+          var id = 'mermaid-' + Date.now() + '-' + idx;
+
+          pre.replaceWith(container);
+
+          mermaid.render(id, codeText.trim()).then(function(result) {
+            container.innerHTML = result.svg;
+          }).catch(function(err) {
+            console.error('Mermaid error:', err);
+            container.innerHTML = '<pre class="mermaid-error" style="color:#c62828;padding:16px;background:#ffebee;border-radius:8px;font-size:13px;line-height:1.6;"><strong>Mermaid 渲染失败</strong>\n' + err.message + '\n\n源码：\n' + codeText + '</pre>';
+          });
+        })(blocks[i], i);
+      }
+    }
+  })();
+  </script>
+
+  <!-- Lightbox Overlay -->
+  <div class="lightbox-overlay" id="lightbox-overlay">
+    <img src="" alt="" id="lightbox-image" />
+  </div>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top" title="Back to top">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"/>
+    </svg>
+  </button>
+
+  <!-- Lightbox interaction -->
+  <script>
+  (function() {
+    var overlay = document.getElementById('lightbox-overlay');
+    var lightboxImg = document.getElementById('lightbox-image');
+    if (overlay && lightboxImg) {
+      var postContent = document.querySelector('.post-content');
+      if (postContent) {
+        postContent.addEventListener('click', function(e) {
+          var target = e.target;
+          if (target.tagName === 'IMG' && target.closest('.post-content')) {
+            lightboxImg.src = target.src;
+            lightboxImg.alt = target.alt || '';
+            overlay.classList.add('active');
+          }
+        });
+      }
+      overlay.addEventListener('click', function() {
+        overlay.classList.remove('active');
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) {
+          overlay.classList.remove('active');
+        }
+      });
+    }
+  })();
+  </script>
+
+  <!-- Share copy function -->
+  <script>
+  function shareTo(platform, title) {
+    var url = window.location.href;
+    var shareUrl;
+    switch (platform) {
+      case 'twitter':
+        shareUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);
+        break;
+      case 'weibo':
+        shareUrl = 'https://service.weibo.com/share/share.php?title=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);
+        break;
+    }
+    if (shareUrl) window.open(shareUrl, '_blank', 'width=600,height=500');
+  }
+  function copyPageLink(btn) {
+    var url = window.location.href;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = url;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+    btn.classList.add('copied');
+    setTimeout(function() { btn.classList.remove('copied'); }, 1800);
+  }
+
+  function copyCopyrightInfo(btn) {
+    var title = document.querySelector('.copyright-title');
+    var url = document.querySelector('.copyright-url');
+    var author = document.querySelector('.copyright-meta-value');
+    if (!title || !url) return;
+    var text = '作者：' + (author ? author.textContent.trim() : '') + '\n'
+             + '标题：' + title.textContent.trim() + '\n'
+             + '链接：' + url.textContent.trim() + '\n'
+             + '来源：' + window.location.host + '\n'
+             + '著作权：CC BY-NC-ND 4.0';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+    btn.classList.add('copied');
+    btn.querySelector('.copyright-copy-feedback').textContent = '已复制';
+    setTimeout(function() {
+      btn.classList.remove('copied');
+      btn.querySelector('.copyright-copy-feedback').textContent = '复制';
+    }, 1800);
+  }
+  </script>
+
+  <!-- Reading Progress & Back to Top -->
+  <script>
+  (function() {
+    var progressBar = document.getElementById('reading-progress');
+    var backBtn = document.getElementById('back-to-top');
+    var hero = document.getElementById('hero');
+    var heroBg = hero ? hero.querySelector('.hero-bg img') : null;
+    var siteHeader = document.querySelector('.site-header');
+
+    function updateProgress() {
+      var winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (height > 0) {
+        progressBar.style.width = (winScroll / height) * 100 + '%';
+      }
+    }
+
+    function toggleBackToTop() {
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop > 400) {
+        backBtn.classList.add('visible');
+      } else {
+        backBtn.classList.remove('visible');
+      }
+    }
+
+    // Hero parallax & nav scroll effect
+    function updateHero() {
+      if (!hero) return;
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      var heroHeight = hero.offsetHeight;
+
+      // Parallax: background moves slower than scroll
+      if (heroBg) {
+        var offset = scrollTop * 0.35;
+        heroBg.style.transform = 'scale(1.05) translateY(' + offset + 'px)';
+      }
+
+      // Fade out hero content as user scrolls
+      var heroContent = hero.querySelector('.hero-content');
+      var scrollHint = hero.querySelector('.hero-scroll-hint');
+      var fadeRatio = Math.max(0, 1 - scrollTop / (heroHeight * 0.6));
+      if (heroContent) {
+        heroContent.style.opacity = fadeRatio;
+        heroContent.style.transform = 'translateY(' + (scrollTop * 0.15) + 'px)';
+      }
+      if (scrollHint) {
+        scrollHint.style.opacity = fadeRatio;
+      }
+
+      // Sticky nav: add background after scrolling past hero
+      if (siteHeader) {
+        if (scrollTop > heroHeight * 0.85) {
+          siteHeader.classList.add('scrolled');
+        } else {
+          siteHeader.classList.remove('scrolled');
+        }
+      }
+    }
+
+    function onScroll() {
+      updateProgress();
+      toggleBackToTop();
+      updateHero();
+    }
+
+    backBtn.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+  </script>
+
+  <!-- busuanzi (不蒜子) - 页面阅读量统计 -->
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  <!-- Table of Contents -->
+  <script>
+  (function() {
+    var toc = document.getElementById('post-toc');
+    var tocBody = document.getElementById('toc-body');
+    if (!toc || !tocBody) return;
+
+    function escapeHtml(str) {
+      var d = document.createElement('div');
+      d.appendChild(document.createTextNode(str));
+      return d.innerHTML;
+    }
+
+    var content = document.querySelector('.post-content');
+    if (!content) { toc.style.display = 'none'; return; }
+
+    var headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    if (headings.length < 2) { toc.style.display = 'none'; return; }
+
+    var idCounts = {};
+    function getId(h) {
+      if (h.id) return h.id;
+      var base = (h.textContent || '').toLowerCase()
+        .replace(/[^\w一-鿿]+/g, '-').replace(/^-+|-+$/g, '') || 'heading';
+      idCounts[base] = (idCounts[base] || 0) + 1;
+      return idCounts[base] > 1 ? base + '-' + idCounts[base] : base;
+    }
+
+    var items = [];
+    headings.forEach(function(h) {
+      var id = getId(h);
+      if (!h.id) h.id = id;
+      items.push({
+        el: h,
+        level: parseInt(h.tagName.charAt(1)),
+        id: id,
+        text: h.textContent.trim()
+      });
+    });
+
+    var minLevel = Math.min.apply(null, items.map(function(i) { return i.level; }));
+    var html = '<ul class="toc-list">';
+    items.forEach(function(item) {
+      var indent = item.level - minLevel;
+      html += '<li class="toc-item" style="--level: ' + indent + '">'
+           + '<a class="toc-link" href="#' + item.id + '">'
+           + escapeHtml(item.text) + '</a></li>';
+    });
+    html += '</ul>';
+    tocBody.innerHTML = html;
+
+    var links = tocBody.querySelectorAll('.toc-link');
+    var els = items.map(function(i) { return i.el; });
+
+    function updateActive() {
+      var activeIndex = -1;
+      for (var i = els.length - 1; i >= 0; i--) {
+        if (els[i].getBoundingClientRect().top <= 100) { activeIndex = i; break; }
+      }
+      links.forEach(function(link, i) {
+        link.classList.toggle('active', i === activeIndex);
+      });
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+
+    links.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          var top = target.getBoundingClientRect().top + window.scrollY - 60;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        }
+      });
+    });
+  })();
+  </script>
+</body>
+</html>

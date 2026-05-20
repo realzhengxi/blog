@@ -1,0 +1,2032 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+  
+    <title>真菌分子系统学与多基因系统发育树构建 | Maverick Spore</title>
+  
+
+  <!-- Google Fonts: Noto Serif SC (宋体正文) + Open Sans (西文无衬线) + Fira Code (等宽) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Noto+Serif+SC:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  <!-- Obsidian 格式支持 (Callout / Wiki-link) -->
+  <!-- CDN: highlight.js CSS - 可在 _config.yml 的 cdn.vendors.highlight_css 中覆盖 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/atom-one-dark.min.css">
+  
+<link rel="stylesheet" href="/css/obsidian.css">
+
+  <meta name="description" content="以羊肚菌和硫磺菌为例，覆盖 GCPSR 物种识别、引物设计到多基因联合建树的全流程。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="真菌分子系统学与多基因系统发育树构建">
+<meta property="og:url" content="https://blog.zhengxi.me/posts/72c69583/index.html">
+<meta property="og:site_name" content="Maverick Spore">
+<meta property="og:description" content="以羊肚菌和硫磺菌为例，覆盖 GCPSR 物种识别、引物设计到多基因联合建树的全流程。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-28T00:00:00.000Z">
+<meta property="article:modified_time" content="2026-05-10T12:47:28.000Z">
+<meta property="article:author" content="ZhengXi">
+<meta property="article:tag" content="生物信息学">
+<meta property="article:tag" content="系统发育">
+<meta property="article:tag" content="真菌学">
+<meta property="article:tag" content="分类学">
+<meta property="article:tag" content="分子鉴定">
+<meta property="article:tag" content="GCPSR">
+<meta property="article:tag" content="实验方法">
+<meta property="article:tag" content="食用菌">
+<meta name="twitter:card" content="summary">
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="Maverick Spore" type="application/atom+xml">
+</head>
+<body>
+  <!-- Reading Progress Bar -->
+  <div class="reading-progress" id="reading-progress"></div>
+
+  <div class="site-wrapper">
+    
+<header class="site-header">
+  
+    <h1 class="site-title">
+      <a href="/">Maverick Spore</a>
+    </h1>
+  
+  
+  
+    <p class="site-subtitle">Unconventional by nature, curious by code</p>
+  
+
+  <nav class="site-nav">
+    <a class="nav-link" href="/">Home</a>
+    <a class="nav-link" href="/archives/">Archives</a>
+    <a class="nav-link" href="/categories/">Categories</a>
+    <a class="nav-link" href="/tags/">Tags</a>
+    <button class="search-btn nav-link" id="search-btn" aria-label="Search">
+      Search
+    </button>
+  </nav>
+</header>
+
+    
+    <main class="main-content">
+      
+      <article class="post-article">
+  <header class="post-header">
+    
+      <div class="post-category">
+        <a class="category-link" href="/categories/%E9%A3%9F%E7%94%A8%E8%8F%8C%E7%A0%94%E7%A9%B6/">
+          食用菌研究
+        </a>
+      </div>
+    
+
+    <h1 class="post-article-title">真菌分子系统学与多基因系统发育树构建</h1>
+
+    <div class="post-meta">
+      <time datetime="2026-04-28">
+        2026-04-28
+      </time>
+      
+        <span class="meta-sep">·</span>
+        <span>5.7k words</span>
+        <span class="meta-sep">·</span>
+        <span>24 min read</span>
+      
+      <span class="meta-sep">·</span>
+      <span id="busuanzi_container_page_pv" class="post-views">
+        <span id="busuanzi_value_page_pv"></span> views
+      </span>
+    </div>
+  </header>
+
+  <div class="post-content">
+    <blockquote>
+<p>以羊肚菌属（<em>Morchella</em>）和硫磺菌属（<em>Laetiporus</em>）的现代分类学研究为实例，覆盖从隐存种概念、GCPSR物种识别框架、引物设计、遗传距离、到多基因联合建树全流程的完整知识体系。</p>
+</blockquote>
+<hr />
+<h2 id="第一部分真菌分类学基础概念"><a class="markdownIt-Anchor" href="#第一部分真菌分类学基础概念"></a> 第一部分：真菌分类学基础概念</h2>
+<h3 id="11-隐存种复合体cryptic-species-complex"><a class="markdownIt-Anchor" href="#11-隐存种复合体cryptic-species-complex"></a> 1.1 隐存种复合体（Cryptic Species Complex）</h3>
+<p>许多传统上被认为是&quot;一个世界广布种&quot;的真菌，经分子系统学研究后被发现实际是<strong>一群形态几乎无法区分但遗传上显著分化的独立物种</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>实例</th>
+<th>传统认知</th>
+<th>分子证据揭示</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>羊肚菌属</td>
+<td>少数几个形态变种</td>
+<td><strong>80+ 系统发育种</strong>，大陆特有性强</td>
+</tr>
+<tr>
+<td>硫磺菌属</td>
+<td><em>L. sulphureus</em> 一个世界种</td>
+<td><strong>17–21 个种</strong>，具寄主和地理分化</td>
+</tr>
+<tr>
+<td>木耳属</td>
+<td><em>A. auricula-judae</em> 单种</td>
+<td>多个隐存种，各大陆独立演化</td>
+</tr>
+</tbody>
+</table>
+<p><strong>关键启示</strong>：仅靠形态学已不足以区分现代真菌物种，<strong>分子系统发育证据是不可或缺的核心标准</strong>。</p>
+<h3 id="12-羊肚菌的-melmes-编号系统"><a class="markdownIt-Anchor" href="#12-羊肚菌的-melmes-编号系统"></a> 1.2 羊肚菌的 Mel/Mes 编号系统</h3>
+<p>2012 年，Taşkın 等人建立了羊肚菌属的系统发育种编号体系，通过<strong>多基因谱系一致性系统发育物种识别法（GCPSR）</strong>分析土耳其羊肚菌时正式提出。</p>
+<table>
+<thead>
+<tr>
+<th>编号前缀</th>
+<th>所属支系</th>
+<th>含义</th>
+<th>物种数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Mes-</strong></td>
+<td>Esculenta clade（黄色羊肚菌）</td>
+<td><strong>M</strong>orchella <strong>es</strong>culenta clade</td>
+<td>Mes-1 至 Mes-27（27种）</td>
+</tr>
+<tr>
+<td><strong>Mel-</strong></td>
+<td>Elata clade（黑色羊肚菌）</td>
+<td><strong>M</strong>orchella <strong>el</strong>ata clade</td>
+<td>Mel-1 至 Mel-34（34种）</td>
+</tr>
+<tr>
+<td>（无编号）</td>
+<td>Rufobrunnea clade（变红支系）</td>
+<td>基部分支，最早分化</td>
+<td>仅 3 种</td>
+</tr>
+</tbody>
+</table>
+<details class="custom-callout note" open><summary class="callout-title"><div class="callout-icon"></div><div>编号系统的意义</div>
+<div class="callout-fold"></div></summary><div class="callout-body">
+<p>大多数系统发育种在发现时尚未获得正式拉丁学名，编号提供了稳定的交叉引用标识。即使后来获得正式命名（如 Mel-6 = <em>M. sextelata</em>），编号仍广泛使用。</p>
+</div>
+</details><h3 id="13-硫磺菌属的分类学修订历程"><a class="markdownIt-Anchor" href="#13-硫磺菌属的分类学修订历程"></a> 1.3 硫磺菌属的分类学修订历程</h3>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>时间</th>
+<th>标志性进展</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>形态分类时代</td>
+<td>1904–1990s</td>
+<td><em>L. sulphureus</em> 被视为单一世界广布种</td>
+</tr>
+<tr>
+<td>单基因（ITS）时代</td>
+<td>2000s</td>
+<td>发现北美、东亚存在多个 ITS 隐存支系</td>
+</tr>
+<tr>
+<td>多基因 + 交配实验</td>
+<td>2008–2014</td>
+<td>多个隐存种被正式描述命名</td>
+</tr>
+<tr>
+<td>多基因 + 生物地理</td>
+<td>2017–2024</td>
+<td>全属系统发育重建，非洲和亚洲新种发表</td>
+</tr>
+<tr>
+<td>属界修正</td>
+<td>2023</td>
+<td><em>L. persicinus</em> 移出该属 → <em>Kusaghiporia persicinus</em></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="第二部分物种识别与判定框架"><a class="markdownIt-Anchor" href="#第二部分物种识别与判定框架"></a> 第二部分：物种识别与判定框架</h2>
+<h3 id="21-gcpsr-谱系一致性物种识别法"><a class="markdownIt-Anchor" href="#21-gcpsr-谱系一致性物种识别法"></a> 2.1 GCPSR —— 谱系一致性物种识别法</h3>
+<p><strong>GCPSR</strong>（Genealogical Concordance Phylogenetic Species Recognition）由 Taylor et al. (2000) 提出，是当前真菌新种判定的核心理论框架。</p>
+<h4 id="基本原理"><a class="markdownIt-Anchor" href="#基本原理"></a> 基本原理</h4>
+<blockquote>
+<p>物种边界应由<strong>多个独立基因系谱之间的系统发育不一致性转折点</strong>来确定。</p>
+</blockquote>
+<ul>
+<li>同一物种内存在基因重组（有性生殖 → 基因流动）→ 不同基因树的拓扑不一致</li>
+<li>两个物种之间存在<strong>生殖隔离</strong> → 多个独立基因位点的系统发育信号将<strong>一致地</strong>将其分为独立支系</li>
+<li><strong>由一致性到不一致性的过渡，即为物种界限</strong></li>
+</ul>
+<h4 id="操作化定义"><a class="markdownIt-Anchor" href="#操作化定义"></a> 操作化定义</h4>
+<table>
+<thead>
+<tr>
+<th>标准</th>
+<th>含义</th>
+<th>操作指标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>谱系一致性</strong>（Genealogical Concordance）</td>
+<td>多个独立基因树都支持同一分支</td>
+<td>≥2 个基因的单基因树中该分支获显著支持</td>
+</tr>
+<tr>
+<td><strong>谱系非冲突</strong>（Genealogical Non-Discordance）</td>
+<td>无任何基因显著反对该分支</td>
+<td>所有基因中均无显著冲突的拓扑</td>
+</tr>
+<tr>
+<td><strong>遗传分化</strong></td>
+<td>与最近缘种积累足够固定差异</td>
+<td>遗传距离超过种内变异上限</td>
+</tr>
+<tr>
+<td><strong>可区分性</strong></td>
+<td>至少在一个维度上可区分</td>
+<td>形态/生态/寄主/地理任一</td>
+</tr>
+</tbody>
+</table>
+<h3 id="22-新种判定的多相分类学框架"><a class="markdownIt-Anchor" href="#22-新种判定的多相分类学框架"></a> 2.2 新种判定的多相分类学框架</h3>
+<p>现代真菌新种描述采用<strong>多相分类学（Polyphasic Taxonomy）</strong>方法，将三类证据结合：</p>
+<pre><code>            ┌──────────────────────┐
+            │   候选新种假说        │
+            └──────────┬───────────┘
+                       │
+       ┌───────────────┼───────────────┐
+       ▼               ▼               ▼
+  分子系统发育      形态学证据       生态学证据
+  ┌─────────┐    ┌─────────┐    ┌─────────┐
+  │多基因树  │    │宏观特征  │    │寄主/基质 │
+  │单基因树  │    │微观特征  │    │地理分布  │
+  │遗传距离  │    │孢子大小  │    │季节/海拔 │
+  │GCPSR    │    │培养特征  │    │火适应性  │
+  └────┬────┘    └────┬────┘    └────┬────┘
+       │               │               │
+       └───────────────┼───────────────┘
+                       ▼
+              ┌─────────────────┐
+              │ 一致支持新种?    │
+              └────────┬────────┘
+                       ▼
+              MycoBank 注册
+              指定模式标本
+              同行评审发表
+</code></pre>
+<h3 id="23-新种判定的四道关卡"><a class="markdownIt-Anchor" href="#23-新种判定的四道关卡"></a> 2.3 新种判定的四道关卡</h3>
+<h4 id="第一关谱系独立性与一致性"><a class="markdownIt-Anchor" href="#第一关谱系独立性与一致性"></a> 第一关：谱系独立性与一致性</h4>
+<table>
+<thead>
+<tr>
+<th>标准</th>
+<th>操作化指标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>谱系一致性</td>
+<td>≥2 个基因的单基因树中该分支获显著支持（MP/ML bootstrap ≥75%，BI PP ≥0.95）</td>
+</tr>
+<tr>
+<td>谱系非冲突</td>
+<td>所有基因位点均无显著冲突的拓扑结构</td>
+</tr>
+</tbody>
+</table>
+<h4 id="第二关遗传分化程度"><a class="markdownIt-Anchor" href="#第二关遗传分化程度"></a> 第二关：遗传分化程度</h4>
+<p>与最近缘已知种的遗传距离需达到种间水平（见第四部分遗传距离详解）。</p>
+<h4 id="第三关形态生态地理的区分性"><a class="markdownIt-Anchor" href="#第三关形态生态地理的区分性"></a> 第三关：形态/生态/地理的区分性</h4>
+<p>对于硫磺菌属，寄主类型（针叶树 vs 阔叶树）是区分近缘种的关键特征。对于羊肚菌属，地理分布和出菇季节是重要辅助证据。</p>
+<h4 id="第四关物种注册与发表"><a class="markdownIt-Anchor" href="#第四关物种注册与发表"></a> 第四关：物种注册与发表</h4>
+<ol>
+<li>在 <strong>MycoBank</strong> 或 <strong>Index Fungorum</strong> 注册</li>
+<li>指定<strong>模式标本（Holotype）</strong>并保藏于公认标本馆</li>
+<li>提供完整的拉丁描述或英文描述</li>
+<li>在同行评审期刊发表</li>
+</ol>
+<hr />
+<h2 id="第三部分分子标记与引物设计"><a class="markdownIt-Anchor" href="#第三部分分子标记与引物设计"></a> 第三部分：分子标记与引物设计</h2>
+<h3 id="31-为什么需要多基因"><a class="markdownIt-Anchor" href="#31-为什么需要多基因"></a> 3.1 为什么需要多基因？</h3>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>单基因（仅 ITS）</th>
+<th>多基因联合</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分辨率</td>
+<td>有限，近缘种可能无法区分</td>
+<td>多个独立位点叠加，分辨率高</td>
+</tr>
+<tr>
+<td>物种树准确性</td>
+<td>基因树 ≠ 物种树</td>
+<td>多基因一致 → GCPSR确认</td>
+</tr>
+<tr>
+<td>冲突检测</td>
+<td>无法检验</td>
+<td>可对比各基因树</td>
+</tr>
+<tr>
+<td>信息来源</td>
+<td>仅核糖体 DNA</td>
+<td>核DNA + 线粒体DNA + 蛋白编码基因</td>
+</tr>
+<tr>
+<td>进化速率</td>
+<td>单一速率</td>
+<td>覆盖快（ITS）、中（EF-1α）、慢（LSU/SSU）三种速率</td>
+</tr>
+</tbody>
+</table>
+<p>在硫磺菌论文中，6 个基因合并后 3,963 bp，含 525 个简约信息位点；ITS 单独仅约 80 个信息位点，信息量差距约 <strong>6.5 倍</strong>。</p>
+<h3 id="32-硫磺菌研究中六基因详细信息"><a class="markdownIt-Anchor" href="#32-硫磺菌研究中六基因详细信息"></a> 3.2 硫磺菌研究中六基因详细信息</h3>
+<h4 id="基因位点总览"><a class="markdownIt-Anchor" href="#基因位点总览"></a> 基因位点总览</h4>
+<table>
+<thead>
+<tr>
+<th>基因</th>
+<th>类型</th>
+<th>进化速率</th>
+<th>主要贡献</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ITS</strong></td>
+<td>核糖体 DNA</td>
+<td>快</td>
+<td>通用条形码，种间分辨</td>
+</tr>
+<tr>
+<td><strong>nrLSU</strong> (28S)</td>
+<td>核糖体 DNA</td>
+<td>慢</td>
+<td>属级以上深层信号</td>
+</tr>
+<tr>
+<td><strong>nrSSU</strong> (18S)</td>
+<td>核糖体 DNA</td>
+<td>最慢</td>
+<td>科/目级深层信号</td>
+</tr>
+<tr>
+<td><strong>mtSSU</strong></td>
+<td>线粒体 DNA</td>
+<td>中</td>
+<td>独立于核基因组的验证信号</td>
+</tr>
+<tr>
+<td><strong>EF-1α</strong></td>
+<td>蛋白编码核基因</td>
+<td>较快</td>
+<td>种间分辨率（含内含子）</td>
+</tr>
+<tr>
+<td><strong>RPB2</strong></td>
+<td>蛋白编码核基因</td>
+<td>中</td>
+<td>单拷贝，GCPSR 核心标记</td>
+</tr>
+</tbody>
+</table>
+<h4 id="引物序列表"><a class="markdownIt-Anchor" href="#引物序列表"></a> 引物序列表</h4>
+<table>
+<thead>
+<tr>
+<th>基因</th>
+<th>引物</th>
+<th>方向</th>
+<th>序列 (5′→3′)</th>
+<th>PCR片段</th>
+<th>建树用</th>
+<th>引物来源</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ITS</strong></td>
+<td>ITS5</td>
+<td>F</td>
+<td>GGA AGT AAA AGT CGT AAC AAG G</td>
+<td>~600–700 bp</td>
+<td>~450–550 bp</td>
+<td>White et al. 1990</td>
+</tr>
+<tr>
+<td></td>
+<td>ITS4</td>
+<td>R</td>
+<td>TCC TCC GCT TAT TGA TAT GC</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>nrLSU</strong></td>
+<td>LR0R</td>
+<td>F</td>
+<td>ACC CGC TGA ACT TAA GC</td>
+<td>~1,400 bp</td>
+<td>~1,200–1,300 bp</td>
+<td>Vilgalys &amp; Hester 1990</td>
+</tr>
+<tr>
+<td></td>
+<td>LR7</td>
+<td>R</td>
+<td>TAC TAC CAC CAA GAT CT</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>nrSSU</strong></td>
+<td>PNS1</td>
+<td>F</td>
+<td>GTA GTC ATA TGC TTG TCT C</td>
+<td>~1,100 bp</td>
+<td>~1,000 bp</td>
+<td>Hibbett 1996</td>
+</tr>
+<tr>
+<td></td>
+<td>NS41</td>
+<td>R</td>
+<td>CCC GTG TTG AGT CAA ATT A</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>mtSSU</strong></td>
+<td>MS1</td>
+<td>F</td>
+<td>CAG CAG TCA AGA ATA TTA GTC AAT G</td>
+<td>~700–800 bp</td>
+<td>~600–700 bp</td>
+<td>White et al. 1990</td>
+</tr>
+<tr>
+<td></td>
+<td>MS2</td>
+<td>R</td>
+<td>GCG GAT TAT CGA ATT AAA TAA C</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>EF-1α</strong></td>
+<td>EF1-983F</td>
+<td>F</td>
+<td>GCY CCY GGH CAY CGT GAY TTY AT</td>
+<td>~550–650 bp</td>
+<td>~500–550 bp</td>
+<td>Rehner &amp; Buckley 2005</td>
+</tr>
+<tr>
+<td></td>
+<td>EF1-1567R</td>
+<td>R</td>
+<td>ACH GTR CCR ATA CCA CCR ATC TT</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>RPB2</strong></td>
+<td><strong>6F-1</strong></td>
+<td>F</td>
+<td>CCT CGT CAA CTG CAC AAC A</td>
+<td>~700–800 bp</td>
+<td>~650–750 bp</td>
+<td><strong>Song et al. 2018 自主设计</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><strong>7R-1</strong></td>
+<td>R</td>
+<td>TCT TCC TCG GCA TCC AA</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<details class="custom-callout important" open><summary class="callout-title"><div class="callout-icon"></div><div>RPB2 引物为自主设计</div>
+<div class="callout-fold"></div></summary><div class="callout-body">
+<p>通用真菌 RPB2 引物 fRPB2-5F / fRPB2-7cR 在硫磺菌属中扩增效果不佳（弱带或非特异性扩增）。Song &amp; Cui（2017, 2018）针对硫磺菌属专门设计新引物 <strong>6F-1 / 7R-1</strong>，覆盖 RPB2 基因保守结构域 6 至结构域 7 之间约 700–800 bp 区域。</p>
+</div>
+</details><h4 id="pcr-扩增条件"><a class="markdownIt-Anchor" href="#pcr-扩增条件"></a> PCR 扩增条件</h4>
+<table>
+<thead>
+<tr>
+<th>步骤</th>
+<th>温度</th>
+<th>时间</th>
+<th>循环数</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>预变性</td>
+<td>95°C</td>
+<td>4 min</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>变性</td>
+<td>94°C</td>
+<td>40 s</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>退火</td>
+<td><strong>50–54°C</strong></td>
+<td>45 s（一般）/ <strong>60 s</strong>（nrLSU, nrSSU）</td>
+<td>35</td>
+<td>退火温度依基因调整</td>
+</tr>
+<tr>
+<td>延伸</td>
+<td>72°C</td>
+<td>60 s（一般）/ <strong>90 s</strong>（nrLSU, nrSSU）</td>
+<td></td>
+<td>延伸时间与产物长度正相关</td>
+</tr>
+<tr>
+<td>终延伸</td>
+<td>72°C</td>
+<td>10 min</td>
+<td>1</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p><strong>各基因退火温度优化</strong>：50°C（ITS, mtSSU, nrLSU）、52°C（RPB2）、54°C（EF-1α, nrSSU）。</p>
+<h4 id="pcr-扩增片段-vs-建树用序列"><a class="markdownIt-Anchor" href="#pcr-扩增片段-vs-建树用序列"></a> PCR 扩增片段 vs 建树用序列</h4>
+<details class="custom-callout warning" open><summary class="callout-title"><div class="callout-icon"></div><div>关键区别</div>
+<div class="callout-fold"></div></summary><div class="callout-body">
+<p>PCR 扩增的原始片段 <strong>不等于</strong> 用于建树的序列。经 MAFFT 比对和手动修剪后，去除引物结合区、两端保守区、非明确同源区后，长度会显著缩短。</p>
+</div>
+</details><table>
+<thead>
+<tr>
+<th>基因</th>
+<th>PCR扩增片段</th>
+<th>建树用比对序列</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ITS</td>
+<td>~600–700 bp</td>
+<td>~450–550 bp（去除18S/28S保守区）</td>
+</tr>
+<tr>
+<td>nrLSU</td>
+<td>~1,400 bp</td>
+<td>~1,200–1,300 bp（去除引物区）</td>
+</tr>
+<tr>
+<td>nrSSU</td>
+<td>~1,100 bp</td>
+<td>~1,000 bp</td>
+</tr>
+<tr>
+<td>mtSSU</td>
+<td>~700–800 bp</td>
+<td>~600–700 bp</td>
+</tr>
+<tr>
+<td>EF-1α</td>
+<td>~550–650 bp</td>
+<td>~500–550 bp</td>
+</tr>
+<tr>
+<td>RPB2</td>
+<td>~700–800 bp</td>
+<td>~650–750 bp</td>
+</tr>
+<tr>
+<td><strong>合计</strong></td>
+<td><strong>~5,400 bp</strong></td>
+<td><strong>3,963 bp</strong></td>
+</tr>
+</tbody>
+</table>
+<p>论文中 3,963 bp 是经 MAFFT G-INS-I 比对和手动修剪后的<strong>合并矩阵总长度</strong>，去除了所有非明确同源位点。</p>
+<h4 id="各基因详细说明"><a class="markdownIt-Anchor" href="#各基因详细说明"></a> 各基因详细说明</h4>
+<p><strong>ITS（内转录间隔区）</strong><br />
+ITS5 结合在 18S rDNA 3’ 端，ITS4 结合在 28S rDNA 5’ 端，扩增完整 ITS1–5.8S–ITS2 区域。是真菌通用条形码，初步鉴定时最先测序的位点。论文建树时去除了两端保守区。</p>
+<p><strong>nrLSU（核糖体大亚基 28S rDNA）</strong><br />
+LR0R 对应酿酒酵母 LSU 第 26–42 位，LR7 对应第 1449–1433 位，覆盖 D1–D3 结构域。因扩增片段最长（~1.4 kb），需 60 s 退火 + 90 s 延伸。进化速率慢，贡献属级及以上信号。</p>
+<p><strong>nrSSU（核糖体小亚基 18S rDNA）</strong><br />
+PNS1/NS41 扩增约 60% 的 18S rDNA 编码区。进化速率最慢，主要贡献科/目级深层系统发育信号，稳定树的基本拓扑。</p>
+<p><strong>mtSSU（线粒体小亚基 rDNA）</strong><br />
+MS1/MS2 扩增线粒体小亚基 rRNA 基因中间区域。线粒体基因进化速率与核基因不同，提供独立于核基因组的系统发育信号。</p>
+<p><strong>EF-1α（翻译延伸因子 1-α）</strong><br />
+EF1-983F/EF1-1567R 的编号（983/1567）为氨基酸位置。扩增区域在硫磺菌中含少量小内含子。蛋白编码基因第 3 位密码子进化快，贡献种间分辨率。</p>
+<p><strong>RPB2（RNA聚合酶II第二大亚基）</strong><br />
+6F-1/7R-1 覆盖保守结构域 6 至 7。作为单拷贝核基因，是 GCPSR 框架中最重要的蛋白编码标记之一。该研究中 88% 的 RPB2 序列为新测。</p>
+<hr />
+<h2 id="第四部分遗传距离与物种界限"><a class="markdownIt-Anchor" href="#第四部分遗传距离与物种界限"></a> 第四部分：遗传距离与物种界限</h2>
+<h3 id="41-遗传距离是什么"><a class="markdownIt-Anchor" href="#41-遗传距离是什么"></a> 4.1 遗传距离是什么？</h3>
+<p>遗传距离（genetic distance）是衡量两条 DNA 序列差异程度的数值指标。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>计算方式</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>p-distance</strong></td>
+<td>差异位点数 / 总位点数 × 100%</td>
+<td>最简单，未考虑多重替换</td>
+</tr>
+<tr>
+<td><strong>K2P 距离</strong>（Kimura 2-parameter）</td>
+<td>校正转换(transition)与颠换(transversion)速率差异</td>
+<td>更准确，最常用</td>
+</tr>
+<tr>
+<td><strong>GTR 距离</strong>（General Time Reversible）</td>
+<td>校正 6 种碱基替换类型</td>
+<td>最复杂，模型选择后确定</td>
+</tr>
+</tbody>
+</table>
+<pre><code>p-distance = 差异碱基数 / 总比对碱基数 × 100%
+
+示例: 两条各 500 bp 的 ITS 序列，比对后 15 个碱基不同
+     p-distance = 15/500 × 100% = 3.0%
+</code></pre>
+<h3 id="42-种内变异-vs-种间分化-barcode-gap"><a class="markdownIt-Anchor" href="#42-种内变异-vs-种间分化-barcode-gap"></a> 4.2 种内变异 vs 种间分化 —— Barcode Gap</h3>
+<p>核心逻辑：<strong>同一物种内个体间变异通常远小于不同物种之间的差异</strong>。</p>
+<pre><code>种内变异(intraspecific):  个体A ↔ 个体B    0.0–1.0%   ← 窄
+                            ↓↓↓ barcode gap ↓↓↓
+种间分化(interspecific):  物种X ↔ 物种Y    2.0–10.0%   ← 宽
+</code></pre>
+<p><strong>当 barcode gap 清晰存在时</strong> → 可用单基因（ITS）区分物种<br />
+<strong>当 barcode gap 缺失或模糊时</strong> → 必须依赖多基因 + GCPSR</p>
+<h3 id="43-真菌中不存在万能阈值"><a class="markdownIt-Anchor" href="#43-真菌中不存在万能阈值"></a> 4.3 真菌中不存在万能阈值</h3>
+<details class="custom-callout warning" open><summary class="callout-title"><div class="callout-icon"></div><div>核心结论</div>
+<div class="callout-fold"></div></summary><div class="callout-body">
+<p>传统上常用 ITS 相似度 97–99%（即 1–3% 遗传距离）作为物种界限的经验阈值，但这一阈值在<strong>不同真菌类群中差异极大</strong>，不存在普适标准。</p>
+</div>
+</details><table>
+<thead>
+<tr>
+<th>真菌类群</th>
+<th>种内 ITS 变异</th>
+<th>种间 ITS 差异</th>
+<th>Barcode Gap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Hydnum</em>（齿菌属）</td>
+<td>&lt;0.5%</td>
+<td>&gt;3%</td>
+<td>清晰</td>
+</tr>
+<tr>
+<td><em>Russula</em>（红菇属）</td>
+<td>&lt;1%</td>
+<td>&gt;4%</td>
+<td>清晰</td>
+</tr>
+<tr>
+<td><em>Suillus</em>（乳牛肝菌属）</td>
+<td>&lt;0.5%</td>
+<td>&gt;2.5%</td>
+<td>清晰</td>
+</tr>
+<tr>
+<td><em>Laetiporus</em>（硫磺菌属）</td>
+<td>&lt;1%</td>
+<td>2–8%</td>
+<td>存在但不均匀</td>
+</tr>
+<tr>
+<td><em>Morchella</em> Elata clade</td>
+<td>可高达 2%</td>
+<td>与种内重叠</td>
+<td>模糊</td>
+</tr>
+<tr>
+<td><em>Marasmius</em>（小皮伞属）</td>
+<td>可高达 5%</td>
+<td>与种内重叠</td>
+<td>不存在</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Barcode gap 的关键影响因素</strong>：</p>
+<ol>
+<li><strong>类群差异</strong>：不同属的分子进化速率截然不同</li>
+<li><strong>分类策略</strong>：“细分派”（splitting）产生更窄的种内变异和更大的 gap；“合并派”（lumping）则相反</li>
+<li><strong>ITS 区域选择</strong>：ITS1 变异速率约为 ITS2 的 2 倍；ITS2 的 barcode gap 比 ITS1 更稳定</li>
+<li><strong>杂交和不完全谱系分选</strong>：可显著模糊物种边界</li>
+</ol>
+<h3 id="44-硫磺菌属中的具体应用"><a class="markdownIt-Anchor" href="#44-硫磺菌属中的具体应用"></a> 4.4 硫磺菌属中的具体应用</h3>
+<p>在 Song et al. (2018) 中，&quot;遗传距离达到种间水平&quot;体现在三个层次：</p>
+<h4 id="层次一its-序列固定差异"><a class="markdownIt-Anchor" href="#层次一its-序列固定差异"></a> 层次一：ITS 序列固定差异</h4>
+<p>候选新种与最近缘种的 ITS 序列存在多个固定差异位点（非个体内多态性），其 p-distance 超过硫磺菌属已知种内变异的上限（通常 &lt;1%）。</p>
+<h4 id="层次二6-个基因一致独立分支"><a class="markdownIt-Anchor" href="#层次二6-个基因一致独立分支"></a> 层次二：6 个基因一致独立分支</h4>
+<pre><code>L. medogensis vs. L. ailaoshanensis：
+  ITS:    独立分支，BS ≥ 95%
+  nrLSU:  独立分支，BS ≥ 90%
+  nrSSU:  独立分支，BS ≥ 85%
+  mtSSU:  独立分支，BS ≥ 88%
+  EF-1α:  独立分支，BS ≥ 95%
+  RPB2:   独立分支，BS ≥ 92%
+→ 6个独立基因一致支持 → 满足GCPSR
+</code></pre>
+<h4 id="层次三分支长度反映分化时间"><a class="markdownIt-Anchor" href="#层次三分支长度反映分化时间"></a> 层次三：分支长度反映分化时间</h4>
+<p>在 ML/BI 树上，候选新种形成<strong>长分支（long branch）</strong>，表明自与姐妹群分化以来积累了足够多的固定替换。</p>
+<h3 id="45-判别流程"><a class="markdownIt-Anchor" href="#45-判别流程"></a> 4.5 判别流程</h3>
+<pre><code>1. 测候选标本的 6 个基因
+2. 与 GenBank 中所有已知近缘物种序列比对
+3. 计算与每个已知种的遗传距离（p-distance / K2P）
+4. 如果:
+   (a) 与最近缘种的遗传距离 &gt; 该属已知种内变异上限
+   (b) 在 ≥2 个基因的单基因树上形成独立高支持分支
+   (c) 存在可量化的形态/生态/地理区分特征
+   → 满足新种标准
+</code></pre>
+<details class="custom-callout note" open><summary class="callout-title"><div class="callout-icon"></div><div>优先级</div>
+<div class="callout-fold"></div></summary><div class="callout-body">
+<p>遗传距离是辅助参考，<strong>GCPSR 谱系一致性</strong>才是首要标准。&quot;多棵树说同一句话&quot;比&quot;一个数字超过阈值&quot;更可靠。</p>
+</div>
+</details><hr />
+<h2 id="第五部分多基因联合系统发育树构建"><a class="markdownIt-Anchor" href="#第五部分多基因联合系统发育树构建"></a> 第五部分：多基因联合系统发育树构建</h2>
+<h3 id="51-测序策略与并行工作流"><a class="markdownIt-Anchor" href="#51-测序策略与并行工作流"></a> 5.1 测序策略与并行工作流</h3>
+<pre><code>基因组DNA提取（CTAB法，从子实体或菌丝体）
+    ↓
+6对引物独立PCR扩增（每标本 × 6个反应 = 330个PCR反应）
+    ↓
+琼脂糖凝胶电泳验证（单一明亮条带）
+    ↓
+Sanger双向测序（每条片段正反向2个反应 = 660个测序反应）
+    ↓
+SeqMan Pro / Geneious Prime 拼接 + 切除低质量末端
+    ↓
+NCBI BLAST 验证身份 + 排除污染
+</code></pre>
+<blockquote>
+<p>该研究共提交了 226 条新序列至 GenBank。其中 nrSSU 100% 新测，EF-1α 和 RPB2 分别有 85% 和 88% 新测。</p>
+</blockquote>
+<h3 id="52-完整十步流程"><a class="markdownIt-Anchor" href="#52-完整十步流程"></a> 5.2 完整十步流程</h3>
+<pre><code class="mermaid">graph TD
+    A[&quot;步骤1: 序列整理&lt;br/&gt;每基因一个FASTA文件&quot;] --&gt; B[&quot;步骤2: MAFFT比对&lt;br/&gt;每基因独立, G-INS-I&quot;]
+    B --&gt; C[&quot;步骤3: 比对修剪&lt;br/&gt;trimAl + 手动&quot;]
+    C --&gt; D[&quot;步骤4: 串联合并&lt;br/&gt;FASconCAT → 超级矩阵&quot;]
+    D --&gt; E[&quot;步骤5: PHT检验&lt;br/&gt;PAUP* 1000次&quot;]
+    E --&gt; F&#123;&quot;P &gt; 0.05?&quot;&#125;
+    F -- &quot;否&quot; --&gt; F1[&quot;ASTRAL溯祖法&lt;br/&gt;或移除冲突基因&quot;]
+    F -- &quot;是&quot; --&gt; G[&quot;步骤6: 模型选择&lt;br/&gt;MrModeltest/ModelFinder&quot;]
+    G --&gt; H[&quot;步骤7: 三种方法建树&lt;br/&gt;ML + BI + MP&quot;]
+    H --&gt; I[&quot;步骤8: 单基因树检查&lt;br/&gt;确认无严重冲突&quot;]
+    I --&gt; J[&quot;步骤9: 树可视化&lt;br/&gt;FigTree/iTOL/ggtree&quot;]
+    J --&gt; K[&quot;步骤10: 数据提交&lt;br/&gt;GenBank + TreeBase&quot;]
+</code></pre>
+<h3 id="53-各步详细操作"><a class="markdownIt-Anchor" href="#53-各步详细操作"></a> 5.3 各步详细操作</h3>
+<h4 id="步骤1序列整理"><a class="markdownIt-Anchor" href="#步骤1序列整理"></a> 步骤1：序列整理</h4>
+<pre><code class="bash"># 按基因分别整理，每个FASTA含自己的序列 + GenBank参考序列
+ITS_raw.fasta       # 55条
+nrLSU_raw.fasta     # 55条
+nrSSU_raw.fasta     # 55条
+mtSSU_raw.fasta     # 55条
+EF1a_raw.fasta      # 55条
+RPB2_raw.fasta      # 55条
+</code></pre>
+<p>序列命名：<code>&gt;属名_种名_菌株号</code>，如 <code>&gt;Laetiporus_medogensis_Cui12240</code></p>
+<h4 id="步骤2mafft-比对"><a class="markdownIt-Anchor" href="#步骤2mafft-比对"></a> 步骤2：MAFFT 比对</h4>
+<pre><code class="bash">for gene in ITS nrLSU nrSSU mtSSU EF1a RPB2; do
+    mafft --thread 8 --maxiterate 1000 --globalpair \
+          raw_$&#123;gene&#125;.fasta &gt; $&#123;gene&#125;_aligned.fasta
+done
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>MAFFT 策略</th>
+<th>参数</th>
+<th>适用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>G-INS-I</strong></td>
+<td><code>--globalpair</code></td>
+<td>全长同源序列（论文使用）</td>
+</tr>
+<tr>
+<td>L-INS-I</td>
+<td><code>--localpair</code></td>
+<td>含侧翼可变区</td>
+</tr>
+<tr>
+<td>Q-INS-I</td>
+<td>—</td>
+<td>需考虑 RNA 二级结构</td>
+</tr>
+</tbody>
+</table>
+<p>比对后用 <strong>BioEdit</strong> 或 <strong>AliView</strong> 手动检查，排除大片段插入和无法明确对齐的区域。</p>
+<h4 id="步骤3trimal-修剪"><a class="markdownIt-Anchor" href="#步骤3trimal-修剪"></a> 步骤3：trimAl 修剪</h4>
+<pre><code class="bash">for gene in ITS nrLSU nrSSU mtSSU EF1a RPB2; do
+    trimal -in $&#123;gene&#125;_aligned.fasta \
+           -out $&#123;gene&#125;_trimmed.fasta \
+           -gt 0.5 -fasta
+done
+</code></pre>
+<p>手动修剪要点：蛋白编码基因的<strong>内含子区</strong>必须切除；ITS 两端 18S/28S 保守区去除。</p>
+<h4 id="步骤4fasconcat-g-串联"><a class="markdownIt-Anchor" href="#步骤4fasconcat-g-串联"></a> 步骤4：FASconCAT-G 串联</h4>
+<pre><code class="bash">perl FASconCAT-G_v1.06.pl -s -o concatenated *_trimmed.fasta
+</code></pre>
+<p>输出：<code>concatenated.fas</code> + <code>concatenated.phy</code> + <code>concatenated_partition.txt</code></p>
+<p><strong>分区文件格式</strong>：</p>
+<pre><code>#NEXUS
+BEGIN SETS;
+    charset ITS = 1-612;
+    charset nrLSU = 613-1524;
+    charset nrSSU = 1525-2780;
+    charset mtSSU = 2781-3412;
+    charset EF1a = 3413-3963;
+    charset RPB2 = 3964-4832;
+END;
+</code></pre>
+<h4 id="步骤5pht-检验-最关键的质控"><a class="markdownIt-Anchor" href="#步骤5pht-检验-最关键的质控"></a> 步骤5：PHT 检验 —— 最关键的质控</h4>
+<p><strong>原理</strong>：检验各基因分区之间是否存在显著拓扑冲突。P &gt; 0.05 表示可以合并。</p>
+<p>PAUP* 脚本：</p>
+<pre><code>BEGIN PAUP;
+    execute concatenated.nex;
+    hompart partition=genes nreps=1000;
+END;
+</code></pre>
+<p><strong>论文结果：P = 0.19</strong>（&gt; 0.05），确认六基因合并。</p>
+<p>如果 <strong>P &lt; 0.05</strong>：排查冲突来源 → 除去冲突基因后重测 → 严重时改用 ASTRAL 溯祖法。</p>
+<h4 id="步骤6模型选择"><a class="markdownIt-Anchor" href="#步骤6模型选择"></a> 步骤6：模型选择</h4>
+<p>论文方法：<strong>MrModeltest v2.3 + AIC</strong>，结果所有分区均为 GTR + I + G。</p>
+<p>现代方法（推荐）：</p>
+<pre><code class="bash">iqtree -s concatenated.phy -p partitions.txt -m MFP+MERGE -T 20
+</code></pre>
+<h4 id="步骤7三种方法建树"><a class="markdownIt-Anchor" href="#步骤7三种方法建树"></a> 步骤7：三种方法建树</h4>
+<p><strong>最大似然法（ML）—— RAxML</strong>（论文在 CIPRES 超算平台运行）：</p>
+<pre><code class="bash">raxmlHPC-HYBRID -s concatenated.phy -q partitions.txt \
+    -m GTRGAMMA -N 100 -f a -# 1000 -n Laetiporus_ML
+</code></pre>
+<p>现代替代 IQ-TREE（推荐）：</p>
+<pre><code class="bash">iqtree -s concatenated.phy -p partitions.txt \
+    -m MFP+MERGE -B 1000 --alrt 1000 -bnni -T 20 --safe -pre Laetiporus
+</code></pre>
+<p><strong>贝叶斯推断（BI）—— MrBayes</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>论文设置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>独立运行</td>
+<td>2 次</td>
+</tr>
+<tr>
+<td>每条链数</td>
+<td>4（1冷 + 3热）</td>
+</tr>
+<tr>
+<td>总代数</td>
+<td>500 万代</td>
+</tr>
+<tr>
+<td>采样频率</td>
+<td>每 1,000 代取 1 棵树</td>
+</tr>
+<tr>
+<td>Burn-in</td>
+<td>前 25% 丢弃</td>
+</tr>
+<tr>
+<td>收敛评估</td>
+<td>Tracer v1.5（ESS &gt; 200）</td>
+</tr>
+</tbody>
+</table>
+<pre><code>BEGIN MRBAYES;
+    charset ITS = 1-612; ...;
+    partition genes = 6: ITS, nrLSU, nrSSU, mtSSU, EF1a, RPB2;
+    set partition = genes;
+    unlink statefreq=(all) revmat=(all) shape=(all) pinvar=(all);
+    prset applyto=(all) ratepr=variable;
+    lset applyto=(all) nst=6 rates=invgamma;
+    mcmc ngen=5000000 nruns=2 nchains=4 samplefreq=1000
+         printfreq=1000 diagnfreq=1000 burninfrac=0.25;
+    sumt burninfrac=0.25;
+END;
+</code></pre>
+<p><strong>最大简约法（MP）—— PAUP</strong>*：</p>
+<p>论文结果：68 棵同等简约树（TL=1173, CI=0.812, RI=0.865）。</p>
+<p><strong>支持值阈值</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>指标</th>
+<th>显著阈值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ML bootstrap</td>
+<td>BT</td>
+<td>≥ 75%</td>
+</tr>
+<tr>
+<td>MP bootstrap</td>
+<td>BT</td>
+<td>≥ 75%</td>
+</tr>
+<tr>
+<td>Bayesian</td>
+<td>BPP</td>
+<td>≥ 0.95</td>
+</tr>
+</tbody>
+</table>
+<h4 id="步骤8单基因树冲突检查"><a class="markdownIt-Anchor" href="#步骤8单基因树冲突检查"></a> 步骤8：单基因树冲突检查</h4>
+<pre><code class="bash">for gene in ITS nrLSU nrSSU mtSSU EF1a RPB2; do
+    iqtree -s $&#123;gene&#125;_trimmed.fasta -m MFP -B 1000 -T 8 -pre $&#123;gene&#125;_single
+done
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>情形</th>
+<th>判断</th>
+<th>处理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>所有高支持分支无矛盾</td>
+<td>无冲突</td>
+<td>正常</td>
+</tr>
+<tr>
+<td>某基因支持率低但不反对</td>
+<td>轻微</td>
+<td>可接受</td>
+</tr>
+<tr>
+<td>某基因显著支持相反拓扑（BS ≥ 70%）</td>
+<td><strong>严重冲突</strong></td>
+<td>需讨论或移除</td>
+</tr>
+</tbody>
+</table>
+<h4 id="步骤9-10可视化与数据提交"><a class="markdownIt-Anchor" href="#步骤9-10可视化与数据提交"></a> 步骤9-10：可视化与数据提交</h4>
+<ul>
+<li>FigTree / iTOL / ggtree 可视化</li>
+<li>GenBank 提交序列</li>
+<li>TreeBase 提交比对矩阵</li>
+</ul>
+<h3 id="54-完整命令行流水线"><a class="markdownIt-Anchor" href="#54-完整命令行流水线"></a> 5.4 完整命令行流水线</h3>
+<pre><code class="bash">#!/bin/bash
+# 真菌多基因系统发育全流程
+THREADS=20
+GENES=(ITS nrLSU nrSSU mtSSU EF1a RPB2)
+
+# 1. 比对
+for g in &quot;$&#123;GENES[@]&#125;&quot;; do
+    mafft --thread $THREADS --maxiterate 1000 --globalpair \
+          raw_$&#123;g&#125;.fasta &gt; $&#123;g&#125;_aligned.fasta
+done
+
+# 2. 修剪
+for g in &quot;$&#123;GENES[@]&#125;&quot;; do
+    trimal -in $&#123;g&#125;_aligned.fasta -out $&#123;g&#125;_trimmed.fasta -gt 0.5 -fasta
+done
+
+# 3. 串联
+perl FASconCAT-G_v1.06.pl -s -o concat *_trimmed.fasta
+
+# 4. PHT 检验（需在 PAUP* 中运行）
+
+# 5. IQ-TREE（模型选择+ML建树一步完成）
+iqtree -s concat.phy -p concat_partition.txt \
+       -m MFP+MERGE -B 1000 --alrt 1000 -bnni \
+       -T $THREADS --safe -pre my_project
+
+# 6. 贝叶斯（可选）
+# mpirun -np $THREADS mb mrbayes.nex
+
+echo &quot;输出文件：&quot;
+echo &quot;  my_project.contree    ← ML 共识树 + bootstrap&quot;
+echo &quot;  my_project.best_scheme ← 最优分区方案&quot;
+echo &quot;  my_project.iqtree      ← 完整报告&quot;
+</code></pre>
+<h3 id="55-软件版本速查"><a class="markdownIt-Anchor" href="#55-软件版本速查"></a> 5.5 软件版本速查</h3>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>版本</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MAFFT</td>
+<td>v7.526+</td>
+<td>多序列比对</td>
+</tr>
+<tr>
+<td>trimAl</td>
+<td>v1.4.rev15</td>
+<td>比对修剪</td>
+</tr>
+<tr>
+<td>FASconCAT-G</td>
+<td>v1.06</td>
+<td>序列串联</td>
+</tr>
+<tr>
+<td>PartitionFinder2</td>
+<td>v2.1.1</td>
+<td>分区与模型选择</td>
+</tr>
+<tr>
+<td>IQ-TREE</td>
+<td>v2.3.0+</td>
+<td>ML 建树 + 模型选择</td>
+</tr>
+<tr>
+<td>MrBayes</td>
+<td>v3.2.7a</td>
+<td>贝叶斯推断</td>
+</tr>
+<tr>
+<td>RAxML-NG</td>
+<td>v1.2+</td>
+<td>ML 建树</td>
+</tr>
+<tr>
+<td>PAUP*</td>
+<td>v4.0b10</td>
+<td>MP 建树 + PHT 检验</td>
+</tr>
+<tr>
+<td>Tracer</td>
+<td>v1.7.2</td>
+<td>贝叶斯收敛诊断</td>
+</tr>
+<tr>
+<td>FigTree</td>
+<td>v1.4.4</td>
+<td>树可视化</td>
+</tr>
+</tbody>
+</table>
+<h3 id="56-最容易出错的环节"><a class="markdownIt-Anchor" href="#56-最容易出错的环节"></a> 5.6 最容易出错的环节</h3>
+<details class="custom-callout danger" open><summary class="callout-title"><div class="callout-icon"></div><div>六大常见错误</div>
+<div class="callout-fold"></div></summary><div class="callout-body">
+<ol>
+<li><strong>PHT 检验被忽略</strong> —— 不检验或 P&lt;0.05 仍强行串联</li>
+<li><strong>内含子未切除</strong> —— 蛋白编码基因比对中混入非同源内含子</li>
+<li><strong>外类群选择不当</strong> —— 与本类群亲缘过远（比对困难）或过近（无法正确定根）</li>
+<li><strong>贝叶斯未收敛</strong> —— ESS &lt; 200 不应采用结果</li>
+<li><strong>单基因树冲突被忽视</strong> —— 任何基因显著反对合并树都应处理</li>
+<li><strong>PCR片段与建树序列混淆</strong> —— PCR 扩增的原始长度 ≠ 建树用的比对长度</li>
+</ol>
+</div>
+</details><hr />
+<h2 id="第六部分中国代表性研究实例"><a class="markdownIt-Anchor" href="#第六部分中国代表性研究实例"></a> 第六部分：中国代表性研究实例</h2>
+<h3 id="61-羊肚菌属"><a class="markdownIt-Anchor" href="#61-羊肚菌属"></a> 6.1 羊肚菌属</h3>
+<ul>
+<li><strong>全球</strong>：80+ 系统发育种，三大支系</li>
+<li><strong>中国</strong>：约半数系统发育种有分布</li>
+<li><strong>主要栽培种</strong>：六妹羊肚菌（<em>M. sextelata</em>, Mel-6）、梯棱羊肚菌（<em>M. importuna</em>, Mel-10）</li>
+<li>详见 <a  href='/posts/d3363a64/'>羊肚菌（Morchella）分类学与系统发育</a></li>
+</ul>
+<h3 id="62-硫磺菌属"><a class="markdownIt-Anchor" href="#62-硫磺菌属"></a> 6.2 硫磺菌属</h3>
+<ul>
+<li><strong>全球</strong>：17–21 个系统发育种</li>
+<li><strong>中国已发表</strong>：4 个新种（哀牢山、环纹、墨脱、新疆硫磺菌）</li>
+<li><strong>研究团队</strong>：北京林业大学戴玉成/崔宝凯团队</li>
+<li><strong>发表时间线</strong>：2014 → <em>L. ailaoshanensis</em>, <em>L. zonatus</em>（<em>Mycologia</em>）；2017 → 全属系统发育与生物地理（<em>BMC Evol. Biol.</em>）；2018 → <em>L. medogensis</em>, <em>L. xinjiangensis</em>（<em>MycoKeys</em>）</li>
+<li>详见 <a  href='/posts/c5bf302b/'>硫磺菌（Laetiporus）分类学与新种鉴定</a></li>
+</ul>
+<h3 id="63-研究基因数演进"><a class="markdownIt-Anchor" href="#63-研究基因数演进"></a> 6.3 研究基因数演进</h3>
+<table>
+<thead>
+<tr>
+<th>论文</th>
+<th>年份</th>
+<th>使用基因数</th>
+<th>基因列表</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Song et al. (<em>Mycologia</em>)</td>
+<td>2014</td>
+<td><strong>2</strong></td>
+<td>ITS, nrLSU</td>
+</tr>
+<tr>
+<td>Song &amp; Cui (<em>BMC Evol. Biol.</em>)</td>
+<td>2017</td>
+<td><strong>6</strong></td>
+<td>ITS, nrLSU, nrSSU, mtSSU, EF-1α, RPB2</td>
+</tr>
+<tr>
+<td>Song et al. (<em>MycoKeys</em>)</td>
+<td>2018</td>
+<td><strong>6</strong></td>
+<td>同上，RPB2 使用自主设计引物 6F-1/7R-1</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="相关笔记"><a class="markdownIt-Anchor" href="#相关笔记"></a> 相关笔记</h2>
+<ul>
+<li><a  href='/posts/d3363a64/'>羊肚菌（Morchella）分类学与系统发育</a></li>
+<li><a  href='/posts/c5bf302b/'>硫磺菌（Laetiporus）分类学与新种鉴定</a></li>
+<li><a  href='/posts/a3f7b2d1/'>硫磺菌新种发表完整工作流程</a></li>
+<li><a  href='/posts/6d371a40/'>木耳（Auricularia）分子鉴定方法</a></li>
+</ul>
+<h2 id="参考文献"><a class="markdownIt-Anchor" href="#参考文献"></a> 参考文献</h2>
+<p><span id="ref1">1</span>. Song J, Sun Y, Ji X, Dai Y, Cui B. (2018) Phylogeny and taxonomy of <em>Laetiporus</em> with descriptions of two new species from western China. <em>MycoKeys</em>, 37: 57–71. PMID: 30116139</p>
+<p><span id="ref2">2</span>. Song J, Cui B. (2017) Phylogeny, divergence time and historical biogeography of <em>Laetiporus</em>. <em>BMC Evolutionary Biology</em>, 17: 102. PMID: 28424048</p>
+<p><span id="ref3">3</span>. Song J, Chen Y, Cui B, et al. (2014) Morphological and molecular evidence for two new species of <em>Laetiporus</em> from southwestern China. <em>Mycologia</em>, 106(5): 1039–1050. PMID: 24987130</p>
+<p><span id="ref4">4</span>. Taşkın H, et al. (2012) A multigene molecular phylogenetic assessment of true morels (<em>Morchella</em>) in Turkey. <em>Fungal Genetics and Biology</em>, 47(8): 672–682.</p>
+<p><span id="ref5">5</span>. Taylor JW, et al. (2000) Phylogenetic species recognition and species concepts in fungi. <em>Fungal Genetics and Biology</em>, 31: 21–32.</p>
+<p><span id="ref6">6</span>. Katoh K, Standley DM. (2013) MAFFT multiple sequence alignment software version 7. <em>Molecular Biology and Evolution</em>, 30: 772–780.</p>
+<p><span id="ref7">7</span>. Minh BQ, et al. (2020) IQ-TREE 2: New models and efficient methods for phylogenetic inference. <em>Molecular Biology and Evolution</em>, 37: 1530–1534.</p>
+<p><span id="ref8">8</span>. Ronquist F, et al. (2012) MrBayes 3.2: Efficient Bayesian phylogenetic inference. <em>Systematic Biology</em>, 61: 539–542.</p>
+<p><span id="ref9">9</span>. Wilson AW, et al. (2023) Does One Size Fit All? Variations in the DNA Barcode Gaps of Macrofungal Genera. <em>Journal of Fungi</em>, 9(8): 788.</p>
+
+  </div>
+
+  
+    <div class="post-tags">
+      
+        <a class="post-tag" href="/tags/%E7%94%9F%E7%89%A9%E4%BF%A1%E6%81%AF%E5%AD%A6/">生物信息学</a>
+      
+        <a class="post-tag" href="/tags/%E7%B3%BB%E7%BB%9F%E5%8F%91%E8%82%B2/">系统发育</a>
+      
+        <a class="post-tag" href="/tags/%E7%9C%9F%E8%8F%8C%E5%AD%A6/">真菌学</a>
+      
+        <a class="post-tag" href="/tags/%E5%88%86%E7%B1%BB%E5%AD%A6/">分类学</a>
+      
+        <a class="post-tag" href="/tags/%E5%88%86%E5%AD%90%E9%89%B4%E5%AE%9A/">分子鉴定</a>
+      
+        <a class="post-tag" href="/tags/GCPSR/">GCPSR</a>
+      
+        <a class="post-tag" href="/tags/%E5%AE%9E%E9%AA%8C%E6%96%B9%E6%B3%95/">实验方法</a>
+      
+        <a class="post-tag" href="/tags/%E9%A3%9F%E7%94%A8%E8%8F%8C/">食用菌</a>
+      
+    </div>
+  
+
+  
+  <div class="post-share">
+    <span class="share-label">分享</span>
+    <a class="share-btn share-twitter" href="javascript:void(0)" onclick="shareTo('twitter','真菌分子系统学与多基因系统发育树构建')" aria-label="分享到 Twitter">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+    </a>
+    <a class="share-btn share-weibo" href="javascript:void(0)" onclick="shareTo('weibo','真菌分子系统学与多基因系统发育树构建')" aria-label="分享到微博">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M10.098 20.323c-3.977.391-7.414-1.406-7.672-4.02-.259-2.609 2.759-5.047 6.74-5.441 3.979-.394 7.413 1.404 7.671 4.018.259 2.6-2.759 5.049-6.739 5.443zM8.594 11.39c-5.065.662-8.727 4.033-8.18 7.543.547 3.51 5.05 5.827 10.115 5.166 5.065-.662 8.727-4.033 8.18-7.543-.547-3.51-5.05-5.827-10.115-5.166zm5.636-1.591c-.275-.052-.462-.199-.422-.332.041-.133.287-.194.562-.143.619.117.998.452.84.776-.156.318-.685.423-1.304.308-.197-.037-.34-.161-.32-.278.021-.117.186-.182.382-.145.276.053.466.012.44-.064-.026-.076-.214-.142-.49-.195.303.12.498.278.457.411-.04.131-.284.19-.558.14-.613-.116-.991-.451-.833-.774.155-.316.679-.418 1.292-.304zM7.706 9.262c-.226-.062-.374-.212-.332-.334.043-.122.252-.172.478-.11.564.152.892.482.735.79-.155.303-.628.42-1.192.27-.569-.152-.891-.483-.734-.791.156-.309.625-.428 1.186-.278.236.064.384.214.341.335-.042.122-.25.172-.482.118zM14.912.472c-2.023-.558-4.314.126-5.963 1.664-.658.614-1.145 1.313-1.44 2.043-.307.759-.417 1.525-.363 2.216.27.208.557.389.861.543.286.144.586.262.897.353.36.107.737.18 1.112.229.054-.09.104-.184.155-.277.244-.45.582-.845 1.006-1.17.957-.735 2.145-.991 3.157-.735 1.011.257 1.646 1.01 1.78 1.992.039.281.04.566.002.846.385.032.76.098 1.113.2.38.108.736.258 1.065.443.15.084.293.177.43.277.257-.954.184-2.07-.311-3.118C21.372 2.933 18.595.735 14.912.472zm-1.374 17.918c-2.203.691-4.611-.196-5.368-1.982-.762-1.796.46-3.788 2.667-4.483 2.203-.695 4.61.197 5.368 1.983.762 1.796-.46 3.788-2.667 4.482zm1.157-2.272c.462-.815-.198-1.848-1.438-2.296-1.239-.447-2.473-.205-2.935.608-.462.813.197 1.848 1.437 2.296 1.24.449 2.473.207 2.936-.608z"/></svg>
+    </a>
+    <button class="share-btn share-copy" onclick="copyPageLink(this)" aria-label="复制链接">
+      <svg class="share-copy-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+    </button>
+    <span class="share-copy-feedback" aria-hidden>已复制</span>
+  </div>
+  
+
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+    
+      
+        
+      
+        
+          
+        
+      
+    
+      
+        
+      
+        
+      
+        
+          
+        
+      
+        
+          
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    <div class="related-posts">
+      <h3 class="related-title">相关文章</h3>
+      <div class="related-list">
+        
+        <a class="related-item" href="/posts/3215020490/">
+          <span class="related-item-title">微信小程序：生科小算Pro</span>
+          <time class="related-item-date">2026-04-21</time>
+        </a>
+        
+        <a class="related-item" href="/posts/a3f7b2d1/">
+          <span class="related-item-title">硫磺菌（Laetiporus）新种发表——完整工作流程与数据统计指南</span>
+          <time class="related-item-date">2026-05-04</time>
+        </a>
+        
+        <a class="related-item" href="/posts/c5bf302b/">
+          <span class="related-item-title">硫磺菌（Laetiporus）分类学与新种鉴定</span>
+          <time class="related-item-date">2026-04-28</time>
+        </a>
+        
+        <a class="related-item" href="/posts/d3363a64/">
+          <span class="related-item-title">羊肚菌（Morchella）分类学与系统发育</span>
+          <time class="related-item-date">2026-04-28</time>
+        </a>
+        
+      </div>
+    </div>
+    
+  
+
+  
+  <div class="post-copyright">
+    <div class="copyright-content">
+      <div class="copyright-title">真菌分子系统学与多基因系统发育树构建</div>
+      <div class="copyright-url" id="copyright-url">https://blog.zhengxi.me/posts/72c69583/</div>
+      <div class="copyright-meta">
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">作者</span>
+          <span class="copyright-meta-value">ZhengXi</span>
+        </span>
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">发布时间</span>
+          <span class="copyright-meta-value">2026-04-28 00:00</span>
+        </span>
+        <span class="copyright-meta-item">
+          <span class="copyright-meta-label">著作权</span>
+          <span class="copyright-meta-value">
+            <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh-hans" target="_blank" rel="noopener">CC BY-NC-ND 4.0</a>
+          </span>
+        </span>
+      </div>
+    </div>
+    <button class="copyright-copy-btn" onclick="copyCopyrightInfo(this)" aria-label="复制版权信息" title="复制版权信息">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+      <span class="copyright-copy-feedback">复制</span>
+    </button>
+  </div>
+  
+
+  
+  <nav class="post-nav">
+    
+      <a class="post-nav-item post-nav-prev" href="/posts/64478dc9/">
+        <span class="post-nav-label">PREV</span>
+        <span class="post-nav-title">Claude Code Skills 安装记录</span>
+      </a>
+    
+    
+      <a class="post-nav-item post-nav-next" href="/posts/c5bf302b/">
+        <span class="post-nav-label">NEXT</span>
+        <span class="post-nav-title">硫磺菌（Laetiporus）分类学与新种鉴定</span>
+      </a>
+    
+  </nav>
+  
+
+  
+  <section id="comments" class="comments-section">
+    <script src="https://giscus.app/client.js"
+      data-repo="realzhengxi/zhengxi_blog_comments"
+      data-repo-id="R_kgDOSKT6sA"
+      data-category="General"
+      data-category-id="DIC_kwDOSKT6sM4C7fUT"
+      data-mapping="title"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="light"
+      data-lang="zh-CN"
+      data-loading="lazy"
+      crossorigin="anonymous"
+      async>
+    </script>
+  </section>
+  
+</article>
+
+<nav class="post-toc" id="post-toc">
+  <div class="toc-header">CONTENTS</div>
+  <div class="toc-body" id="toc-body"></div>
+</nav>
+
+    </main>
+
+    
+<footer class="site-footer">
+  <div class="footer-bottom">
+    <a class="footer-license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" rel="noopener noreferrer" aria-label="CC BY-NC-ND 4.0 License">
+      CC&nbsp;&nbsp;BY–NC–ND&nbsp;&nbsp;4.0
+    </a>
+    <span class="footer-credit">
+      <a href="https://hexo.io" target="_blank" rel="noopener noreferrer">Hexo</a> &middot;
+      <a href="https://github.com/realzhengxi/hexo-theme-highlight" target="_blank" rel="noopener noreferrer">Highlight</a>
+    </span>
+    <span class="footer-links">
+      <a class="footer-link" href="https://github.com/realzhengxi" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015-2.895-.015-3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+      </a>
+      <a class="footer-rss" href="/atom.xml" target="_blank" rel="noopener noreferrer" aria-label="RSS Feed">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="4" cy="20" r="3"/><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/></svg>
+      </a>
+    </span>
+  </div>
+</footer>
+
+  </div>
+
+  <!-- Search Modal -->
+  <div class="search-overlay" id="search-overlay"></div>
+  <div class="search-modal" id="search-modal">
+    <div class="search-modal-header">
+      <input
+        type="text"
+        id="search-input"
+        class="search-input"
+        placeholder="Search something..."
+        autocomplete="off"
+      />
+      <button class="search-close" id="search-close" aria-label="Close search">✕</button>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+
+  <!-- Search Script (inline, fetches search.json at runtime) -->
+  <script>
+  (function() {
+    var overlay = document.getElementById('search-overlay');
+    var modal = document.getElementById('search-modal');
+    var input = document.getElementById('search-input');
+    var resultsContainer = document.getElementById('search-results');
+    var closeBtn = document.getElementById('search-close');
+
+    // Find the search open button(s)
+    var openBtns = document.querySelectorAll('#search-btn');
+
+    var postsData = [];
+    var dataLoaded = false;
+
+    function loadSearchData() {
+      if (dataLoaded && postsData.length > 0) return Promise.resolve(postsData);
+      return fetch(window.location.origin + '/search.json')
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          postsData = data || [];
+          dataLoaded = true;
+          return postsData;
+        })
+        .catch(function(err) {
+          console.error('Failed to load search data:', err);
+          postsData = [];
+          dataLoaded = true;
+          return [];
+        });
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      var div = document.createElement('div');
+      div.appendChild(document.createTextNode(text));
+      return div.innerHTML;
+    }
+
+    function highlightMatch(text, query) {
+      if (!query) return text;
+      try {
+        var escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        var regex = new RegExp('(' + escaped + ')', 'gi');
+        return text.replace(regex, '<mark>$1</mark>');
+      } catch(e) {
+        return text;
+      }
+    }
+
+    function renderResults(items, query) {
+      if (!items || items.length === 0) {
+        resultsContainer.innerHTML = '<div class="search-empty">No results found.</div>';
+        return;
+      }
+      var html = '';
+      for (var i = 0; i < items.length; i++) {
+        var p = items[i];
+        var title = escapeHtml(p.title);
+        var excerptText = p.text || p.content || '';
+        var excerpt = '';
+        if (excerptText.length > 120) {
+          excerpt = escapeHtml(excerptText.substring(0, 140));
+        } else {
+          excerpt = escapeHtml(excerptText);
+        }
+        html += '<a href="' + p.url + '" class="search-result-item">';
+        html += '  <span class="result-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>';
+        html += '  <div class="result-body">';
+        html += '    <h3 class="result-title">' + highlightMatch(title, query) + '</h3>';
+        html += '    <p class="result-excerpt">' + highlightMatch(excerpt, query) + '</p>';
+        html += '  </div>';
+        html += '</a>';
+      }
+      resultsContainer.innerHTML = html;
+    }
+
+    function performSearch(query) {
+      var q = query.trim().toLowerCase();
+      if (!q) {
+        renderResults(postsData, '');
+        return;
+      }
+      var filtered = postsData.filter(function(post) {
+        var searchText = post.text || post.content || '';
+        return post.title.toLowerCase().indexOf(q) !== -1 ||
+               searchText.toLowerCase().indexOf(q) !== -1;
+      });
+      renderResults(filtered, q);
+    }
+
+    function openSearch() {
+      overlay.classList.add('active');
+      modal.classList.add('active');
+      setTimeout(function() { input.focus(); }, 150);
+
+      // Load data and show all posts on open
+      loadSearchData().then(function() {
+        resultsContainer.innerHTML = '<div class="search-placeholder">Posts</div>';
+        renderResults(postsData, input.value);
+      });
+    }
+
+    function closeSearch() {
+      overlay.classList.remove('active');
+      modal.classList.remove('active');
+      input.value = '';
+      resultsContainer.innerHTML = '';
+    }
+
+    for (var i = 0; i < openBtns.length; i++) {
+      openBtns[i].addEventListener('click', openSearch);
+    }
+    closeBtn.addEventListener('click', closeSearch);
+    overlay.addEventListener('click', closeSearch);
+
+    document.addEventListener('keydown', function(e) {
+      // Cmd/Ctrl + K
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        if (modal.classList.contains('active')) {
+          closeSearch();
+        } else {
+          openSearch();
+        }
+      }
+      // Escape to close
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeSearch();
+      }
+    });
+
+    // Search as you type
+    var searchTimer = null;
+    input.addEventListener('input', function() {
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(function() {
+        performSearch(input.value);
+      }, 150);
+    });
+
+    // Pre-load search data in background after page loads
+    setTimeout(loadSearchData, 2000);
+  })();
+  </script>
+
+  <!-- Code Highlight (highlight.js) - CDN -->
+  <!-- CDN URL 可在 _config.yml → cdn.vendors.highlight_js 覆盖 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+  <script>
+  (function() {
+    // Add language label and copy button to each pre block (skip mermaid)
+    document.querySelectorAll('pre').forEach(function(pre) {
+      var code = pre.querySelector('code');
+      if (!code) return;
+      if (code.className.indexOf('mermaid') !== -1) return;
+
+      // Wrap code content in a scrollable container
+      // so the copy button stays fixed when content scrolls
+      var wrapper = document.createElement('div');
+      wrapper.className = 'code-scroll-wrapper';
+      while (pre.firstChild) {
+        wrapper.appendChild(pre.firstChild);
+      }
+      pre.appendChild(wrapper);
+      // code is now inside wrapper
+
+      var langClass = '';
+      for (var i = 0; i < code.classList.length; i++) {
+        var cls = code.classList[i];
+        if (cls.startsWith('language-') || cls.startsWith('lang-')) {
+          langClass = cls.replace('language-', '').replace('lang-', '');
+          break;
+        }
+      }
+      if (langClass) {
+        pre.setAttribute('data-lang', langClass);
+      }
+
+      // Add copy button only if not already present
+      if (pre.dataset.copyBtn) return;
+      pre.dataset.copyBtn = 'true';
+      var btn = document.createElement('button');
+      btn.className = 'code-copy-btn';
+      btn.setAttribute('type', 'button');
+      btn.setAttribute('aria-label', '复制代码');
+      btn.title = '复制';
+      btn.textContent = '复制';
+
+      function doCopy(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          return navigator.clipboard.writeText(text);
+        }
+        return new Promise(function(resolve, reject) {
+          var ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          try {
+            document.execCommand('copy');
+            resolve();
+          } catch (err) {
+            reject(err);
+          }
+          document.body.removeChild(ta);
+        });
+      }
+
+      btn.addEventListener('click', function() {
+        var text = code.innerText || code.textContent || '';
+        doCopy(text).then(function() {
+          btn.textContent = '已复制';
+          btn.classList.add('copied');
+          setTimeout(function() {
+            btn.textContent = '复制';
+            btn.classList.remove('copied');
+          }, 1800);
+        }).catch(function() {
+          btn.textContent = '复制失败';
+          setTimeout(function() {
+            btn.textContent = '复制';
+          }, 1800);
+        });
+      });
+      pre.appendChild(btn);
+
+      // Ensure code content is visible (fix dark theme issue)
+      if (getComputedStyle(pre).color === 'rgb(0, 0, 0)' || getComputedStyle(code).color === 'rgb(0, 0, 0)') {
+        code.style.color = '#1a1a1a';
+      }
+    });
+
+    // Ensure inline code visibility
+    document.querySelectorAll(':not(pre) > code').forEach(function(inline) {
+      if (inline.parentElement && inline.parentElement.tagName !== 'PRE') {
+        inline.style.color = '#404040';
+        inline.style.fontWeight = '500';
+      }
+    });
+
+    // Initialize highlight.js on all code blocks EXCEPT mermaid
+    // MUST run AFTER wrapping code in scroll containers
+    if (typeof hljs !== 'undefined') {
+      document.querySelectorAll('pre code').forEach(function(block) {
+        if (block.className.indexOf('mermaid') !== -1) return;
+        try {
+          hljs.highlightElement(block);
+        } catch (e) {
+          console.warn('Highlight.js error:', e);
+        }
+      });
+    }
+  })();
+  </script>
+
+  <!-- Mermaid Diagrams (CDN) - 纯前端渲染，必须在 highlight.js 之后 -->
+  <!-- CDN URL 可在 _config.yml → cdn.vendors.mermaid 覆盖 -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script>
+  (function() {
+    if (!window.mermaid) {
+      console.error('Mermaid library not loaded');
+      return;
+    }
+
+    // 匹配所有 mermaid 代码块
+    var blocks = document.querySelectorAll('code.language-mermaid, code.lang-mermaid, code.mermaid');
+
+    if (blocks.length > 0) {
+      mermaid.initialize({
+        startOnLoad: false,
+        theme: 'default',
+        themeVariables: {
+          primaryColor: '#e3f2fd',
+          primaryBorderColor: '#2563eb',
+          lineColor: '#737373',
+          secondaryColor: '#fff8e1',
+          tertiaryColor: '#f5f5f5',
+          fontFamily: '"Open Sans", "PingFang SC", "Noto Serif SC", sans-serif',
+          fontSize: '14px',
+          nodeTextColor: '#404040'
+        },
+        flowchart: { useMaxWidth: true, htmlLabels: true },
+        securityLevel: 'loose'
+      });
+
+      for (var i = 0; i < blocks.length; i++) {
+        (function(block, idx) {
+          var pre = block.parentElement;
+          var codeText = block.textContent || block.innerText;
+
+          // 转换 Markdown 内联格式为 HTML 标签（mermaid htmlLabels 需用 HTML）
+          codeText = codeText
+            .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+          var container = document.createElement('div');
+          container.className = 'mermaid-container';
+          var id = 'mermaid-' + Date.now() + '-' + idx;
+
+          pre.replaceWith(container);
+
+          mermaid.render(id, codeText.trim()).then(function(result) {
+            container.innerHTML = result.svg;
+          }).catch(function(err) {
+            console.error('Mermaid error:', err);
+            container.innerHTML = '<pre class="mermaid-error" style="color:#c62828;padding:16px;background:#ffebee;border-radius:8px;font-size:13px;line-height:1.6;"><strong>Mermaid 渲染失败</strong>\n' + err.message + '\n\n源码：\n' + codeText + '</pre>';
+          });
+        })(blocks[i], i);
+      }
+    }
+  })();
+  </script>
+
+  <!-- Lightbox Overlay -->
+  <div class="lightbox-overlay" id="lightbox-overlay">
+    <img src="" alt="" id="lightbox-image" />
+  </div>
+
+  <!-- Back to Top Button -->
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top" title="Back to top">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"/>
+    </svg>
+  </button>
+
+  <!-- Lightbox interaction -->
+  <script>
+  (function() {
+    var overlay = document.getElementById('lightbox-overlay');
+    var lightboxImg = document.getElementById('lightbox-image');
+    if (overlay && lightboxImg) {
+      var postContent = document.querySelector('.post-content');
+      if (postContent) {
+        postContent.addEventListener('click', function(e) {
+          var target = e.target;
+          if (target.tagName === 'IMG' && target.closest('.post-content')) {
+            lightboxImg.src = target.src;
+            lightboxImg.alt = target.alt || '';
+            overlay.classList.add('active');
+          }
+        });
+      }
+      overlay.addEventListener('click', function() {
+        overlay.classList.remove('active');
+      });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && overlay.classList.contains('active')) {
+          overlay.classList.remove('active');
+        }
+      });
+    }
+  })();
+  </script>
+
+  <!-- Share copy function -->
+  <script>
+  function shareTo(platform, title) {
+    var url = window.location.href;
+    var shareUrl;
+    switch (platform) {
+      case 'twitter':
+        shareUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);
+        break;
+      case 'weibo':
+        shareUrl = 'https://service.weibo.com/share/share.php?title=' + encodeURIComponent(title) + '&url=' + encodeURIComponent(url);
+        break;
+    }
+    if (shareUrl) window.open(shareUrl, '_blank', 'width=600,height=500');
+  }
+  function copyPageLink(btn) {
+    var url = window.location.href;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = url;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+    btn.classList.add('copied');
+    setTimeout(function() { btn.classList.remove('copied'); }, 1800);
+  }
+
+  function copyCopyrightInfo(btn) {
+    var title = document.querySelector('.copyright-title');
+    var url = document.querySelector('.copyright-url');
+    var author = document.querySelector('.copyright-meta-value');
+    if (!title || !url) return;
+    var text = '作者：' + (author ? author.textContent.trim() : '') + '\n'
+             + '标题：' + title.textContent.trim() + '\n'
+             + '链接：' + url.textContent.trim() + '\n'
+             + '来源：' + window.location.host + '\n'
+             + '著作权：CC BY-NC-ND 4.0';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch(e) {}
+      document.body.removeChild(ta);
+    }
+    btn.classList.add('copied');
+    btn.querySelector('.copyright-copy-feedback').textContent = '已复制';
+    setTimeout(function() {
+      btn.classList.remove('copied');
+      btn.querySelector('.copyright-copy-feedback').textContent = '复制';
+    }, 1800);
+  }
+  </script>
+
+  <!-- Reading Progress & Back to Top -->
+  <script>
+  (function() {
+    var progressBar = document.getElementById('reading-progress');
+    var backBtn = document.getElementById('back-to-top');
+    var hero = document.getElementById('hero');
+    var heroBg = hero ? hero.querySelector('.hero-bg img') : null;
+    var siteHeader = document.querySelector('.site-header');
+
+    function updateProgress() {
+      var winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+      var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      if (height > 0) {
+        progressBar.style.width = (winScroll / height) * 100 + '%';
+      }
+    }
+
+    function toggleBackToTop() {
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      if (scrollTop > 400) {
+        backBtn.classList.add('visible');
+      } else {
+        backBtn.classList.remove('visible');
+      }
+    }
+
+    // Hero parallax & nav scroll effect
+    function updateHero() {
+      if (!hero) return;
+      var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+      var heroHeight = hero.offsetHeight;
+
+      // Parallax: background moves slower than scroll
+      if (heroBg) {
+        var offset = scrollTop * 0.35;
+        heroBg.style.transform = 'scale(1.05) translateY(' + offset + 'px)';
+      }
+
+      // Fade out hero content as user scrolls
+      var heroContent = hero.querySelector('.hero-content');
+      var scrollHint = hero.querySelector('.hero-scroll-hint');
+      var fadeRatio = Math.max(0, 1 - scrollTop / (heroHeight * 0.6));
+      if (heroContent) {
+        heroContent.style.opacity = fadeRatio;
+        heroContent.style.transform = 'translateY(' + (scrollTop * 0.15) + 'px)';
+      }
+      if (scrollHint) {
+        scrollHint.style.opacity = fadeRatio;
+      }
+
+      // Sticky nav: add background after scrolling past hero
+      if (siteHeader) {
+        if (scrollTop > heroHeight * 0.85) {
+          siteHeader.classList.add('scrolled');
+        } else {
+          siteHeader.classList.remove('scrolled');
+        }
+      }
+    }
+
+    function onScroll() {
+      updateProgress();
+      toggleBackToTop();
+      updateHero();
+    }
+
+    backBtn.addEventListener('click', function() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+  </script>
+
+  <!-- busuanzi (不蒜子) - 页面阅读量统计 -->
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  <!-- Table of Contents -->
+  <script>
+  (function() {
+    var toc = document.getElementById('post-toc');
+    var tocBody = document.getElementById('toc-body');
+    if (!toc || !tocBody) return;
+
+    function escapeHtml(str) {
+      var d = document.createElement('div');
+      d.appendChild(document.createTextNode(str));
+      return d.innerHTML;
+    }
+
+    var content = document.querySelector('.post-content');
+    if (!content) { toc.style.display = 'none'; return; }
+
+    var headings = content.querySelectorAll('h1, h2, h3, h4, h5, h6');
+    if (headings.length < 2) { toc.style.display = 'none'; return; }
+
+    var idCounts = {};
+    function getId(h) {
+      if (h.id) return h.id;
+      var base = (h.textContent || '').toLowerCase()
+        .replace(/[^\w一-鿿]+/g, '-').replace(/^-+|-+$/g, '') || 'heading';
+      idCounts[base] = (idCounts[base] || 0) + 1;
+      return idCounts[base] > 1 ? base + '-' + idCounts[base] : base;
+    }
+
+    var items = [];
+    headings.forEach(function(h) {
+      var id = getId(h);
+      if (!h.id) h.id = id;
+      items.push({
+        el: h,
+        level: parseInt(h.tagName.charAt(1)),
+        id: id,
+        text: h.textContent.trim()
+      });
+    });
+
+    var minLevel = Math.min.apply(null, items.map(function(i) { return i.level; }));
+    var html = '<ul class="toc-list">';
+    items.forEach(function(item) {
+      var indent = item.level - minLevel;
+      html += '<li class="toc-item" style="--level: ' + indent + '">'
+           + '<a class="toc-link" href="#' + item.id + '">'
+           + escapeHtml(item.text) + '</a></li>';
+    });
+    html += '</ul>';
+    tocBody.innerHTML = html;
+
+    var links = tocBody.querySelectorAll('.toc-link');
+    var els = items.map(function(i) { return i.el; });
+
+    function updateActive() {
+      var activeIndex = -1;
+      for (var i = els.length - 1; i >= 0; i--) {
+        if (els[i].getBoundingClientRect().top <= 100) { activeIndex = i; break; }
+      }
+      links.forEach(function(link, i) {
+        link.classList.toggle('active', i === activeIndex);
+      });
+    }
+
+    window.addEventListener('scroll', updateActive, { passive: true });
+    updateActive();
+
+    links.forEach(function(link) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          var top = target.getBoundingClientRect().top + window.scrollY - 60;
+          window.scrollTo({ top: top, behavior: 'smooth' });
+        }
+      });
+    });
+  })();
+  </script>
+</body>
+</html>
